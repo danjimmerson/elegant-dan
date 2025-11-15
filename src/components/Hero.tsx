@@ -1,26 +1,36 @@
 import { ArrowDown } from "lucide-react";
 import heroImage from "@/assets/dan-jimmerson-speaker.jpg";
+import { useTypewriter } from "@/hooks/useTypewriter";
 
 const Hero = () => {
+  const typewriterText = useTypewriter([
+    "Marketing Executive",
+    "Personal Injury Thought Leader",
+    "Marketing Technologist",
+  ]);
   return (
     <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12 py-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="space-y-8 animate-fade-in">
-            <div className="space-y-4">
-              <h1 className="text-7xl lg:text-8xl xl:text-9xl font-serif font-bold text-foreground leading-none">
+            <div className="space-y-6">
+              <h1 className="text-8xl lg:text-9xl xl:text-[12rem] font-serif font-bold text-foreground leading-[0.9]">
                 Dan
                 <br />
                 Jimmerson
               </h1>
+              
+              {/* Typewriter Effect */}
+              <div className="flex items-center gap-1">
+                <h2 className="text-3xl lg:text-4xl xl:text-5xl font-sans font-semibold text-accent">
+                  {typewriterText}
+                </h2>
+                <span className="inline-block w-1 h-8 lg:h-10 xl:h-12 bg-accent animate-cursor-blink"></span>
+              </div>
             </div>
             
             <div className="space-y-4 max-w-lg">
-              <p className="text-xl lg:text-2xl text-muted-foreground">
-                Creative professional crafting
-                <span className="text-accent font-semibold"> stunning experiences</span>
-              </p>
               <p className="text-lg text-muted-foreground">
                 Based in the heart of innovation, bringing ideas to life through design and creativity.
               </p>
