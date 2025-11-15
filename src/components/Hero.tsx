@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import heroImage from "@/assets/hero-portrait.jpg";
+import heroImage from "@/assets/dan-jimmerson-speaker.jpg";
 
 const Hero = () => {
   return (
@@ -38,11 +38,13 @@ const Hero = () => {
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
               <img
                 src={heroImage}
-                alt="Dan Jimmerson"
-                className="w-full h-full object-cover"
+                alt="Dan Jimmerson - Professional Speaker"
+                className="w-full h-full object-cover object-center"
+                loading="eager"
               />
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"></div>
+              {/* Multi-layer Gradient Overlays for Seamless Transition */}
+              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent"></div>
             </div>
             
             {/* Floating Badge */}
