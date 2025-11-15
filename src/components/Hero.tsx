@@ -15,7 +15,7 @@ const Hero = () => {
           {/* Text Content */}
           <div className="space-y-8 animate-fade-in">
             <div className="space-y-6">
-              <h1 className="text-8xl lg:text-9xl xl:text-[12rem] font-serif font-bold text-foreground leading-[0.9]">
+              <h1 className="text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-foreground leading-tight">
                 Dan
                 <br />
                 Jimmerson
@@ -23,10 +23,10 @@ const Hero = () => {
               
               {/* Typewriter Effect */}
               <div className="flex items-center gap-1">
-                <h2 className="text-3xl lg:text-4xl xl:text-5xl font-sans font-semibold text-accent">
+                <h2 className="text-6xl lg:text-7xl xl:text-8xl font-sans font-bold text-accent leading-tight">
                   {typewriterText}
                 </h2>
-                <span className="inline-block w-1 h-8 lg:h-10 xl:h-12 bg-accent animate-cursor-blink"></span>
+                <span className="inline-block w-1 h-12 lg:h-14 xl:h-20 bg-accent animate-cursor-blink"></span>
               </div>
             </div>
             
