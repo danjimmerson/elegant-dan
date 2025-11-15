@@ -105,12 +105,21 @@ export default {
             opacity: "1",
           },
         },
+        "cursor-blink": {
+          "0%, 49%": {
+            opacity: "1",
+          },
+          "50%, 100%": {
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.6s ease-out",
         "slide-up": "slide-up 0.8s ease-out",
+        "cursor-blink": "cursor-blink 1s ease-in-out infinite",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
