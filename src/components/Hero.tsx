@@ -43,7 +43,7 @@ const Hero = () => {
           </div>
 
           {/* Image */}
-          <div className="relative animate-slide-up z-10">
+          <div className="relative animate-slide-up z-10 lg:scale-[1.15]">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
               <img
                 src={heroImage}
