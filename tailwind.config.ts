@@ -114,7 +114,7 @@ export default {
       },
       fontFamily: {
         serif: ["Playfair Display", "serif"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Stack Sans Text", "system-ui", "sans-serif"],
       },
     },
   },
