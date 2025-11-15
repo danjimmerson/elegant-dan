@@ -10,7 +10,7 @@ interface UseTypewriterOptions {
 export const useTypewriter = (
   words: string[],
   typeSpeed = 100,
-  deleteSpeed = 50,
+  deleteSpeed = 30,
   pauseDuration = 2000
 ): string => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
