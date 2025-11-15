@@ -17,7 +17,7 @@ const Hero = () => {
             <div className="space-y-4">
               {/* Greeting */}
               <p className="text-lg lg:text-xl text-foreground font-sans mb-4">
-                Hi, I'm Dan.
+                Hi, I'm Dan Jimmerson.
               </p>
               
               {/* Typewriter Effect */}
