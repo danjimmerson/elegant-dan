@@ -21,7 +21,7 @@ const Hero = () => {
               </p>
               
               {/* Typewriter Effect */}
-              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold text-accent leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem]">
+              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] bg-gradient-to-r from-accent via-accent-tangerine to-accent-copper bg-clip-text text-transparent">
                 {typewriterText}
                 <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
               </h2>
@@ -72,7 +72,7 @@ const Hero = () => {
 
       {/* Decorative Elements */}
       <div className="absolute top-1/4 right-12 w-72 h-72 bg-accent/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 left-12 w-96 h-96 bg-accent-warm/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 left-12 w-96 h-96 bg-accent-amber/5 rounded-full blur-3xl"></div>
     </section>
   );
 };
