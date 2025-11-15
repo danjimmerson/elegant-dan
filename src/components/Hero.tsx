@@ -10,19 +10,22 @@ const Hero = () => {
   ]);
   return (
     <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+      {/* Large Background Name */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <h1 className="text-[12rem] lg:text-[16rem] xl:text-[20rem] font-sans font-black text-foreground/5 uppercase tracking-tighter leading-none whitespace-nowrap">
+          Dan Jimmerson
+        </h1>
+      </div>
+      
       <div className="container mx-auto px-6 lg:px-12 py-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="space-y-8 animate-fade-in">
             <div className="space-y-6">
-              <h1 className="text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-foreground leading-tight">
-                Dan Jimmerson
-              </h1>
-              
               {/* Typewriter Effect */}
-              <h2 className="text-6xl lg:text-7xl xl:text-7xl font-sans font-bold text-accent leading-tight">
+              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold text-accent leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem]">
                 {typewriterText}
-                <span className="inline-block w-1 h-12 lg:h-14 xl:h-16 bg-accent animate-cursor-blink ml-1"></span>
+                <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
               </h2>
             </div>
             
@@ -40,7 +43,7 @@ const Hero = () => {
           </div>
 
           {/* Image */}
-          <div className="relative animate-slide-up">
+          <div className="relative animate-slide-up z-10">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
               <img
                 src={heroImage}
