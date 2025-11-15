@@ -113,7 +113,7 @@ export default {
         "slide-up": "slide-up 0.8s ease-out",
       },
       fontFamily: {
-        serif: ["Lora", "serif"],
+        serif: ["Cormorant Garamond", "serif"],
         sans: ["Poppins", "system-ui", "sans-serif"],
       },
     },
