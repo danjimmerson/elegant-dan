@@ -8,39 +8,51 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 0%; /* Black */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 0 0% 5%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 0%; /* Black */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 40 30% 94%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 40 25% 91%; /* Soft Linen */
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 40 30% 94%;
+    --muted: 40 25% 91%; /* Soft Linen */
     --muted-foreground: 0 0% 40%;
 
-    --accent: 75 95% 65%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 230 100% 62%; /* Electric Sapphire */
+    --accent-foreground: 0 0% 100%;
 
-    --accent-warm: 35 90% 65%;
-    --accent-warm-foreground: 0 0% 5%;
+    --accent-amber: 48 100% 60%; /* Bright Amber */
+    --accent-amber-foreground: 0 0% 0%;
 
-    --beige: 40 30% 94%;
-    --beige-foreground: 0 0% 5%;
+    --accent-jungle: 118 38% 48%; /* Medium Jungle */
+    --accent-jungle-foreground: 0 0% 100%;
+
+    --accent-copper: 9 53% 52%; /* Rosy Copper */
+    --accent-copper-foreground: 0 0% 100%;
+
+    --accent-lavender: 267 14% 44%; /* Dusty Lavender */
+    --accent-lavender-foreground: 0 0% 100%;
+
+    --accent-tangerine: 21 100% 66%; /* Tangerine Dream */
+    --accent-tangerine-foreground: 0 0% 0%;
+
+    --beige: 40 25% 91%; /* Soft Linen */
+    --beige-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 75 95% 65%;
+    --ring: 230 100% 62%; /* Electric Sapphire */
 
     --radius: 1rem;
     
@@ -64,8 +76,8 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 3%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 3%; /* Near Black */
+    --foreground: 0 0% 98%; /* White */
 
     --card: 0 0% 5%;
     --card-foreground: 0 0% 98%;
@@ -73,22 +85,34 @@ All colors MUST be HSL.
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 0 0% 98%; /* White */
+    --primary-foreground: 0 0% 5%; /* Black */
 
-    --secondary: 40 15% 15%;
+    --secondary: 40 15% 15%; /* Dark Soft Linen */
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 75 95% 65%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 230 100% 65%; /* Brighter Electric Sapphire for dark mode */
+    --accent-foreground: 0 0% 100%;
 
-    --accent-warm: 35 90% 65%;
-    --accent-warm-foreground: 0 0% 5%;
+    --accent-amber: 48 100% 65%; /* Brighter Amber for dark mode */
+    --accent-amber-foreground: 0 0% 0%;
 
-    --beige: 40 30% 94%;
+    --accent-jungle: 118 38% 55%; /* Brighter Jungle for dark mode */
+    --accent-jungle-foreground: 0 0% 0%;
+
+    --accent-copper: 9 53% 58%; /* Brighter Copper for dark mode */
+    --accent-copper-foreground: 0 0% 100%;
+
+    --accent-lavender: 267 14% 55%; /* Brighter Lavender for dark mode */
+    --accent-lavender-foreground: 0 0% 100%;
+
+    --accent-tangerine: 21 100% 70%; /* Brighter Tangerine for dark mode */
+    --accent-tangerine-foreground: 0 0% 0%;
+
+    --beige: 40 25% 91%; /* Soft Linen */
     --beige-foreground: 0 0% 5%;
 
     --destructive: 0 62.8% 50%;
@@ -96,7 +120,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 75 95% 65%;
+    --ring: 230 100% 65%; /* Electric Sapphire */
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
