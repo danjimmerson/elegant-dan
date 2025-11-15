@@ -21,7 +21,7 @@ const Hero = () => {
               </p>
               
               {/* Typewriter Effect */}
-              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] bg-gradient-to-r from-accent via-accent-tangerine to-accent-copper bg-clip-text text-transparent">
+              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] bg-gradient-to-r from-accent via-accent-tangerine to-accent-copper bg-clip-text text-transparent animate-rainbow-gradient">
                 {typewriterText}
                 <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
               </h2>
