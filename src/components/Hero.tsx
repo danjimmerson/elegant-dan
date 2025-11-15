@@ -11,17 +11,8 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
       {/* Large Background Name */}
-      <div className="absolute inset-0 flex items-start justify-center pointer-events-none overflow-hidden pt-0 -mt-12">
-        <h1 
-          className="text-[12rem] lg:text-[16rem] xl:text-[20rem] font-sans font-black text-foreground/15 uppercase tracking-tighter leading-none whitespace-nowrap z-40"
-          style={{
-            textShadow: '0 0 40px hsl(var(--accent) / 0.3), 0 0 80px hsl(var(--accent) / 0.2)',
-            background: 'linear-gradient(180deg, hsl(var(--accent)) 0%, hsl(var(--foreground)) 50%, hsl(var(--accent)) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            opacity: 0.2
-          }}
-        >
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <h1 className="text-[12rem] lg:text-[16rem] xl:text-[20rem] font-sans font-black text-foreground/5 uppercase tracking-tighter leading-none whitespace-nowrap">
           Dan Jimmerson
         </h1>
       </div>
