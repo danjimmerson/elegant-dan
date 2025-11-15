@@ -122,6 +122,29 @@ export default {
             opacity: "0",
           },
         },
+        "rainbow-gradient": {
+          "0%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent)), hsl(var(--accent-tangerine)), hsl(var(--accent-copper)))",
+          },
+          "16.66%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent-tangerine)), hsl(var(--accent-copper)), hsl(var(--accent-lavender)))",
+          },
+          "33.33%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent-copper)), hsl(var(--accent-lavender)), hsl(var(--accent-jungle)))",
+          },
+          "50%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent-lavender)), hsl(var(--accent-jungle)), hsl(var(--accent-amber)))",
+          },
+          "66.66%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent-jungle)), hsl(var(--accent-amber)), hsl(var(--accent)))",
+          },
+          "83.33%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent-amber)), hsl(var(--accent)), hsl(var(--accent-tangerine)))",
+          },
+          "100%": {
+            backgroundImage: "linear-gradient(to right, hsl(var(--accent)), hsl(var(--accent-tangerine)), hsl(var(--accent-copper)))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -129,6 +152,7 @@ export default {
         "fade-in": "fade-in 0.6s ease-out",
         "slide-up": "slide-up 0.8s ease-out",
         "cursor-blink": "cursor-blink 1s ease-in-out infinite",
+        "rainbow-gradient": "rainbow-gradient 8s ease-in-out infinite",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
