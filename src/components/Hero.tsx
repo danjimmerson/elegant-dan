@@ -16,18 +16,14 @@ const Hero = () => {
           <div className="space-y-8 animate-fade-in">
             <div className="space-y-6">
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-foreground leading-tight">
-                Dan
-                <br />
-                Jimmerson
+                Dan Jimmerson
               </h1>
               
               {/* Typewriter Effect */}
-              <div className="flex items-center gap-1">
-                <h2 className="text-6xl lg:text-7xl xl:text-8xl font-sans font-bold text-accent leading-tight">
-                  {typewriterText}
-                </h2>
-                <span className="inline-block w-1 h-12 lg:h-14 xl:h-20 bg-accent animate-cursor-blink"></span>
-              </div>
+              <h2 className="text-6xl lg:text-7xl xl:text-7xl font-sans font-bold text-accent leading-tight">
+                {typewriterText}
+                <span className="inline-block w-1 h-12 lg:h-14 xl:h-16 bg-accent animate-cursor-blink ml-1"></span>
+              </h2>
             </div>
             
             <div className="space-y-4 max-w-lg">
