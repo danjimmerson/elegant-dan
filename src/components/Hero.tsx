@@ -10,11 +10,16 @@ const Hero = () => {
   ]);
   return (
     <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-12 py-32">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-24">
+        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-center">
           {/* Text Content */}
-          <div className="space-y-8 animate-fade-in">
-            <div className="space-y-6">
+          <div className="space-y-8 lg:space-y-6 animate-fade-in">
+            <div className="space-y-4">
+              {/* Greeting */}
+              <p className="text-lg lg:text-xl text-foreground font-sans mb-4">
+                Hi, I'm Dan.
+              </p>
+              
               {/* Typewriter Effect */}
               <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold text-accent leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem]">
                 {typewriterText}
