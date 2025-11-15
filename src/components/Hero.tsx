@@ -22,11 +22,7 @@ const Hero = () => {
               
               {/* Typewriter Effect */}
               <h2 
-                className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] bg-clip-text text-transparent animate-rainbow-gradient"
-                style={{
-                  backgroundImage: "linear-gradient(to right, hsl(var(--accent)), hsl(var(--accent-tangerine)), hsl(var(--accent-copper)), hsl(var(--accent-lavender)), hsl(var(--accent-jungle)), hsl(var(--accent-amber)), hsl(var(--accent)))",
-                  backgroundSize: "200% 100%",
-                }}
+                className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] text-accent-amber"
               >
                 {typewriterText}
                 <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
@@ -52,7 +48,7 @@ const Hero = () => {
               <img
                 src={heroImage}
                 alt="Dan Jimmerson - Professional Speaker"
-                className="w-full h-full object-cover object-[center_20%] lg:scale-[1.15]"
+                className="w-full h-full object-cover object-[center_45%]"
                 loading="eager"
               />
               {/* Multi-layer Gradient Overlays for Seamless Transition */}
