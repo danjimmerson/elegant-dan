@@ -10,13 +10,6 @@ const Hero = () => {
   ]);
   return (
     <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-      {/* Large Background Name */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <h1 className="text-[12rem] lg:text-[16rem] xl:text-[20rem] font-sans font-black text-foreground/5 uppercase tracking-tighter leading-none whitespace-nowrap">
-          Dan Jimmerson
-        </h1>
-      </div>
-      
       <div className="container mx-auto px-6 lg:px-12 py-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
