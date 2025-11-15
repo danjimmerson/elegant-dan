@@ -52,7 +52,7 @@ const Hero = () => {
               <img
                 src={heroImage}
                 alt="Dan Jimmerson - Professional Speaker"
-                className="w-full h-full object-cover object-center lg:scale-[1.15]"
+                className="w-full h-full object-cover object-[center_35%] lg:scale-[1.15]"
                 loading="eager"
               />
               {/* Multi-layer Gradient Overlays for Seamless Transition */}
