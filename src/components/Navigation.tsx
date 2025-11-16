@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "@/components/NavLink";
 import { Button } from "@/components/ui/button";
+import logoMark from "@/assets/dan-jimmerson-logo.svg";
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -24,9 +25,13 @@ const Navigation = () => {
           {/* Logo */}
           <NavLink
             to="/"
-            className="text-2xl font-serif font-bold text-foreground hover:text-accent transition-colors"
+            className="hover:opacity-80 transition-opacity"
           >
-            Dan Jimmerson
+            <img 
+              src={logoMark} 
+              alt="Dan Jimmerson" 
+              className="h-8 w-auto"
+            />
           </NavLink>
 
           {/* Navigation Links */}
