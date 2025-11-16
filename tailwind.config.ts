@@ -122,13 +122,25 @@ export default {
             opacity: "0",
           },
         },
-        "rainbow-gradient": {
+         "rainbow-gradient": {
           "0%": {
             backgroundPosition: "0% 50%",
           },
           "100%": {
             backgroundPosition: "200% 50%",
           },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "float-delayed": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.05)", opacity: "0.8" },
         },
       },
       animation: {
@@ -138,6 +150,9 @@ export default {
         "slide-up": "slide-up 0.8s ease-out",
         "cursor-blink": "cursor-blink 1s ease-in-out infinite",
         "rainbow-gradient": "rainbow-gradient 12s linear infinite",
+        "float": "float 3s ease-in-out infinite",
+        "float-delayed": "float-delayed 4s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
