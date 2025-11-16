@@ -40,14 +40,6 @@ const Hero = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent"></div>
             </div>
-            
-            {/* Floating Badge */}
-            <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-full p-6 shadow-2xl">
-              <div className="text-center">
-                <div className="text-3xl font-bold">10+</div>
-                <div className="text-xs uppercase tracking-wider">Years</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
