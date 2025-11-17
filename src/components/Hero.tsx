@@ -1,6 +1,7 @@
 import { ArrowDown } from "lucide-react";
 import heroImage from "@/assets/dan-jimmerson-speaker.jpg";
 import { useTypewriter } from "@/hooks/useTypewriter";
+import LogoBar from "./LogoBar";
 const Hero = () => {
   const typewriterText = useTypewriter(["Marketing Executive", "Personal Injury Thought Leader", "Marketing Technologist"]);
   return <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
@@ -44,8 +45,13 @@ const Hero = () => {
         </div>
       </div>
 
+      {/* Logo Bar */}
+      <div className="absolute bottom-24 left-0 right-0 z-20">
+        <LogoBar />
+      </div>
+
       {/* Scroll Down Arrow */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce z-30">
         <ArrowDown className="w-6 h-6 text-accent" />
       </div>
 

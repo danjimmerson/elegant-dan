@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="white">
+  <g>
+    <polygon points="100,20 120,60 165,60 130,90 145,130 100,105 55,130 70,90 35,60 80,60"/>
+    <text x="100" y="170" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">U.S. ARMY</text>
+  </g>
+</svg>
