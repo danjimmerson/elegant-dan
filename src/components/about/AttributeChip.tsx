@@ -3,28 +3,43 @@ import { LucideIcon } from "lucide-react";
 interface AttributeChipProps {
   label: string;
   icon: LucideIcon;
-  position: { top: string; left: string };
+  position: { top: string; left?: string; right?: string };
   delay: number;
-  onClick: () => void;
+  direction: 'left' | 'right';
+  accentColor: string;
 }
 
-export const AttributeChip = ({ label, icon: Icon, position, delay, onClick }: AttributeChipProps) => {
+export const AttributeChip = ({ 
+  label, 
+  icon: Icon, 
+  position, 
+  delay, 
+  direction,
+  accentColor 
+}: AttributeChipProps) => {
+  const animationClass = direction === 'left' ? 'animate-slide-from-left' : 'animate-slide-from-right';
+  
   return (
-    <button
-      onClick={onClick}
-      className="absolute bg-accent text-accent-foreground rounded-full px-4 py-2 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 animate-float"
+    <div
+      className={`absolute bg-card/95 backdrop-blur-sm rounded-full px-5 py-3 shadow-lg border-2 ${animationClass} z-20`}
       style={{
         top: position.top,
         left: position.left,
+        right: position.right,
         animationDelay: `${delay}s`,
-        transform: "translate(-50%, -50%)", // Center the chip on its position
+        borderColor: `hsl(var(--${accentColor}))`,
       }}
-      aria-label={`Filter by ${label}`}
     >
-      <div className="flex items-center gap-2">
-        <Icon size={16} />
-        <span className="text-sm font-semibold whitespace-nowrap">{label}</span>
+      <div className="flex items-center gap-2.5">
+        <Icon 
+          size={18} 
+          className="flex-shrink-0"
+          style={{ color: `hsl(var(--${accentColor}))` }}
+        />
+        <span className="text-sm font-semibold whitespace-nowrap text-card-foreground">
+          {label}
+        </span>
       </div>
-    </button>
+    </div>
   );
 };
