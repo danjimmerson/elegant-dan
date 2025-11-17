@@ -1,7 +1,6 @@
 import microsoftLogo from "@/assets/logos/microsoft.svg";
 import nasaLogo from "@/assets/logos/nasa.svg";
 import armyLogo from "@/assets/logos/army.svg";
-import shunnarahLogo from "@/assets/logos/shunnarah.svg";
 import dklawLogo from "@/assets/logos/dklaw.svg";
 
 const LogoBar = () => {
@@ -9,17 +8,16 @@ const LogoBar = () => {
     { src: microsoftLogo, alt: "Microsoft" },
     { src: nasaLogo, alt: "NASA" },
     { src: armyLogo, alt: "U.S. Army" },
-    { src: shunnarahLogo, alt: "Alexander Shunnarah Trial Attorneys" },
     { src: dklawLogo, alt: "DK Law" }
   ];
 
   return (
     <div className="w-full">
-      <div className="container mx-auto px-6 lg:px-12">
-        <p className="text-center text-xs text-muted-foreground uppercase tracking-wider mb-6">
-          Brands I've partnered with
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
+        <p className="text-left text-xs text-muted-foreground uppercase tracking-wider mb-6">
+          Brands I've worked and partnered with
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
+        <div className="flex flex-wrap items-center justify-start gap-12 lg:gap-20">
           {logos.map((logo) => (
             <img
               key={logo.alt}
