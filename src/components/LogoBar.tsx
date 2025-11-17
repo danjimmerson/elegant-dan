@@ -1,6 +1,7 @@
 import microsoftLogo from "@/assets/logos/microsoft.svg";
-import nasaLogo from "@/assets/logos/nasa.svg";
+import nasaLogo from "@/assets/logos/nasa.png";
 import armyLogo from "@/assets/logos/army.svg";
+import vaLogo from "@/assets/logos/va.svg";
 import dklawLogo from "@/assets/logos/dklaw.svg";
 
 const LogoBar = () => {
@@ -8,12 +9,13 @@ const LogoBar = () => {
     { src: microsoftLogo, alt: "Microsoft" },
     { src: nasaLogo, alt: "NASA" },
     { src: armyLogo, alt: "U.S. Army" },
+    { src: vaLogo, alt: "Veterans Administration" },
     { src: dklawLogo, alt: "DK Law" }
   ];
 
   return (
     <div className="w-full">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
+      <div className="container mx-auto px-6 lg:px-12">
         <p className="text-left text-xs text-muted-foreground uppercase tracking-wider mb-6">
           Brands I've worked and partnered with
         </p>
