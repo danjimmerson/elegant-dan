@@ -40,13 +40,8 @@ const Hero = () => {
       </div>
 
       {/* Logo Bar */}
-      <div className="absolute bottom-32 lg:bottom-36 left-0 right-0 z-20">
+      <div className="absolute bottom-16 lg:bottom-20 left-0 right-0 z-20">
         <LogoBar />
-      </div>
-
-      {/* Scroll Down Arrow */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce z-30">
-        <ArrowDown className="w-6 h-6 text-accent" />
       </div>
 
       {/* Decorative Elements */}

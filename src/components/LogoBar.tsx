@@ -22,22 +22,22 @@ const LogoBar = () => {
   const tripleLogos = [...logos, ...logos, ...logos];
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-hidden relative">
       <div className="container mx-auto px-6 lg:px-12">
         <p className="text-left text-xs text-muted-foreground uppercase tracking-wider mb-4">
           Brands I've worked and partnered with
         </p>
         
         {/* Scrolling Container with Fade Edges */}
-        <div className="relative">
+        <div className="relative overflow-hidden">
           {/* Left Fade Gradient */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-32 lg:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
           
           {/* Right Fade Gradient */}
-          <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 lg:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
           
           {/* Scrolling Logos */}
-          <div className="flex items-center gap-16 lg:gap-24 animate-scroll-logos">
+          <div className="flex items-center gap-16 lg:gap-24 animate-scroll-logos px-8">
             {tripleLogos.map((logo, index) => (
               <img
                 key={`${logo.alt}-${index}`}
