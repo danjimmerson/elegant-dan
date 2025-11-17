@@ -41,7 +41,7 @@ export const SkillCard = ({ title, outcome, tags, index }: SkillCardProps) => {
       )}
       style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
     >
-      <h3 className="text-lg font-bold mb-2 text-foreground">{title}</h3>
+      <h3 className="text-lg font-bold mb-2 text-black">{title}</h3>
       <p className="text-sm text-muted-foreground mb-3">{outcome}</p>
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
