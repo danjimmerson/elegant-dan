@@ -1,12 +1,10 @@
 import { 
-  Lightbulb, 
-  Award, 
-  BarChart3, 
-  Users, 
+  Target,
   TrendingUp, 
-  Zap, 
-  Target, 
-  Megaphone,
+  BarChart3, 
+  Lightbulb, 
+  Settings,
+  Users,
   LucideIcon 
 } from "lucide-react";
 
@@ -16,75 +14,52 @@ export interface AttributeData {
   position: { top: string; left?: string; right?: string };
   delay: number;
   direction: 'left' | 'right';
-  accentColor: string;
 }
 
 export const attributeData: AttributeData[] = [
   // Left Side
   {
-    label: "Strategic Vision",
-    icon: Lightbulb,
-    position: { top: '12%', left: '2%' },
+    label: "Brand Positioning",
+    icon: Target,
+    position: { top: '15%', left: '2%' },
     delay: 0,
-    direction: 'left',
-    accentColor: 'accent'
+    direction: 'left'
   },
   {
-    label: "Brand Builder",
-    icon: Award,
-    position: { top: '32%', left: '1%' },
-    delay: 0.15,
-    direction: 'left',
-    accentColor: 'accent-lavender'
-  },
-  {
-    label: "Data-Driven",
+    label: "Attribution & BI",
     icon: BarChart3,
-    position: { top: '52%', left: '3%' },
-    delay: 0.3,
-    direction: 'left',
-    accentColor: 'accent-jungle'
+    position: { top: '40%', left: '2%' },
+    delay: 0.2,
+    direction: 'left'
   },
   {
-    label: "Team Leader",
-    icon: Users,
-    position: { top: '72%', left: '2%' },
-    delay: 0.45,
-    direction: 'left',
-    accentColor: 'accent-tangerine'
+    label: "Marketing Ops & Integrations",
+    icon: Settings,
+    position: { top: '65%', left: '2%' },
+    delay: 0.4,
+    direction: 'left'
   },
   
   // Right Side
   {
-    label: "Growth Focus",
+    label: "Full-Funnel Acquisition",
     icon: TrendingUp,
-    position: { top: '12%', right: '2%' },
+    position: { top: '15%', right: '2%' },
     delay: 0.6,
-    direction: 'right',
-    accentColor: 'accent-jungle'
+    direction: 'right'
   },
   {
-    label: "Innovation",
-    icon: Zap,
-    position: { top: '32%', right: '1%' },
-    delay: 0.75,
-    direction: 'right',
-    accentColor: 'accent-amber'
+    label: "Creative Direction",
+    icon: Lightbulb,
+    position: { top: '40%', right: '2%' },
+    delay: 0.8,
+    direction: 'right'
   },
   {
-    label: "ROI Expert",
-    icon: Target,
-    position: { top: '52%', right: '3%' },
-    delay: 0.9,
-    direction: 'right',
-    accentColor: 'accent-copper'
-  },
-  {
-    label: "Digital Marketing",
-    icon: Megaphone,
-    position: { top: '72%', right: '2%' },
-    delay: 1.05,
-    direction: 'right',
-    accentColor: 'accent'
+    label: "Team Building & Leadership",
+    icon: Users,
+    position: { top: '65%', right: '2%' },
+    delay: 1.0,
+    direction: 'right'
   }
 ];
