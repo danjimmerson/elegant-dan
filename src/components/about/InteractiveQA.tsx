@@ -47,35 +47,24 @@ export const InteractiveQA = () => {
             <AccordionItem 
               key={item.id} 
               value={item.id}
-              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl overflow-hidden shadow-lg"
+              className="border-b border-border"
             >
-              <AccordionTrigger className="px-6 py-4 text-left font-serif text-xl font-bold hover:no-underline hover:bg-accent/5 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center justify-center w-8 h-8 text-sm bg-foreground/10 text-foreground/70 font-medium rounded-full">
-                    {item.number}
-                  </span>
-                  <span>{item.label}</span>
-                </div>
+              <AccordionTrigger className="text-left font-serif text-xl lg:text-2xl font-bold hover:no-underline hover:text-accent transition-colors">
+                <span className="text-muted-foreground mr-2">{item.number}</span>
+                {item.label}
               </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6">
-                {/* Intro with highlight */}
-                <div className="bg-accent/5 -mx-2 px-2 py-3 rounded-xl mb-6">
-                  <p className="text-lg font-medium leading-relaxed text-foreground/90">
-                    {item.intro}
-                  </p>
-                </div>
+              <AccordionContent className="pt-4 pb-6">
+                {/* Intro */}
+                <p className="text-lg font-sans mb-6 text-foreground leading-relaxed">
+                  {item.intro}
+                </p>
                 
-                {/* Enhanced Bullets */}
-                <ul className="space-y-3">
+                {/* Bullets */}
+                <ul className="space-y-3 text-base">
                   {item.bullets.map((bullet, i) => (
-                    <li 
-                      key={i} 
-                      className="flex gap-3 items-start bg-background/40 p-3 rounded-xl border-l-2 border-accent/30"
-                    >
-                      <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 rounded-full bg-accent" />
-                      </div>
-                      <span className="text-base text-muted-foreground leading-relaxed">{bullet}</span>
+                    <li key={i} className="flex gap-3">
+                      <span className="text-accent mt-1 flex-shrink-0">–</span>
+                      <span className="text-muted-foreground leading-relaxed">{bullet}</span>
                     </li>
                   ))}
                 </ul>
