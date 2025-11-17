@@ -3,6 +3,8 @@ import nasaLogo from "@/assets/logos/nasa.png";
 import armyLogo from "@/assets/logos/army.svg";
 import vaLogo from "@/assets/logos/va.svg";
 import dklawLogo from "@/assets/logos/dklaw.svg";
+import astaLogo from "@/assets/logos/asta.png";
+import nypdLogo from "@/assets/logos/nypd.png";
 
 const LogoBar = () => {
   const logos = [
@@ -10,7 +12,9 @@ const LogoBar = () => {
     { src: nasaLogo, alt: "NASA" },
     { src: armyLogo, alt: "U.S. Army" },
     { src: vaLogo, alt: "Veterans Administration" },
-    { src: dklawLogo, alt: "DK Law" }
+    { src: dklawLogo, alt: "DK Law" },
+    { src: astaLogo, alt: "ASTA" },
+    { src: nypdLogo, alt: "NYPD" }
   ];
 
   return (
