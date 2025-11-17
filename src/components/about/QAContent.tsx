@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { qaData } from "./qaData";
-import { cn } from "@/lib/utils";
 
 interface QAContentProps {
   setActiveId: (id: string) => void;
@@ -31,7 +30,7 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
   }, [setActiveId]);
 
   return (
-    <div className="space-y-16 lg:space-y-24">
+    <div className="space-y-24 lg:space-y-32">
       {qaData.map((item, index) => (
         <div
           key={item.id}
@@ -40,43 +39,25 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
           className="scroll-mt-32 animate-fade-in"
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          <div className={cn(
-            "rounded-2xl p-8 lg:p-12 shadow-2xl transition-all duration-500 hover:shadow-orange-900/20 hover:scale-[1.01]",
-            item.bgColor
-          )}>
-            {/* Accent Badge */}
-            <div className="flex items-center gap-2 mb-6">
-              <div className={cn("w-3 h-3 rounded-sm", item.accentColor)} />
-              <span className="text-xs uppercase tracking-wider font-semibold text-slate-400">
-                {item.label}
-              </span>
-            </div>
-            
-            {/* Large Serif Headline */}
-            <h3 className="text-4xl lg:text-6xl font-serif font-bold mb-8 text-white leading-tight">
-              {item.title}
-            </h3>
-            
-            {/* Intro Paragraph */}
-            <p className="text-xl lg:text-2xl font-sans mb-10 text-slate-200 leading-relaxed max-w-3xl">
-              {item.intro}
-            </p>
-            
-            {/* Bullets */}
-            <ul className="space-y-4 text-base lg:text-lg max-w-3xl">
-              {item.bullets.map((bullet, i) => (
-                <li key={i} className="flex gap-4 items-start">
-                  <span className={cn(
-                    "w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0",
-                    item.accentColor
-                  )} />
-                  <span className="text-slate-300 leading-relaxed">
-                    {bullet}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Number + Title */}
+          <h3 className="text-3xl lg:text-5xl font-serif font-bold mb-6 text-foreground">
+            {item.number} – {item.title}
+          </h3>
+          
+          {/* Intro */}
+          <p className="text-xl lg:text-2xl font-sans mb-8 text-foreground leading-relaxed">
+            {item.intro}
+          </p>
+          
+          {/* Bullets */}
+          <ul className="space-y-4 text-base lg:text-lg">
+            {item.bullets.map((bullet, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="text-accent mt-1 flex-shrink-0">–</span>
+                <span className="text-muted-foreground leading-relaxed">{bullet}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       ))}
     </div>

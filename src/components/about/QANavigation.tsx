@@ -8,51 +8,43 @@ interface QANavigationProps {
 
 export const QANavigation = ({ activeId, scrollToSection }: QANavigationProps) => {
   return (
-    <nav className="sticky top-24 lg:top-32 h-fit">
-      <div className="bg-white/60 backdrop-blur-sm rounded-lg p-8 shadow-md border border-amber-100">
-        <div className="space-y-1">
-          {qaData.map((item, index) => (
-            <div key={item.id}>
-              <button
-                onClick={() => scrollToSection(item.id)}
-                className={cn(
-                  "w-full text-left py-4 px-4 -mx-4 rounded-md transition-all duration-300 group",
-                  activeId === item.id 
-                    ? "bg-amber-100/80" 
-                    : "hover:bg-amber-50/50"
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className={cn(
-                      "text-lg font-bold transition-colors duration-300",
-                      activeId === item.id 
-                        ? "text-orange-600" 
-                        : "text-slate-400 group-hover:text-slate-600"
-                    )}
-                  >
-                    {item.number}
-                  </span>
-                  <span
-                    className={cn(
-                      "text-xs uppercase tracking-wider font-medium transition-colors duration-300",
-                      activeId === item.id 
-                        ? "text-slate-900" 
-                        : "text-slate-600 group-hover:text-slate-800"
-                    )}
-                  >
-                    {item.label}
-                  </span>
-                </div>
-              </button>
-              
-              {index < qaData.length - 1 && (
-                <div className="h-px bg-amber-200 my-1" />
+    <div className="sticky top-24 lg:top-32 h-fit">
+      {/* Vertical Line */}
+      <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
+      
+      {/* Stops */}
+      <div className="relative space-y-12">
+        {qaData.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => scrollToSection(item.id)}
+            className={cn(
+              "flex items-center gap-4 text-left transition-all duration-300 group",
+              activeId === item.id ? "font-bold" : "font-normal hover:translate-x-1"
+            )}
+          >
+            {/* Dot */}
+            <div
+              className={cn(
+                "w-6 h-6 rounded-full border-2 transition-all duration-300 flex-shrink-0",
+                activeId === item.id
+                  ? "bg-foreground border-foreground scale-110"
+                  : "bg-background border-foreground group-hover:border-accent"
               )}
-            </div>
-          ))}
-        </div>
+            />
+            
+            {/* Label */}
+            <span
+              className={cn(
+                "text-sm lg:text-base transition-colors duration-300",
+                activeId === item.id ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+              )}
+            >
+              {item.number} · {item.label}
+            </span>
+          </button>
+        ))}
       </div>
-    </nav>
+    </div>
   );
 };

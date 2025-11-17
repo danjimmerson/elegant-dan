@@ -5,8 +5,6 @@ export interface QAItem {
   title: string;
   intro: string;
   bullets: string[];
-  bgColor: string;
-  accentColor: string;
 }
 
 export const qaData: QAItem[] = [
@@ -21,9 +19,7 @@ export const qaData: QAItem[] = [
       "Own the mix across brand, PI lead gen, paid/local search, and social.",
       "Build feedback loops with intake, call center, and ops so we're optimizing to cases, not clicks.",
       "Design experiments, kill what doesn't work fast, double-down on what moves pipeline."
-    ],
-    bgColor: "bg-slate-900",
-    accentColor: "bg-orange-500"
+    ]
   },
   {
     id: "how-i-think",
@@ -36,9 +32,7 @@ export const qaData: QAItem[] = [
       "Build multi-touch journeys that follow real buyer behavior, not just ad platform defaults.",
       "Use first-party data, attribution, and cohort views to decide where each next dollar goes.",
       "Protect the brand while scaling: every creative, script, and landing experience is on-voice and on-mission."
-    ],
-    bgColor: "bg-gray-900",
-    accentColor: "bg-cyan-400"
+    ]
   },
   {
     id: "proof-it-works",
@@ -51,9 +45,7 @@ export const qaData: QAItem[] = [
       "Rebuilt local search + GMB to 3× inbound volume in key markets.",
       "Launched brand and social programs that added tens of thousands of followers/subscribers in months.",
       "Led full-firm rebrands and website relaunches (strategy → design → UX → performance → CRO) on aggressive timelines."
-    ],
-    bgColor: "bg-zinc-900",
-    accentColor: "bg-emerald-400"
+    ]
   },
   {
     id: "working-on-now",
@@ -66,8 +58,6 @@ export const qaData: QAItem[] = [
       "Experimenting with LLM-driven content, calculators, and tools that create demand and capture higher-intent leads.",
       "Deepening measurement: beyond last-click to understand channel assist, quality, and long-term value.",
       "Coaching teams so creative, media, and data operate as one growth unit."
-    ],
-    bgColor: "bg-stone-900",
-    accentColor: "bg-purple-400"
+    ]
   }
 ];
