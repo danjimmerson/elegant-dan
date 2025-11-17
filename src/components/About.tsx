@@ -11,8 +11,8 @@ const About = () => {
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Column - Avatar & Attributes */}
-          <AvatarSection onAttributeClick={() => {}} />
+          {/* Left Column - Professional Photo */}
+          <AvatarSection />
 
           {/* Right Column - Skill Explorer */}
           <SkillExplorer />
