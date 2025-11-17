@@ -104,22 +104,32 @@ export default {
             transform: "translateY(0)",
           },
         },
-        "draw-line": {
-          from: {
-            strokeDashoffset: "1000",
+        "slide-from-left": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(100px) scale(0.8)",
           },
-          to: {
-            strokeDashoffset: "0",
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0) scale(1)",
           },
         },
-        "fade-in-label": {
-          from: {
+        "slide-from-right": {
+          "0%": {
             opacity: "0",
-            transform: "translateX(-10px)",
+            transform: "translateX(-100px) scale(0.8)",
           },
-          to: {
+          "100%": {
             opacity: "1",
-            transform: "translateX(0)",
+            transform: "translateX(0) scale(1)",
+          },
+        },
+        float: {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
           },
         },
         "slide-up": {
@@ -171,8 +181,8 @@ export default {
         "float": "float 3s ease-in-out infinite",
         "float-delayed": "float-delayed 4s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
-        "draw-line": "draw-line 0.6s ease-out forwards",
-        "fade-in-label": "fade-in-label 0.3s ease-out forwards",
+        "slide-from-left": "slide-from-left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "slide-from-right": "slide-from-right 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
