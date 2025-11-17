@@ -8,7 +8,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 lg:px-12 py-24 lg:py-16 xl:py-20">
         <div className="relative">
           {/* Image - Absolutely Positioned Behind */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full lg:w-1/2 xl:w-[45%] h-[500px] lg:h-[600px] z-0 animate-slide-up">
+          <div className="absolute right-0 top-[55%] -translate-y-1/2 w-full lg:w-1/2 xl:w-[45%] h-[500px] lg:h-[600px] z-0 animate-slide-up">
             <div className="relative w-full h-full rounded-3xl overflow-hidden lg:scale-[1.15] origin-center">
               <img src={heroImage} alt="Dan Jimmerson - Professional Speaker" className="w-full h-full object-cover object-[center_45%]" loading="eager" />
               {/* Multi-layer Gradient Overlays for Seamless Transition */}
@@ -18,23 +18,19 @@ const Hero = () => {
           </div>
 
           {/* Text Content - Overlays Image */}
-          <div className="relative z-10 max-w-3xl space-y-6 lg:space-y-4 animate-fade-in">
-            <div className="space-y-4">
-              {/* Greeting */}
-              <p className="text-lg lg:text-xl text-foreground font-sans mb-4">
-                Hi, I'm Dan Jimmerson.
-              </p>
-              
-              {/* Typewriter Effect */}
-              <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] text-foreground lg:whitespace-nowrap">
-                {typewriterText}
-                <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
-              </h2>
-            </div>
+          <div className="relative z-10 max-w-3xl animate-fade-in">
+            <p className="text-lg lg:text-xl text-foreground font-sans mb-3">
+              Hi, I'm Dan Jimmerson.
+            </p>
             
-            <div className="space-y-4 max-w-lg">
-              <p className="text-lg text-muted-foreground">I combine C-suite strategy with hands-on execution to build brands people remember and systems that reliably turn attention into revenue.</p>
-            </div>
+            <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] text-foreground lg:whitespace-nowrap mb-6 lg:mb-8">
+              {typewriterText}
+              <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
+            </h2>
+            
+            <p className="text-lg text-muted-foreground max-w-lg">
+              I combine C-suite strategy with hands-on execution to build brands people remember and systems that reliably turn attention into revenue.
+            </p>
           </div>
         </div>
       </div>
