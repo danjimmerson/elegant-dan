@@ -18,8 +18,8 @@ const LogoBar = () => {
     { src: nypdLogo, alt: "NYPD" }            // narrow
   ];
 
-  // Triple the logos for seamless infinite scroll
-  const tripleLogos = [...logos, ...logos, ...logos];
+  // Double the logos for seamless infinite scroll
+  const doubleLogos = [...logos, ...logos];
 
   return (
     <div className="w-full overflow-hidden relative">
@@ -38,7 +38,7 @@ const LogoBar = () => {
           
           {/* Scrolling Logos */}
           <div className="flex items-center gap-16 lg:gap-24 animate-scroll-logos px-8">
-            {tripleLogos.map((logo, index) => (
+            {doubleLogos.map((logo, index) => (
               <img
                 key={`${logo.alt}-${index}`}
                 src={logo.src}
