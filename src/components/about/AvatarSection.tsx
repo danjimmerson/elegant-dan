@@ -6,8 +6,8 @@ export const AvatarSection = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto h-[800px] flex items-center justify-center">
       {/* Avatar Image */}
-      <div className="relative z-10">
-        <img 
+      <div className="relative z-20">
+        <img
           src={professionalPhoto}
           alt="Dan Jimmerson - Marketing Executive"
           className="h-[700px] w-auto object-contain animate-fade-in"
