@@ -40,7 +40,7 @@ const Hero = () => {
       </div>
 
       {/* Logo Bar */}
-      <div className="absolute bottom-24 left-0 right-0 z-20">
+      <div className="absolute bottom-32 lg:bottom-36 left-0 right-0 z-20">
         <LogoBar />
       </div>
 
