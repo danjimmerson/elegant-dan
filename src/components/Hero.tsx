@@ -25,12 +25,6 @@ const Hero = () => {
             <div className="space-y-4 max-w-lg">
               <p className="text-lg text-muted-foreground">I combine C-suite strategy with hands-on execution to build brands people remember and systems that reliably turn attention into revenue.</p>
             </div>
-
-            {/* Scroll Indicator */}
-            <div className="flex items-center gap-4 pt-8">
-              <div className="h-px w-16 bg-accent"></div>
-              <span className="text-sm text-muted-foreground uppercase tracking-wider">Scroll to explore</span>
-            </div>
           </div>
 
           {/* Image */}
