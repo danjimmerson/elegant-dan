@@ -1,15 +1,26 @@
-import { BarChart, Lightbulb, Target, Zap, MessageSquare, Layers, TrendingUp, Cog } from "lucide-react";
 import { AttributeChip } from "./AttributeChip";
-import { Badge } from "@/components/ui/badge";
+import { BarChart, Lightbulb, Target, Zap, Users, Puzzle, Briefcase, TrendingUp } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
 interface Attribute {
   id: string;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   category: string;
-  position: { top: string; left?: string; right?: string };
+  position: { top: string; left: string };
   delay: number;
 }
+
+// Helper function for circular positioning (keeps chips within bounds)
+const getCircularPosition = (index: number, total: number, radiusPercent: number) => {
+  const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
+  const x = 50 + radiusPercent * Math.cos(angle);
+  const y = 50 + radiusPercent * Math.sin(angle);
+  return { 
+    top: `${Math.max(5, Math.min(95, y))}%`, 
+    left: `${Math.max(5, Math.min(95, x))}%` 
+  };
+};
 
 const ATTRIBUTES: Attribute[] = [
   {
@@ -17,7 +28,7 @@ const ATTRIBUTES: Attribute[] = [
     label: "Analytics",
     icon: BarChart,
     category: "analytics",
-    position: { top: "15%", left: "-8%" },
+    position: getCircularPosition(0, 8, 38),
     delay: 0,
   },
   {
@@ -25,7 +36,7 @@ const ATTRIBUTES: Attribute[] = [
     label: "Creative",
     icon: Lightbulb,
     category: "brand",
-    position: { top: "30%", left: "-5%" },
+    position: getCircularPosition(1, 8, 38),
     delay: 0.2,
   },
   {
@@ -33,7 +44,7 @@ const ATTRIBUTES: Attribute[] = [
     label: "Strategic",
     icon: Target,
     category: "brand",
-    position: { top: "10%", right: "-5%" },
+    position: getCircularPosition(2, 8, 38),
     delay: 0.4,
   },
   {
@@ -41,39 +52,39 @@ const ATTRIBUTES: Attribute[] = [
     label: "Tactical",
     icon: Zap,
     category: "acquisition",
-    position: { top: "28%", right: "-8%" },
+    position: getCircularPosition(3, 8, 38),
     delay: 0.6,
   },
   {
-    id: "communicative",
-    label: "Communicative",
-    icon: MessageSquare,
+    id: "leadership",
+    label: "Leadership",
+    icon: Users,
     category: "leadership",
-    position: { top: "50%", left: "-10%" },
+    position: getCircularPosition(4, 8, 38),
     delay: 0.8,
   },
   {
-    id: "brand-systems",
-    label: "Brand Systems",
-    icon: Layers,
-    category: "brand",
-    position: { top: "70%", left: "-6%" },
+    id: "systems",
+    label: "Systems",
+    icon: Puzzle,
+    category: "ops",
+    position: getCircularPosition(5, 8, 38),
     delay: 1.0,
   },
   {
-    id: "revenue-architecture",
-    label: "Revenue Architecture",
-    icon: TrendingUp,
-    category: "acquisition",
-    position: { top: "55%", right: "-10%" },
+    id: "ops",
+    label: "Operations",
+    icon: Briefcase,
+    category: "ops",
+    position: getCircularPosition(6, 8, 38),
     delay: 1.2,
   },
   {
-    id: "automation",
-    label: "Automation & Ops",
-    icon: Cog,
-    category: "ops",
-    position: { top: "75%", right: "-8%" },
+    id: "growth",
+    label: "Growth",
+    icon: TrendingUp,
+    category: "acquisition",
+    position: getCircularPosition(7, 8, 38),
     delay: 1.4,
   },
 ];
@@ -83,10 +94,10 @@ const ATTRIBUTE_TO_CATEGORY_MAP: Record<string, string> = {
   creative: "brand",
   strategic: "brand",
   tactical: "acquisition",
-  communicative: "leadership",
-  "brand-systems": "brand",
-  "revenue-architecture": "acquisition",
-  automation: "ops",
+  leadership: "leadership",
+  systems: "ops",
+  ops: "ops",
+  growth: "acquisition",
 };
 
 interface AvatarSectionProps {
@@ -95,80 +106,35 @@ interface AvatarSectionProps {
 
 export const AvatarSection = ({ onAttributeClick }: AvatarSectionProps) => {
   const handleChipClick = (attributeId: string) => {
-    const category = ATTRIBUTE_TO_CATEGORY_MAP[attributeId];
+    const category = ATTRIBUTE_TO_CATEGORY_MAP[attributeId] || "all";
     onAttributeClick(category);
     
     // Smooth scroll to skill explorer
     const skillExplorer = document.getElementById("skill-explorer");
     if (skillExplorer) {
-      skillExplorer.scrollIntoView({ behavior: "smooth", block: "start" });
+      skillExplorer.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   };
 
   return (
-    <div className="relative">
-      {/* Eyebrow */}
-      <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">About Dan</p>
-
-      {/* Main Heading */}
-      <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-        Brand architect.
-        <br />
-        Revenue operator.
-      </h1>
-
-      {/* Description */}
-      <p className="text-lg text-muted-foreground mb-12 max-w-xl">
-        I blend C-suite strategy with hands-on execution for PI firms that need both vision and
-        performance. I build brands people remember, then wire the funnels, data, and systems that
-        turn that attention into signed cases.
-      </p>
-
-      {/* Avatar Container with Floating Attributes */}
-      <div className="relative w-full max-w-lg mx-auto lg:mx-0 aspect-[3/4] mb-12">
-        {/* Placeholder Avatar */}
-        <div className="relative w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-8xl mb-4">👤</div>
-              <p className="text-lg text-muted-foreground font-medium">
-                3D Avatar Placeholder
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Will be replaced with 3D model
-              </p>
-            </div>
-          </div>
-          
-          {/* Gradient Overlays for Depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent"></div>
-        </div>
-
-        {/* Floating Attribute Chips */}
-        {ATTRIBUTES.map((attribute) => (
-          <AttributeChip
-            key={attribute.id}
-            label={attribute.label}
-            icon={attribute.icon}
-            position={attribute.position}
-            delay={attribute.delay}
-            onClick={() => handleChipClick(attribute.id)}
-          />
-        ))}
+    <div className="relative w-full h-[400px] flex items-center justify-center">
+      {/* Avatar Container - Centered */}
+      <div className="relative w-64 h-64 bg-gradient-to-br from-accent/20 to-accent/5 rounded-full flex items-center justify-center shadow-2xl">
+        <div className="text-6xl font-bold text-accent/40">DJ</div>
+        <div className="absolute inset-0 rounded-full border-4 border-accent/20"></div>
       </div>
 
-      {/* Character Stats */}
-      <div className="flex flex-wrap gap-3">
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          15+ years in PI
-        </Badge>
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          $XXXM+ media directed
-        </Badge>
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          25+ markets scaled
-        </Badge>
-      </div>
+      {/* Floating Attribute Chips - Positioned in circle around avatar */}
+      {ATTRIBUTES.map((attr) => (
+        <AttributeChip
+          key={attr.id}
+          label={attr.label}
+          icon={attr.icon}
+          position={attr.position}
+          delay={attr.delay}
+          onClick={() => handleChipClick(attr.id)}
+        />
+      ))}
     </div>
   );
 };
