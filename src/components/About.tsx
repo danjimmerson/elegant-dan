@@ -1,6 +1,5 @@
 import { AboutHeader } from "./about/AboutHeader";
 import { AvatarSection } from "./about/AvatarSection";
-import { SkillExplorer } from "./about/SkillExplorer";
 
 const About = () => {
   return (
@@ -9,13 +8,9 @@ const About = () => {
         {/* Header Section - Full Width */}
         <AboutHeader />
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Column - Professional Photo */}
+        {/* Centered Avatar with Skill Chips */}
+        <div className="max-w-5xl mx-auto">
           <AvatarSection />
-
-          {/* Right Column - Skill Explorer */}
-          <SkillExplorer />
         </div>
       </div>
     </section>
