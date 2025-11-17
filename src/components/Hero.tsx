@@ -10,7 +10,7 @@ const Hero = () => {
           {/* Image - Absolutely Positioned Behind */}
           <div className="absolute right-0 top-[55%] -translate-y-1/2 w-full lg:w-1/2 xl:w-[45%] h-[500px] lg:h-[600px] z-0 animate-slide-up">
             <div className="relative w-full h-full rounded-3xl overflow-hidden lg:scale-[1.15] origin-center">
-              <img src={heroImage} alt="Dan Jimmerson - Professional Speaker" className="w-full h-full object-cover object-[center_45%]" loading="eager" />
+              <img src={heroImage} alt="Dan Jimmerson - Professional Speaker" className="w-full h-full object-cover object-[center_30%]" loading="eager" />
               {/* Multi-layer Gradient Overlays for Seamless Transition */}
               <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent"></div>
