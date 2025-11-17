@@ -104,6 +104,24 @@ export default {
             transform: "translateY(0)",
           },
         },
+        "draw-line": {
+          from: {
+            strokeDashoffset: "1000",
+          },
+          to: {
+            strokeDashoffset: "0",
+          },
+        },
+        "fade-in-label": {
+          from: {
+            opacity: "0",
+            transform: "translateX(-10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
         "slide-up": {
           "0%": {
             transform: "translateY(100%)",
@@ -153,6 +171,8 @@ export default {
         "float": "float 3s ease-in-out infinite",
         "float-delayed": "float-delayed 4s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "draw-line": "draw-line 0.6s ease-out forwards",
+        "fade-in-label": "fade-in-label 0.3s ease-out forwards",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
