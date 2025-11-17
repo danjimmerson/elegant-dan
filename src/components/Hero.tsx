@@ -3,7 +3,7 @@ import heroImage from "@/assets/dan-jimmerson-speaker.jpg";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import LogoBar from "./LogoBar";
 const Hero = () => {
-  const typewriterText = useTypewriter(["Marketing Executive", "Personal Injury Thought Leader", "Marketing Technologist"]);
+  const typewriterText = useTypewriter(["Marketing Executive", "Brand Architect", "Revenue Catalyst"]);
   return <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-24">
         <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-center">
