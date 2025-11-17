@@ -49,7 +49,7 @@ const SKILLS: Skill[] = [
 
 export const SkillExplorer = () => {
   return (
-    <div className="bg-accent-tangerine rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
+    <div className="bg-black rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
       <div className="mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
