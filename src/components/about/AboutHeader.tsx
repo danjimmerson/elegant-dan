@@ -13,17 +13,6 @@ export const AboutHeader = () => {
         I blend C-suite strategy with hands-on execution for PI firms that need both vision and performance. 
         I build brands people remember, then wire the funnels, data, and systems that turn that attention into signed cases.
       </p>
-      <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          15+ years in PI
-        </Badge>
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          $XXXM+ media directed
-        </Badge>
-        <Badge variant="secondary" className="text-sm px-4 py-2">
-          25+ markets scaled
-        </Badge>
-      </div>
     </div>
   );
 };
