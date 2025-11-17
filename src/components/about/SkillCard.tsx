@@ -3,8 +3,7 @@ import { cn } from "@/lib/utils";
 
 interface SkillCardProps {
   title: string;
-  summary: string;
-  details: string;
+  outcome: string;
   tags: string[];
   index: number;
 }
@@ -33,20 +32,17 @@ const getTagColor = (tag: string) => {
   return TAG_COLORS[tag] || "bg-accent/20 text-accent-foreground border-accent/40";
 };
 
-export const SkillCard = ({ title, summary, details, tags, index }: SkillCardProps) => {
+export const SkillCard = ({ title, outcome, tags, index }: SkillCardProps) => {
   return (
     <div
       className={cn(
-        "bg-white rounded-lg p-6 border-2 border-border/50 hover:border-accent transition-all duration-300",
-        "hover:shadow-md opacity-0 animate-fade-in"
+        "bg-white rounded-lg p-4 border-2 border-white/50 hover:border-white transition-all duration-300",
+        "hover:shadow-lg hover:-translate-y-1 opacity-0 animate-fade-in"
       )}
-      style={{ animationDelay: `${index * 100}ms`, animationFillMode: "forwards" }}
+      style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
     >
-      <h3 className="text-xl font-bold mb-3">{title}</h3>
-      <p className="text-base text-muted-foreground mb-3">{summary}</p>
-      <p className="text-sm text-muted-foreground/80 mb-4 italic">
-        {details}
-      </p>
+      <h3 className="text-lg font-bold mb-2 text-foreground">{title}</h3>
+      <p className="text-sm text-muted-foreground mb-3">{outcome}</p>
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
           <Badge 

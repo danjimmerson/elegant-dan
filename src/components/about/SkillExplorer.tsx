@@ -1,143 +1,73 @@
-import { useState } from "react";
 import { Sparkles } from "lucide-react";
-import { CategoryFilter } from "./CategoryFilter";
 import { SkillCard } from "./SkillCard";
-import { Button } from "@/components/ui/button";
-
-interface Category {
-  id: string;
-  label: string;
-}
 
 interface Skill {
   id: string;
   title: string;
-  summary: string;
-  details: string;
+  outcome: string;
   tags: string[];
-  category: string;
 }
-
-const CATEGORIES: Category[] = [
-  { id: "all", label: "Show All" },
-  { id: "brand", label: "Brand & Positioning" },
-  { id: "acquisition", label: "Acquisition & Paid Media" },
-  { id: "analytics", label: "Analytics & Attribution" },
-  { id: "ops", label: "Ops, Systems & Integrations" },
-  { id: "leadership", label: "Leadership & Team Building" },
-];
 
 const SKILLS: Skill[] = [
   {
     id: "brand-positioning",
-    title: "Brand Positioning for PI Firms",
-    summary: "Reframes firms from \"one of many\" to the obvious choice in crowded markets.",
-    details: "Used at DK Law and Alexander Shunnarah to scale volume while defending margins.",
+    title: "Brand Positioning",
+    outcome: "Made firms the obvious choice in crowded markets",
     tags: ["Brand", "Strategic"],
-    category: "brand",
   },
   {
     id: "full-funnel",
-    title: "Full-Funnel Acquisition Strategy",
-    summary: "Architects media, landing experiences, and follow-up that stabilize cost-per-case.",
-    details: "Deployed across 25+ markets to reduce CPA by 30% while maintaining quality.",
+    title: "Full-Funnel Acquisition",
+    outcome: "Reduced cost-per-case by 30% across 25+ markets",
     tags: ["Performance", "Acquisition"],
-    category: "acquisition",
   },
   {
     id: "attribution",
-    title: "Attribution & BI for Signed Cases",
-    summary: "Builds reporting that ties every marketing dollar to actual case outcomes.",
-    details: "Custom dashboards showing true ROI from first click to signed retainer.",
+    title: "Attribution & BI",
+    outcome: "Built dashboards showing true ROI from click to signed case",
     tags: ["Analytics", "Ops"],
-    category: "analytics",
   },
   {
     id: "creative-direction",
-    title: "Creative Direction That Performs",
-    summary: "Leads concepts that are memorable on billboards, search, and social—and actually convert.",
-    details: "Balance brand storytelling with direct response principles for measurable results.",
+    title: "Creative Direction",
+    outcome: "Delivered concepts that are memorable and convert",
     tags: ["Creative", "Brand"],
-    category: "brand",
   },
   {
     id: "marketing-ops",
     title: "Marketing Ops & Integrations",
-    summary: "Connects CRMs, call centers, and ad platforms so no lead slips through the cracks.",
-    details: "Built full-stack integrations between CallRail, Salesforce, and Meta/Google APIs.",
+    outcome: "Connected CRMs, call centers, and ad platforms seamlessly",
     tags: ["Ops", "Systems"],
-    category: "ops",
   },
   {
     id: "team-building",
     title: "Team Building & Leadership",
-    summary: "Builds and coaches teams across media, creative, and data that can scale beyond the founder.",
-    details: "Hired, trained, and led 15+ person marketing departments with clear KPIs.",
+    outcome: "Built and coached teams that scale beyond the founder",
     tags: ["Leadership", "People"],
-    category: "leadership",
   },
 ];
 
-interface SkillExplorerProps {
-  activeFilter: string;
-  onFilterChange: (filter: string) => void;
-}
-
-export const SkillExplorer = ({ activeFilter, onFilterChange }: SkillExplorerProps) => {
-  const [showAll, setShowAll] = useState(false);
-
-  const filteredSkills = activeFilter === "all" 
-    ? SKILLS 
-    : SKILLS.filter((skill) => skill.category === activeFilter);
-
-  const displayedSkills = showAll ? filteredSkills : filteredSkills.slice(0, 4);
-
+export const SkillExplorer = () => {
   return (
-    <div className="bg-card rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
+    <div className="bg-accent-tangerine rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-accent" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Core Capabilities</h2>
-            <p className="text-xs text-muted-foreground">What I bring to your firm</p>
+            <h2 className="text-xl font-bold text-white">Core Capabilities</h2>
+            <p className="text-xs text-white/90">What I bring to your firm</p>
           </div>
         </div>
       </div>
 
-      {/* Category Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-4 mb-6 snap-x scrollbar-hide">
-        {CATEGORIES.map((category) => (
-          <CategoryFilter
-            key={category.id}
-            label={category.label}
-            isActive={activeFilter === category.id}
-            onClick={() => {
-              onFilterChange(category.id);
-              setShowAll(false);
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Skill Cards - Single Column */}
-      <div className="space-y-4 mb-6">
-        {displayedSkills.map((skill, index) => (
+      {/* Skill Cards - 2x3 Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {SKILLS.map((skill, index) => (
           <SkillCard key={skill.id} {...skill} index={index} />
         ))}
       </div>
-
-      {/* View Full List Button */}
-      {filteredSkills.length > 4 && !showAll && (
-        <Button
-          variant="ghost"
-          onClick={() => setShowAll(true)}
-          className="w-full text-sm"
-        >
-          View full skill list ({filteredSkills.length - 4} more)
-        </Button>
-      )}
     </div>
   );
 };
