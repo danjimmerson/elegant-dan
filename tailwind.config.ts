@@ -172,7 +172,7 @@ export default {
         },
         "scroll-logos": {
           "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-33.333%)" }
+          "100%": { transform: "translateX(-50%)" }
         },
       },
       animation: {
@@ -187,7 +187,7 @@ export default {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "slide-from-left": "slide-from-left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
         "slide-from-right": "slide-from-right 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
-        "scroll-logos": "scroll-logos 45s linear infinite",
+        "scroll-logos": "scroll-logos 40s linear infinite",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
