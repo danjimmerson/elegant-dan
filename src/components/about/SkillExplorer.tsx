@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 import { CategoryFilter } from "./CategoryFilter";
 import { SkillCard } from "./SkillCard";
 import { Button } from "@/components/ui/button";
@@ -94,8 +95,15 @@ export const SkillExplorer = ({ activeFilter, onFilterChange }: SkillExplorerPro
   return (
     <div className="bg-card rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Skillset</h2>
-        <p className="text-sm text-muted-foreground">Browse how I help firms grow.</p>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-accent" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Core Capabilities</h2>
+            <p className="text-xs text-muted-foreground">What I bring to your firm</p>
+          </div>
+        </div>
       </div>
 
       {/* Category Filters */}
