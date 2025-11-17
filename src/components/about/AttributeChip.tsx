@@ -1,17 +1,14 @@
 import { LucideIcon } from "lucide-react";
-import { useParallax } from "@/hooks/useParallax";
 
 interface AttributeChipProps {
   label: string;
   icon: LucideIcon;
-  position: { top: string; left?: string; right?: string };
+  position: { top: string; left: string };
   delay: number;
   onClick: () => void;
 }
 
 export const AttributeChip = ({ label, icon: Icon, position, delay, onClick }: AttributeChipProps) => {
-  const parallaxOffset = useParallax(0.1 + delay * 0.05);
-
   return (
     <button
       onClick={onClick}
@@ -19,15 +16,14 @@ export const AttributeChip = ({ label, icon: Icon, position, delay, onClick }: A
       style={{
         top: position.top,
         left: position.left,
-        right: position.right,
         animationDelay: `${delay}s`,
-        transform: `translateY(${parallaxOffset}px)`,
+        transform: "translate(-50%, -50%)", // Center the chip on its position
       }}
       aria-label={`Filter by ${label}`}
     >
       <div className="flex items-center gap-2">
         <Icon size={16} />
-        <span className="text-sm font-semibold">{label}</span>
+        <span className="text-sm font-semibold whitespace-nowrap">{label}</span>
       </div>
     </button>
   );

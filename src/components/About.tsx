@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AboutHeader } from "./about/AboutHeader";
 import { AvatarSection } from "./about/AvatarSection";
 import { SkillExplorer } from "./about/SkillExplorer";
 
@@ -14,16 +15,18 @@ const About = () => {
   };
 
   return (
-    <section className="bg-beige py-24 px-6 lg:px-12">
+    <section className="bg-beige py-16 lg:py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-12">
+        {/* Header Section - Full Width */}
+        <AboutHeader />
+
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Avatar & Attributes */}
           <AvatarSection onAttributeClick={handleAttributeClick} />
 
           {/* Right Column - Skill Explorer */}
-          <div id="skill-explorer">
-            <SkillExplorer activeFilter={activeFilter} onFilterChange={handleFilterChange} />
-          </div>
+          <SkillExplorer activeFilter={activeFilter} onFilterChange={handleFilterChange} />
         </div>
       </div>
     </section>

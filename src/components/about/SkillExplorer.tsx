@@ -92,14 +92,14 @@ export const SkillExplorer = ({ activeFilter, onFilterChange }: SkillExplorerPro
   const displayedSkills = showAll ? filteredSkills : filteredSkills.slice(0, 4);
 
   return (
-    <div className="bg-card rounded-2xl shadow-xl p-8 lg:sticky lg:top-24">
+    <div className="bg-card rounded-2xl shadow-xl p-6 lg:p-8" id="skill-explorer">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-1">Skillset</h2>
+        <h2 className="text-2xl font-bold mb-2">Skillset</h2>
         <p className="text-sm text-muted-foreground">Browse how I help firms grow.</p>
       </div>
 
       {/* Category Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-4 mb-6 snap-x">
+      <div className="flex gap-2 overflow-x-auto pb-4 mb-6 snap-x scrollbar-hide">
         {CATEGORIES.map((category) => (
           <CategoryFilter
             key={category.id}
@@ -113,8 +113,8 @@ export const SkillExplorer = ({ activeFilter, onFilterChange }: SkillExplorerPro
         ))}
       </div>
 
-      {/* Skill Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      {/* Skill Cards - Single Column */}
+      <div className="space-y-4 mb-6">
         {displayedSkills.map((skill, index) => (
           <SkillCard key={skill.id} {...skill} index={index} />
         ))}
@@ -127,7 +127,7 @@ export const SkillExplorer = ({ activeFilter, onFilterChange }: SkillExplorerPro
           onClick={() => setShowAll(true)}
           className="w-full text-sm"
         >
-          View full skill list
+          View full skill list ({filteredSkills.length - 4} more)
         </Button>
       )}
     </div>
