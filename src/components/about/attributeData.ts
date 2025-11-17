@@ -24,7 +24,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Strategic Vision",
     icon: Lightbulb,
-    position: { top: '15%', left: '8%' },
+    position: { top: '12%', left: '2%' },
     delay: 0,
     direction: 'left',
     accentColor: 'accent'
@@ -32,7 +32,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Brand Builder",
     icon: Award,
-    position: { top: '35%', left: '5%' },
+    position: { top: '32%', left: '1%' },
     delay: 0.15,
     direction: 'left',
     accentColor: 'accent-lavender'
@@ -40,7 +40,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Data-Driven",
     icon: BarChart3,
-    position: { top: '55%', left: '10%' },
+    position: { top: '52%', left: '3%' },
     delay: 0.3,
     direction: 'left',
     accentColor: 'accent-jungle'
@@ -48,7 +48,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Team Leader",
     icon: Users,
-    position: { top: '75%', left: '8%' },
+    position: { top: '72%', left: '2%' },
     delay: 0.45,
     direction: 'left',
     accentColor: 'accent-tangerine'
@@ -58,7 +58,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Growth Focus",
     icon: TrendingUp,
-    position: { top: '15%', right: '8%' },
+    position: { top: '12%', right: '2%' },
     delay: 0.6,
     direction: 'right',
     accentColor: 'accent-jungle'
@@ -66,7 +66,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Innovation",
     icon: Zap,
-    position: { top: '35%', right: '5%' },
+    position: { top: '32%', right: '1%' },
     delay: 0.75,
     direction: 'right',
     accentColor: 'accent-amber'
@@ -74,7 +74,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "ROI Expert",
     icon: Target,
-    position: { top: '55%', right: '10%' },
+    position: { top: '52%', right: '3%' },
     delay: 0.9,
     direction: 'right',
     accentColor: 'accent-copper'
@@ -82,7 +82,7 @@ export const attributeData: AttributeData[] = [
   {
     label: "Digital Marketing",
     icon: Megaphone,
-    position: { top: '75%', right: '8%' },
+    position: { top: '72%', right: '2%' },
     delay: 1.05,
     direction: 'right',
     accentColor: 'accent'

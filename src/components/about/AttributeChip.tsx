@@ -21,22 +21,23 @@ export const AttributeChip = ({
   
   return (
     <div
-      className={`absolute bg-card/95 backdrop-blur-sm rounded-full px-5 py-3 shadow-lg border-2 ${animationClass} z-20`}
+      className={`absolute bg-white/98 backdrop-blur-sm rounded-full px-6 py-3.5 border-l-[3px] ${animationClass} z-10`}
       style={{
         top: position.top,
         left: position.left,
         right: position.right,
         animationDelay: `${delay}s`,
-        borderColor: `hsl(var(--${accentColor}))`,
+        borderLeftColor: `hsl(var(--${accentColor}))`,
+        boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08), 0 16px 32px rgba(0,0,0,0.06)',
       }}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         <Icon 
-          size={18} 
+          size={20} 
           className="flex-shrink-0"
           style={{ color: `hsl(var(--${accentColor}))` }}
         />
-        <span className="text-sm font-semibold whitespace-nowrap text-card-foreground">
+        <span className="text-base font-medium tracking-tight whitespace-nowrap text-gray-900">
           {label}
         </span>
       </div>
