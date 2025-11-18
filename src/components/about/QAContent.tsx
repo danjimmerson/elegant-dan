@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { qaData } from "./qaData";
+import { Card } from "@/components/ui/card";
 
 interface QAContentProps {
   setActiveId: (id: string) => void;
@@ -30,13 +31,13 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
   }, [setActiveId]);
 
   return (
-    <div className="space-y-24 lg:space-y-32">
+    <div className="space-y-8 lg:space-y-12">
       {qaData.map((item, index) => (
-        <div
+        <Card
           key={item.id}
           id={item.id}
           data-qa-id={item.id}
-          className="scroll-mt-32 animate-fade-in"
+          className="scroll-mt-32 animate-fade-in p-8 lg:p-12 bg-card/80 backdrop-blur-sm border-border/50"
           style={{ animationDelay: `${index * 100}ms` }}
         >
           {/* Number + Title */}
@@ -58,7 +59,7 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       ))}
     </div>
   );

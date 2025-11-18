@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QANavigation } from "./QANavigation";
 import { QAContent } from "./QAContent";
 import { qaData } from "./qaData";
@@ -11,6 +11,7 @@ import {
 
 export const InteractiveQA = () => {
   const [activeId, setActiveId] = useState(qaData[0].id);
+  const [scrollProgress, setScrollProgress] = useState<Record<string, number>>({});
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -18,6 +19,39 @@ export const InteractiveQA = () => {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  useEffect(() => {
+    const calculateProgress = () => {
+      const progress: Record<string, number> = {};
+      
+      qaData.forEach((item) => {
+        const element = document.getElementById(item.id);
+        if (!element) return;
+        
+        const rect = element.getBoundingClientRect();
+        const elementHeight = rect.height;
+        const elementTop = rect.top;
+        const windowHeight = window.innerHeight;
+        
+        const scrollStart = windowHeight - elementTop;
+        const scrollRange = elementHeight + windowHeight;
+        const percentage = Math.max(0, Math.min(100, (scrollStart / scrollRange) * 100));
+        
+        progress[item.id] = Math.round(percentage);
+      });
+      
+      setScrollProgress(progress);
+    };
+    
+    const handleScroll = () => {
+      requestAnimationFrame(calculateProgress);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    calculateProgress();
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="w-full">
@@ -28,6 +62,7 @@ export const InteractiveQA = () => {
           <QANavigation 
             activeId={activeId} 
             scrollToSection={scrollToSection}
+            scrollProgress={scrollProgress}
           />
         </div>
         
