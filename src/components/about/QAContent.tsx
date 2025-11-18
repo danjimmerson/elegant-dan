@@ -41,21 +41,26 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
           style={{ animationDelay: `${index * 100}ms` }}
         >
           {/* Hero Image - Full Bleed */}
-          <div className="w-full h-64 lg:h-80 overflow-hidden">
+          <div className="relative w-full h-64 lg:h-80 overflow-hidden">
             <img 
               src={heroImage} 
               alt="Hero" 
               className="w-full h-full object-cover"
             />
+            
+            {/* Black Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            
+            {/* Title Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
+              <h3 className="text-3xl lg:text-5xl font-sans font-bold text-white">
+                {item.number} – {item.title}
+              </h3>
+            </div>
           </div>
           
           {/* Card Content */}
           <div className="p-8 lg:p-12 relative">
-            {/* Number + Title */}
-            <h3 className="text-3xl lg:text-5xl font-serif font-bold mb-6 text-black">
-              {item.number} – {item.title}
-            </h3>
-            
             {/* Intro */}
             <p className="text-xl lg:text-2xl font-sans mb-8 text-gray-800 leading-relaxed">
               {item.intro}
