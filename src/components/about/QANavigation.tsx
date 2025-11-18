@@ -21,14 +21,14 @@ export const QANavigation = ({ activeId, scrollToSection, scrollProgress }: QANa
             <div className="flex items-baseline gap-3">
               <span className={cn(
                 "text-sm font-mono transition-colors duration-300",
-                activeId === item.id ? "text-foreground" : "text-muted-foreground/60"
+                activeId === item.id ? "text-black" : "text-muted-foreground/60"
               )}>
                 {item.number}
               </span>
               <span
                 className={cn(
                   "text-sm lg:text-base transition-colors duration-300 uppercase tracking-wide",
-                  activeId === item.id ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground"
+                  activeId === item.id ? "text-black font-medium" : "text-muted-foreground group-hover:text-black"
                 )}
               >
                 {item.label}
@@ -37,8 +37,8 @@ export const QANavigation = ({ activeId, scrollToSection, scrollProgress }: QANa
             
             {/* Progress Bar */}
             <div className={cn(
-              "w-full h-[1px] overflow-hidden transition-colors duration-300",
-              activeId === item.id ? "bg-foreground/20" : "bg-border/20"
+              "w-full h-[2px] overflow-hidden transition-all duration-300 rounded-full",
+              activeId === item.id ? "bg-black shadow-[0_0_8px_rgba(0,0,0,0.3)]" : "bg-border/20"
             )}>
               <div 
                 className="h-full bg-accent transition-all duration-300 shadow-[0_0_10px_hsl(var(--accent))]"
