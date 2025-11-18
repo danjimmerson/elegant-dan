@@ -66,9 +66,9 @@ export const InteractiveQA = () => {
               <img 
                 src={trophyIcon} 
                 alt="Trophy" 
-                className="w-8 h-8 object-contain opacity-80"
+                className="w-10 h-10 object-contain opacity-80"
               />
-              <h2 className="text-2xl font-bold text-foreground">About Dan</h2>
+              <h2 className="text-2xl font-bold text-black">About Dan</h2>
             </div>
           </div>
           
@@ -97,9 +97,9 @@ export const InteractiveQA = () => {
             <img 
               src={trophyIcon} 
               alt="Trophy" 
-              className="w-7 h-7 object-contain opacity-80"
+              className="w-9 h-9 object-contain opacity-80"
             />
-            <h2 className="text-xl font-bold text-foreground">About Dan</h2>
+            <h2 className="text-xl font-bold text-black">About Dan</h2>
           </div>
         </div>
         
