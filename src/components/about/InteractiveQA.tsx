@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import trophyIcon from "@/assets/trophy-sketch-icon.png";
 
 export const InteractiveQA = () => {
   const [activeId, setActiveId] = useState(qaData[0].id);
@@ -59,6 +60,19 @@ export const InteractiveQA = () => {
       <div className="hidden lg:grid lg:grid-cols-12 gap-8 lg:gap-16">
         {/* Left Navigation - Sticky */}
         <div className="lg:col-span-3">
+          {/* Header Section */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3">
+              <img 
+                src={trophyIcon} 
+                alt="Trophy" 
+                className="w-8 h-8 object-contain opacity-80"
+              />
+              <h2 className="text-2xl font-bold text-foreground">About Dan</h2>
+            </div>
+          </div>
+          
+          {/* Navigation */}
           <QANavigation 
             activeId={activeId} 
             scrollToSection={scrollToSection}
@@ -77,6 +91,18 @@ export const InteractiveQA = () => {
 
       {/* Mobile: Accordion */}
       <div className="lg:hidden">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3">
+            <img 
+              src={trophyIcon} 
+              alt="Trophy" 
+              className="w-7 h-7 object-contain opacity-80"
+            />
+            <h2 className="text-xl font-bold text-foreground">About Dan</h2>
+          </div>
+        </div>
+        
         <Accordion type="single" collapsible className="space-y-4">
           {qaData.map((item) => (
             <AccordionItem 
