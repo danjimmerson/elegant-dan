@@ -1,6 +1,15 @@
 import { useEffect } from "react";
 import { qaData } from "./qaData";
-import heroImage from "@/assets/desk-approach.jpg";
+import deskApproachImage from "@/assets/desk-approach.jpg";
+import rocketLaunchImage from "@/assets/rocket-launch-growth.jpg";
+
+// Map each Q&A section to its hero image
+const heroImages: Record<string, string> = {
+  "what-i-do": deskApproachImage,
+  "how-i-think": rocketLaunchImage,
+  "proof-it-works": deskApproachImage,
+  "working-on-now": deskApproachImage,
+};
 
 interface QAContentProps {
   setActiveId: (id: string) => void;
@@ -43,8 +52,8 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
           {/* Hero Image - Full Bleed */}
           <div className="relative w-full h-64 lg:h-80 overflow-hidden">
             <img 
-              src={heroImage} 
-              alt="Hero" 
+              src={heroImages[item.id] || deskApproachImage} 
+              alt={item.title} 
               className="w-full h-full object-cover"
             />
             
