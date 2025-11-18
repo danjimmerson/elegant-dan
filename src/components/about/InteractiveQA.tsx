@@ -57,7 +57,7 @@ export const InteractiveQA = () => {
   return (
     <div className="w-full">
       {/* Desktop: Two-column layout */}
-      <div className="hidden lg:grid lg:grid-cols-12 gap-8 lg:gap-16">
+      <div className="hidden lg:grid lg:grid-cols-12 gap-8 lg:gap-16 relative">
         {/* Left Navigation - Sticky */}
         <div className="lg:col-span-3">
           {/* Header Section */}
@@ -81,7 +81,7 @@ export const InteractiveQA = () => {
         </div>
         
         {/* Right Content */}
-        <div className="lg:col-span-9">
+        <div className="lg:col-span-9 -mr-6 lg:-mr-12">
           <QAContent 
             setActiveId={setActiveId}
             activeId={activeId}

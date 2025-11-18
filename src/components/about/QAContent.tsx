@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { qaData } from "./qaData";
-import { Card } from "@/components/ui/card";
+import heroImage from "@/assets/desk-approach.jpg";
 
 interface QAContentProps {
   setActiveId: (id: string) => void;
@@ -31,35 +31,56 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
   }, [setActiveId]);
 
   return (
-    <div className="space-y-8 lg:space-y-12">
+    <div className="space-y-12 lg:space-y-16">
       {qaData.map((item, index) => (
-        <Card
+        <div
           key={item.id}
           id={item.id}
           data-qa-id={item.id}
-          className="scroll-mt-32 animate-fade-in p-8 lg:p-12 bg-card/80 backdrop-blur-sm border-border/50"
+          className="relative scroll-mt-32 animate-fade-in bg-white overflow-hidden shadow-lg"
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          {/* Number + Title */}
-          <h3 className="text-3xl lg:text-5xl font-serif font-bold mb-6 text-foreground">
-            {item.number} – {item.title}
-          </h3>
+          {/* Hero Image - Full Bleed */}
+          <div className="w-full h-64 lg:h-80 overflow-hidden">
+            <img 
+              src={heroImage} 
+              alt="Hero" 
+              className="w-full h-full object-cover"
+            />
+          </div>
           
-          {/* Intro */}
-          <p className="text-xl lg:text-2xl font-sans mb-8 text-foreground leading-relaxed">
-            {item.intro}
-          </p>
+          {/* Card Content */}
+          <div className="p-8 lg:p-12 relative">
+            {/* Number + Title */}
+            <h3 className="text-3xl lg:text-5xl font-serif font-bold mb-6 text-black">
+              {item.number} – {item.title}
+            </h3>
+            
+            {/* Intro */}
+            <p className="text-xl lg:text-2xl font-sans mb-8 text-gray-800 leading-relaxed">
+              {item.intro}
+            </p>
+            
+            {/* Bullets */}
+            <ul className="space-y-4 text-base lg:text-lg">
+              {item.bullets.map((bullet, i) => (
+                <li key={i} className="flex gap-3">
+                  <span className="text-gray-900 mt-1 flex-shrink-0">–</span>
+                  <span className="text-gray-700 leading-relaxed">{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
           
-          {/* Bullets */}
-          <ul className="space-y-4 text-base lg:text-lg">
-            {item.bullets.map((bullet, i) => (
-              <li key={i} className="flex gap-3">
-                <span className="text-accent mt-1 flex-shrink-0">–</span>
-                <span className="text-muted-foreground leading-relaxed">{bullet}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
+          {/* Pin Line Border - Overlays Everything */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              border: '1px solid rgba(0, 0, 0, 0.3)',
+              margin: '8px'
+            }}
+          />
+        </div>
       ))}
     </div>
   );
