@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { qaData } from "./qaData";
 import deskApproachImage from "@/assets/desk-approach.jpg";
 import rocketLaunchImage from "@/assets/rocket-launch-growth.jpg";
+import racecarVideo from "@/assets/racecar-danj.mp4";
 
 // Map each Q&A section to its hero image
 const heroImages: Record<string, string> = {
@@ -49,13 +50,24 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
           className="relative scroll-mt-32 animate-fade-in bg-white overflow-hidden shadow-lg"
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          {/* Hero Image - Full Bleed */}
+          {/* Hero Image/Video - Full Bleed */}
           <div className="relative w-full h-64 lg:h-80 overflow-hidden">
-            <img 
-              src={heroImages[item.id] || deskApproachImage} 
-              alt={item.title} 
-              className="w-full h-full object-cover"
-            />
+            {item.id === "proof-it-works" ? (
+              <video
+                src={racecarVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img 
+                src={heroImages[item.id] || deskApproachImage} 
+                alt={item.title} 
+                className="w-full h-full object-cover"
+              />
+            )}
             
             {/* Black Gradient Overlay */}
             <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
