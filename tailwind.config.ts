@@ -174,10 +174,6 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" }
         },
-        "slow-zoom": {
-          "0%": { transform: "scale(1)" },
-          "100%": { transform: "scale(1.1)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -192,7 +188,6 @@ export default {
         "slide-from-left": "slide-from-left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
         "slide-from-right": "slide-from-right 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
         "scroll-logos": "scroll-logos 40s linear infinite",
-        "slow-zoom": "slow-zoom 20s ease-out infinite alternate",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "serif"],
