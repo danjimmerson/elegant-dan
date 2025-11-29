@@ -65,7 +65,9 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
               <img 
                 src={heroImages[item.id] || deskApproachImage} 
                 alt={item.title} 
-                className="w-full h-full object-cover"
+                className={`w-full h-full object-cover ${
+                  item.id === "how-i-think" ? "animate-slow-zoom" : ""
+                }`}
               />
             )}
             
