@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import heroImage from "@/assets/dan-jimmerson-speaker.jpg";
+import heroImage from "@/assets/dan-jimmerson-speaker-stage.jpeg";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import LogoBar from "./LogoBar";
 const Hero = () => {
