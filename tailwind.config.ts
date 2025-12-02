@@ -150,7 +150,7 @@ export default {
             opacity: "0",
           },
         },
-         "rainbow-gradient": {
+        "rainbow-gradient": {
           "0%": {
             backgroundPosition: "0% 50%",
           },
@@ -195,5 +195,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

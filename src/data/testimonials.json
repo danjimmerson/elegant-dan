@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "quote": "Dan is one of the most talented digital marketing, technology and branding strategist that I’ve ever worked with. His go-to-market & branding strategy was brilliant and quickly helped drive revenue and new customers.",
+        "author": "Sal Stabler",
+        "role": "CEO and Cofounder",
+        "company": "Nexlayer",
+        "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&auto=format&fit=crop&q=60",
+        "color": "#FACC15"
+    },
+    {
+        "id": 2,
+        "quote": "Dan is a visionary with an old soul. He clearly defines his goals and approach to projects and completes tasks in a timely manner. Dan is able to lead multiple staff and teams within an organization and is an executive level professional.",
+        "author": "John Malcolm",
+        "role": "Chief Innovation Officer",
+        "company": "Cleveland Public Library",
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&auto=format&fit=crop&q=60",
+        "color": "#C084FC"
+    },
+    {
+        "id": 3,
+        "quote": "Dan is a thought leader and innovator. The results he's produced for us have been tremendous. By far, the smartest, most creative, and most capable head of marketing that I've worked with in my 25 year career.",
+        "author": "Keith Vargo",
+        "role": "Chief Revenue Officer",
+        "company": "Smart Data Solutions",
+        "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&auto=format&fit=crop&q=60",
+        "color": "#3B82F6"
+    },
+    {
+        "id": 4,
+        "quote": "Dan brings passion, deep knowledge of his customer base and an incredible amount of marketing know-how. He not only developed a strong pipeline but also customer relationships, which were instrumental in driving continued success.",
+        "author": "Allison Dawson",
+        "role": "VP of Field Marketing",
+        "company": "Zendesk",
+        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&auto=format&fit=crop&q=60",
+        "color": "#4ADE80"
+    },
+    {
+        "id": 5,
+        "quote": "Dan is absolutely one of the most talented marketing professionals I have known in my entire career. He has such a deep understanding of how marketing can directly impact and influence the bottom line.",
+        "author": "Wende Nossaman",
+        "role": "Director, AI Workforce Solutions",
+        "company": "Microsoft",
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&auto=format&fit=crop&q=60",
+        "color": "#F87171"
+    }
+]

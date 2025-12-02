@@ -1,48 +1,84 @@
-import { ArrowDown } from "lucide-react";
-import heroImage from "@/assets/dan-jimmerson-speaker-stage.jpeg";
-import { useTypewriter } from "@/hooks/useTypewriter";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import heroImage from "@/assets/dan-jimmerson-speaker-stage-v3.jpg";
 import LogoBar from "./LogoBar";
-const Hero = () => {
-  const typewriterText = useTypewriter(["Marketing Executive", "Brand Architect", "Revenue Catalyst"]);
-  return <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-12 py-24 lg:py-16 xl:py-20">
-        <div className="relative">
-          {/* Image - Absolutely Positioned Behind */}
-          <div className="absolute right-0 top-[55%] -translate-y-1/2 w-full lg:w-1/2 xl:w-[45%] h-[500px] lg:h-[600px] z-0 animate-slide-up">
-            <div className="relative w-full h-full rounded-3xl overflow-hidden lg:scale-[1.15] origin-center">
-              <img src={heroImage} alt="Dan Jimmerson - Professional Speaker" className="w-full h-full object-cover object-[center_30%]" loading="eager" />
-              {/* Multi-layer Gradient Overlays for Seamless Transition */}
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent"></div>
-            </div>
-          </div>
+import { useTypewriter } from "@/hooks/useTypewriter";
 
-          {/* Text Content - Overlays Image */}
-          <div className="relative z-10 max-w-3xl animate-fade-in">
-            <p className="text-lg lg:text-xl text-foreground font-sans mb-3">
+const Hero = () => {
+  const typewriterText = useTypewriter([
+    "Marketing Executive",
+    "Brand Architect",
+    "Revenue Catalyst"
+  ]);
+
+  return (
+    <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] opacity-50 animate-pulse-glow" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-amber/5 rounded-full blur-[120px] opacity-30" />
+      </div>
+
+      <div className="container mx-auto px-6 lg:px-12 relative z-10 h-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-center h-full min-h-[600px]">
+
+          {/* Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="max-w-3xl z-30 pt-32 lg:pt-0"
+          >
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-lg lg:text-xl text-muted-foreground font-medium mb-2"
+            >
               Hi, I'm Dan Jimmerson.
-            </p>
-            
-            <h2 className="text-5xl lg:text-6xl xl:text-6xl font-sans font-bold leading-tight min-h-[4.5rem] lg:min-h-[5rem] xl:min-h-[5rem] text-foreground lg:whitespace-nowrap mb-6 lg:mb-8">
-              {typewriterText}
-              <span className="inline-block w-1 h-10 lg:h-12 xl:h-12 bg-accent animate-cursor-blink ml-1"></span>
-            </h2>
-            
-            <p className="text-lg text-muted-foreground max-w-lg">
+            </motion.p>
+
+            <h1 className="text-5xl lg:text-7xl font-sans font-bold leading-[1.1] mb-6 tracking-tight text-white min-h-[120px] lg:min-h-[160px]">
+              {typewriterText}<span className="animate-cursor-blink text-accent">|</span>
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-lg lg:text-xl text-muted-foreground/80 max-w-lg leading-relaxed"
+            >
               I combine C-suite strategy with hands-on execution to build brands people remember and systems that reliably turn attention into revenue.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
+
+          {/* Hero Image - Seamless Blend */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute right-0 top-0 bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
+          >
+            <div className="relative w-full h-full">
+              <img
+                src={heroImage}
+                alt="Dan Jimmerson"
+                className="w-full h-full object-cover object-[center_15%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:top-0 lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
+              />
+
+              {/* Mobile: Bottom Gradient for Text Readability */}
+              <div className="absolute bottom-0 left-0 right-0 h-[75%] bg-gradient-to-t from-background via-background/90 to-transparent lg:hidden z-10" />
+            </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Logo Bar */}
-      <div className="absolute bottom-16 lg:bottom-20 left-0 right-0 z-20">
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-background via-background to-transparent pt-20 pb-8">
         <LogoBar />
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-1/4 right-12 w-72 h-72 bg-accent/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 left-12 w-96 h-96 bg-accent-amber/5 rounded-full blur-3xl"></div>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
