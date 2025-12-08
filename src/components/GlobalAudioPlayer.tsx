@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 const GlobalAudioPlayer = () => {
     const { isPlaying, isMuted, volume, currentStation, setIsPlaying } = useMusic();
-    const playerRef = useRef<any>(null);
+    const playerRef = useRef<React.ElementRef<typeof ReactPlayer>>(null);
 
     useEffect(() => {
         console.log("GlobalAudioPlayer: Mounted");
@@ -15,7 +15,7 @@ const GlobalAudioPlayer = () => {
     }, [isPlaying, currentStation]);
 
     // Error handling
-    const handleError = (e: any) => {
+    const handleError = (e: unknown) => {
         console.error("Global Audio Player Error:", e);
         // Optional: Try next station or show notification
     };
@@ -70,6 +70,7 @@ const GlobalAudioPlayer = () => {
                     onError={handleError}
                     config={{
                         youtube: {
+                            // @ts-expect-error: playerVars is missing from types but supported by library
                             playerVars: {
                                 playsinline: 1,
                                 controls: 0,
@@ -78,7 +79,7 @@ const GlobalAudioPlayer = () => {
                                 iv_load_policy: 3,
                                 modestbranding: 1,
                                 origin: window.location.origin,
-                            } as any
+                            }
                         },
                         soundcloud: {
                             options: {

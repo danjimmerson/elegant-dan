@@ -29,7 +29,16 @@ const projects = [
     }
 ];
 
-const ProjectCard = ({ project, index }: { project: any, index: number }) => {
+interface Project {
+    id: number;
+    title: string;
+    category: string;
+    description: string;
+    color: string;
+    tags: string[];
+}
+
+const ProjectCard = ({ project, index }: { project: Project, index: number }) => {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,

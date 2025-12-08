@@ -73,7 +73,7 @@ const MarketingChapter = ({
                     style={{ opacity, y }}
                     className="relative z-20 max-w-4xl px-6 text-center text-white"
                 >
-                    <span className="text-accent font-bold tracking-widest uppercase mb-6 block text-sm md:text-base">
+                    <span className="bg-gradient-to-r from-amber-200 to-yellow-500 bg-clip-text text-transparent font-bold tracking-widest uppercase mb-6 block text-sm md:text-base">
                         {subtitle}
                     </span>
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold mb-8 leading-tight">

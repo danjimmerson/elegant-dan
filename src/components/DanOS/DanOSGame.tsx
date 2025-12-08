@@ -53,43 +53,16 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     const BRICK_COLORS = ["#333333", "#7C3F00", "#228B22", "#808080", "#FFD700"];
     const BONUS_EMOJIS = ["", "☕️", "💰", "🥌", "💡"];
 
-    // Initialize game state
-    const initGame = () => {
-        const bricks: { x: number; y: number; status: number; type: number }[][] = [];
-        for (let c = 0; c < BRICK_COLUMN_COUNT; c++) {
-            bricks[c] = [];
-            for (let r = 0; r < BRICK_ROW_COUNT; r++) {
-                let type = BRICK_TYPES.NORMAL;
-                if (Math.random() < 0.2) {
-                    type = Math.floor(Math.random() * 4) + 1;
-                }
-                bricks[c][r] = { x: 0, y: 0, status: 1, type: type };
-            }
-        }
 
-        gameStateRef.current = {
-            x: CANVAS_WIDTH / 2,
-            y: CANVAS_HEIGHT - 30,
-            dx: 5,
-            dy: -5,
-            paddleX: (CANVAS_WIDTH - PADDLE_WIDTH) / 2,
-            rightPressed: false,
-            leftPressed: false,
-            score: 0,
-            bricks: bricks,
-            gameRunning: true
-        };
-        setScore(0);
-        setGameOver(false);
-        setGameWon(false);
-    };
 
     // Sound Effects
     const audioCtxRef = useRef<AudioContext | null>(null);
 
+    // Initialize audio context lazily
     const initAudio = () => {
         if (!audioCtxRef.current) {
-            audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+            // @ts-expect-error: WebkitAudioContext is not standard but needed for Safari support
+            audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
         }
         if (audioCtxRef.current.state === "suspended") {
             audioCtxRef.current.resume();
@@ -160,7 +133,35 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     useEffect(() => {
         if (!gameStarted) return;
 
-        initGame();
+        // Init game state
+        const bricks: { x: number; y: number; status: number; type: number }[][] = [];
+        for (let c = 0; c < BRICK_COLUMN_COUNT; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < BRICK_ROW_COUNT; r++) {
+                let type = BRICK_TYPES.NORMAL;
+                if (Math.random() < 0.2) {
+                    type = Math.floor(Math.random() * 4) + 1;
+                }
+                bricks[c][r] = { x: 0, y: 0, status: 1, type: type };
+            }
+        }
+
+        gameStateRef.current = {
+            x: CANVAS_WIDTH / 2,
+            y: CANVAS_HEIGHT - 30,
+            dx: 5,
+            dy: -5,
+            paddleX: (CANVAS_WIDTH - PADDLE_WIDTH) / 2,
+            rightPressed: false,
+            leftPressed: false,
+            score: 0,
+            bricks: bricks,
+            gameRunning: true
+        };
+        setScore(0);
+        setGameOver(false);
+        setGameWon(false);
+
         initAudio(); // Initialize audio on game start
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -320,7 +321,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             document.removeEventListener("mousemove", mouseMoveHandler);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [gameStarted, restartKey]); // Only re-run if gameStarted changes
+    }, [gameStarted, restartKey, BRICK_COLUMN_COUNT, BRICK_ROW_COUNT, BRICK_TYPES, CANVAS_HEIGHT, CANVAS_WIDTH, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_RADIUS, BRICK_COLORS, BONUS_EMOJIS, BRICK_WIDTH, BRICK_HEIGHT, BRICK_PADDING, BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP]);
 
     return (
         <div className="flex flex-col items-center justify-center h-full bg-black text-white font-mono p-4 relative overflow-hidden">

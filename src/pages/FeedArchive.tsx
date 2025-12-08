@@ -5,87 +5,17 @@ import Navigation from "@/components/Navigation";
 import { useState } from "react";
 import SwipeFeed from "@/components/SwipeFeed";
 
-const COVER_STORY = {
-    id: 1,
-    title: "The Future of Brand Architecture",
-    slug: "the-future-of-brand-architecture",
-    category: "Strategy",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
-    excerpt: "How modern companies are rethinking their structural identity in a decentralized world. The monolithic structures of the past are giving way to more fluid, decentralized ecosystems.",
-    date: "Nov 28, 2025",
-    readTime: "5 min read",
-    type: "created"
-};
+import { BLOG_POSTS } from "@/data/posts";
+
+const COVER_STORY = BLOG_POSTS["the-future-of-brand-architecture"];
 
 const ARCHIVE_POSTS = [
-    {
-        id: 2,
-        title: "Revenue Systems that Scale",
-        slug: "revenue-systems-that-scale",
-        category: "Business",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070",
-        excerpt: "Building automated pipelines that turn passive attention into active revenue streams.",
-        date: "Nov 25, 2025",
-        readTime: "4 min read",
-        type: "created"
-    },
-    {
-        id: 3,
-        title: "Design as a Competitive Advantage",
-        slug: "design-as-a-competitive-advantage",
-        category: "Design",
-        image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=2700",
-        excerpt: "Why aesthetic excellence is no longer optional for market leaders in the AI era.",
-        date: "Nov 22, 2025",
-        readTime: "6 min read",
-        type: "created"
-    },
-    {
-        id: 4,
-        title: "The Psychology of User Retention",
-        slug: "the-psychology-of-user-retention",
-        category: "Product",
-        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070",
-        excerpt: "Understanding the cognitive biases that keep users coming back to your application.",
-        date: "Nov 18, 2025",
-        readTime: "7 min read",
-        type: "created"
-    },
-    {
-        id: 5,
-        title: "Building for the Spatial Web",
-        slug: "building-for-the-spatial-web",
-        category: "Technology",
-        image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80&w=2070",
-        excerpt: "Preparing your design system for an immersive, 3D-first internet.",
-        date: "Nov 15, 2025",
-        readTime: "5 min read",
-        type: "created"
-    },
-    {
-        id: 101,
-        title: "The End of Average",
-        slug: "the-end-of-average",
-        category: "Inspiration",
-        image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=2068",
-        excerpt: "A compelling look at why standard metrics fail to capture individual potential. Found this incredibly relevant to modern team building.",
-        date: "Nov 27, 2025",
-        readTime: "External",
-        type: "curated",
-        link: "https://example.com/end-of-average"
-    },
-    {
-        id: 102,
-        title: "Minimalism in Complex Systems",
-        slug: "minimalism-in-complex-systems",
-        category: "Architecture",
-        image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80&w=2070",
-        excerpt: "Great breakdown of how complex backends can still maintain minimal, maintainable frontends.",
-        date: "Nov 20, 2025",
-        readTime: "External",
-        type: "curated",
-        link: "https://example.com/minimalism"
-    }
+    BLOG_POSTS["revenue-systems-that-scale"],
+    BLOG_POSTS["design-as-a-competitive-advantage"],
+    BLOG_POSTS["the-psychology-of-user-retention"],
+    BLOG_POSTS["building-for-the-spatial-web"],
+    BLOG_POSTS["the-end-of-average"],
+    BLOG_POSTS["minimalism-in-complex-systems"]
 ];
 
 const FeedArchive = () => {
@@ -270,7 +200,19 @@ const FeedArchive = () => {
     );
 };
 
-const ArticleCard = ({ post, isExternal = false }: { post: any, isExternal?: boolean }) => (
+interface ArticlePost {
+    id: string | number;
+    title: string;
+    category: string;
+    image: string;
+    excerpt?: string;
+    date: string;
+    slug?: string;
+    type?: string;
+    link?: string;
+}
+
+const ArticleCard = ({ post, isExternal = false }: { post: ArticlePost, isExternal?: boolean }) => (
     <article className="flex flex-col md:flex-row gap-8 items-center bg-white p-6 rounded-[2rem] border-2 border-black shadow-sm group-hover:shadow-xl transition-all duration-300">
         <div className="w-full md:w-1/3 aspect-[4/3] md:aspect-square overflow-hidden rounded-2xl relative shadow-inner border border-black/5">
             <img

@@ -3,46 +3,19 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import feedIllustration from "@/assets/feed-illustration.jpg";
 
-const FEATURED_POST = {
-    id: 1,
-    title: "The Future of Brand Architecture",
-    slug: "the-future-of-brand-architecture",
-    category: "Strategy",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
-    excerpt: "How modern companies are rethinking their structural identity in a decentralized world. The old playbooks for brand building are being rewritten by DAOs, community-led growth, and AI-driven personalization.",
-    date: "Oct 12, 2024"
-};
+import { BLOG_POSTS } from "@/data/posts";
+
+const FEATURED_POST = BLOG_POSTS["the-future-of-brand-architecture"];
 
 const RECENT_POSTS = [
-    {
-        id: 2,
-        title: "Revenue Systems that Scale",
-        slug: "revenue-systems-that-scale",
-        category: "Business",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070",
-        date: "Oct 08, 2024"
-    },
-    {
-        id: 3,
-        title: "Design as a Competitive Advantage",
-        slug: "design-as-a-competitive-advantage",
-        category: "Design",
-        image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=2700",
-        date: "Sep 28, 2024"
-    },
-    {
-        id: 4,
-        title: "The Psychology of Micro-interactions",
-        slug: "the-psychology-of-micro-interactions",
-        category: "UX/UI",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2564",
-        date: "Sep 15, 2024"
-    }
+    BLOG_POSTS["revenue-systems-that-scale"],
+    BLOG_POSTS["design-as-a-competitive-advantage"],
+    BLOG_POSTS["the-psychology-of-micro-interactions"]
 ];
 
 const Feed = () => {
     return (
-        <section className="py-24 lg:py-32 bg-cream relative overflow-hidden">
+        <section className="pt-12 lg:pt-16 pb-24 lg:pb-32 bg-cream relative overflow-hidden">
             <div className="container mx-auto px-6 lg:px-12">
                 <div className="flex flex-col lg:flex-row justify-between items-end mb-12 lg:mb-16 gap-8 lg:gap-12 relative">
                     <div className="max-w-2xl">

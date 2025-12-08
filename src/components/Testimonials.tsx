@@ -20,12 +20,12 @@ const testimonials: Testimonial[] = testimonialsData;
 
 const TestimonialCard = ({ t }: { t: Testimonial }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const maxLength = 120;
+    const maxLength = 220;
     const shouldTruncate = t.quote.length > maxLength;
     const displayQuote = isExpanded || !shouldTruncate ? t.quote : `${t.quote.substring(0, maxLength)}...`;
 
     return (
-        <div className="w-[350px] md:w-[450px] min-h-[450px] relative group flex-shrink-0 select-none">
+        <div className="w-[350px] md:w-[450px] min-h-[550px] relative group flex-shrink-0 select-none">
             {/* Background Container */}
             <div className="absolute inset-0 bg-black border border-white/10 rounded-[2rem] overflow-hidden">
                 {/* Animated Background Glow */}
@@ -97,6 +97,13 @@ const Testimonials = () => {
     // Create a massive loop for "infinite" feel
     const loopTestimonials = Array(20).fill(testimonials).flat();
 
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+
+    const x = useTransform(scrollYProgress, [0, 1], [0, -1000]);
+
     return (
         <section ref={containerRef} className="py-24 lg:py-32 bg-white overflow-hidden">
             <div className="container mx-auto px-6 lg:px-12 mb-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 relative">
@@ -116,6 +123,7 @@ const Testimonials = () => {
             {/* Draggable Slider Container */}
             <div className="relative w-full cursor-grab active:cursor-grabbing">
                 <motion.div
+                    style={{ x }}
                     className="flex gap-8 px-6 lg:px-12 w-max"
                     drag="x"
                     dragConstraints={{ right: 0, left: -((350 + 32) * loopTestimonials.length) }} // Calculate rough width

@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
 
 export default {
   darkMode: ["class"],
@@ -158,10 +160,7 @@ export default {
             backgroundPosition: "200% 50%",
           },
         },
-        "float": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
+
         "float-delayed": {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-15px)" },
@@ -190,10 +189,10 @@ export default {
         "scroll-logos": "scroll-logos 40s linear infinite",
       },
       fontFamily: {
-        serif: ["Cormorant Garamond", "serif"],
+        serif: ["Playfair Display", "serif"],
         sans: ["Poppins", "system-ui", "sans-serif"],
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [tailwindAnimate, typography],
 } satisfies Config;

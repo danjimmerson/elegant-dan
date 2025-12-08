@@ -3,14 +3,14 @@ import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "
 import { ArrowRight, Globe, ExternalLink, RotateCcw } from "lucide-react";
 
 interface Post {
-    id: number;
+    id: number | string;
     title: string;
     category: string;
     image: string;
-    excerpt: string;
+    excerpt?: string;
     date: string;
     readTime: string;
-    type: string;
+    type?: string;
     link?: string;
 }
 
@@ -124,7 +124,7 @@ const Card = ({ post, isTop, onSwipe }: CardProps) => {
         ["rgb(255, 200, 200)", "rgb(255, 255, 255)", "rgb(255, 255, 255)", "rgb(255, 255, 255)", "rgb(200, 255, 200)"]
     );
 
-    const handleDragEnd = (event: any, info: PanInfo) => {
+    const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
         if (Math.abs(info.offset.x) > 100) {
             const dir = info.offset.x > 0 ? 'right' : 'left';
             onSwipe(dir);

@@ -4,7 +4,7 @@ import pixelAvatar from "@/assets/pixel_avatar.jpg";
 
 interface Fact {
     id: string;
-    icon: any;
+    icon: React.ElementType;
     label: string;
     title: string;
     description: string;
