@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Github, ExternalLink, Gamepad2, Code2, Sparkles, Briefcase, Play, Shapes } from "lucide-react";
-import testimonialsIllustration from "@/assets/testimonials-illustration.jpg";
+import showcaseIllustration from "@/assets/showcase-illustration.jpg";
 import queenMaryVideo from "@/assets/Queen_Mary_Cinematic_K_Video.mp4";
 
 // Combined Data
@@ -122,7 +122,7 @@ const WorkPlay = () => {
             <div className="container mx-auto px-6 lg:px-12">
                 {/* Full Width Header */}
                 <div className="flex flex-col lg:flex-row justify-between items-end mb-12 lg:mb-16 gap-8 lg:gap-12 relative">
-                    <div className="max-w-3xl z-10">
+                    <div className="max-w-3xl z-10 w-full">
                         <span className={`font-bold tracking-widest uppercase mb-4 block transition-colors duration-500 ${mode === "work" ? "text-accent" : "text-accent-tangerine"}`}>
                             Showcase
                         </span>
@@ -134,11 +134,13 @@ const WorkPlay = () => {
                         </p>
                     </div>
 
-                    <img
-                        src={testimonialsIllustration}
-                        alt="Creative process"
-                        className="absolute top-0 right-0 w-48 lg:w-80 grayscale mix-blend-multiply contrast-125 brightness-110 opacity-50 -rotate-6 hidden lg:block pointer-events-none"
-                    />
+                    <div className="hidden lg:block relative shrink-0">
+                        <img
+                            src={showcaseIllustration}
+                            alt="Showcase"
+                            className="w-[500px] h-auto grayscale mix-blend-multiply contrast-125 object-contain"
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">

@@ -53,18 +53,27 @@ const Navigation = ({ alwaysShowBackground = true }: { alwaysShowBackground?: bo
       ? location.hash === to
       : (to === "/" ? isHome : location.pathname.startsWith(to));
 
+    // Common click handler for both mobile and desktop
+    const handleClick = (e: React.MouseEvent) => {
+      // Prevent default browser navigation (full reload)
+      e.preventDefault();
+
+      if (isHash) {
+        handleNavClick(to);
+      } else {
+        navigate(to);
+      }
+
+      if (mobile) {
+        setMobileMenuOpen(false);
+      }
+    };
+
     if (mobile) {
       return (
         <motion.a
           href={to}
-          onClick={(e) => {
-            if (isHash) {
-              e.preventDefault();
-              handleNavClick(to);
-            } else {
-              setMobileMenuOpen(false);
-            }
-          }}
+          onClick={handleClick}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -81,14 +90,9 @@ const Navigation = ({ alwaysShowBackground = true }: { alwaysShowBackground?: bo
     return (
       <a
         href={to}
-        onClick={(e) => {
-          if (isHash) {
-            e.preventDefault();
-            handleNavClick(to);
-          }
-        }}
+        onClick={handleClick}
         className={cn(
-          "h-20 flex items-center relative px-1 text-sm font-medium transition-colors hover:text-accent",
+          "h-20 flex items-center relative px-1 text-sm font-medium transition-colors hover:text-accent cursor-pointer",
           isActive ? "text-white" : "text-white/80"
         )}
       >

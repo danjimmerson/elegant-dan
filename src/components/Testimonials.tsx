@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Quote } from "lucide-react";
 
 import testimonialsIllustration from "@/assets/testimonials-illustration.jpg";
@@ -19,13 +19,8 @@ interface Testimonial {
 const testimonials: Testimonial[] = testimonialsData;
 
 const TestimonialCard = ({ t }: { t: Testimonial }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const maxLength = 220;
-    const shouldTruncate = t.quote.length > maxLength;
-    const displayQuote = isExpanded || !shouldTruncate ? t.quote : `${t.quote.substring(0, maxLength)}...`;
-
     return (
-        <div className="w-[350px] md:w-[450px] min-h-[550px] relative group flex-shrink-0 select-none">
+        <div className="w-[350px] md:w-[450px] relative group flex-shrink-0 select-none h-full">
             {/* Background Container */}
             <div className="absolute inset-0 bg-black border border-white/10 rounded-[2rem] overflow-hidden">
                 {/* Animated Background Glow */}
@@ -54,25 +49,14 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 p-8 md:p-10 flex flex-col justify-between h-full">
+            <div className="relative z-10 p-8 md:p-10 flex flex-col justify-between h-full min-h-[400px]">
                 <div className="mt-16 mb-6">
                     <p className="text-lg md:text-xl font-sans leading-relaxed text-white drop-shadow-md">
-                        "{displayQuote}"
+                        "{t.quote}"
                     </p>
-                    {shouldTruncate && (
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation(); // Prevent drag interference if needed
-                                setIsExpanded(!isExpanded);
-                            }}
-                            className="mt-3 text-sm font-bold uppercase tracking-wider text-accent hover:text-white transition-colors focus:outline-none"
-                        >
-                            {isExpanded ? "Read Less" : "Read More"}
-                        </button>
-                    )}
                 </div>
 
-                <div className="flex items-center gap-4 mt-auto">
+                <div className="flex items-center gap-4 mt-auto pt-6">
                     <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
                         <img
                             src={t.image}
@@ -94,15 +78,22 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
 const Testimonials = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Create a massive loop for "infinite" feel
-    const loopTestimonials = Array(20).fill(testimonials).flat();
+    // Optimized loop for "infinite" feel without excessive DOM
+    const loopTestimonials = Array(6).fill(testimonials).flat();
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
     });
 
-    const x = useTransform(scrollYProgress, [0, 1], [0, -1000]);
+    // Add spring physics for fluid momentum
+    const smoothProgress = useSpring(scrollYProgress, {
+        damping: 20,
+        stiffness: 100,
+        mass: 0.5
+    });
+
+    const x = useTransform(smoothProgress, [0, 1], [0, -((350 + 32) * (loopTestimonials.length / 2))]);
 
     return (
         <section ref={containerRef} className="py-24 lg:py-32 bg-white overflow-hidden">
@@ -124,9 +115,9 @@ const Testimonials = () => {
             <div className="relative w-full cursor-grab active:cursor-grabbing">
                 <motion.div
                     style={{ x }}
-                    className="flex gap-8 px-6 lg:px-12 w-max"
+                    className="flex gap-8 px-6 lg:px-12 w-max items-stretch"
                     drag="x"
-                    dragConstraints={{ right: 0, left: -((350 + 32) * loopTestimonials.length) }} // Calculate rough width
+                    dragConstraints={{ right: 0, left: -((350 + 32) * (loopTestimonials.length - 2)) }}
                     whileTap={{ cursor: "grabbing" }}
                 >
                     {loopTestimonials.map((t, index) => (

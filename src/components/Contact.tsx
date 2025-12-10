@@ -1,11 +1,13 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { ArrowRight, Mail, Linkedin, Twitter } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from "framer-motion";
+import { ArrowRight, Mail, Sparkles, X } from "lucide-react";
 import logoMarkBlack from "@/assets/dan-jimmerson-logo-black.svg";
 import { useContact } from "@/context/ContactContext";
+import Newsletter from "@/components/Newsletter";
 
 const Contact = () => {
     const { openContact } = useContact();
+    const [showNewsletter, setShowNewsletter] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Mouse interaction for 3D logo effect
@@ -62,7 +64,7 @@ const Contact = () => {
 
             <div className="container mx-auto px-6 lg:px-12 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    {/* Left Column: CTA & Socials */}
+                    {/* Left Column: CTA & Newsletter */}
                     <div>
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
@@ -97,17 +99,13 @@ const Contact = () => {
                                 <div className="absolute inset-0 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
                             </button>
 
-                            <div className="flex gap-4">
-                                <a href="mailto:hello@danjimmerson.com" className="p-4 rounded-full border border-black/10 hover:bg-black/5 transition-colors text-black">
-                                    <Mail className="w-6 h-6" />
-                                </a>
-                                <a href="#" className="p-4 rounded-full border border-black/10 hover:bg-black/5 transition-colors text-black">
-                                    <Linkedin className="w-6 h-6" />
-                                </a>
-                                <a href="#" className="p-4 rounded-full border border-black/10 hover:bg-black/5 transition-colors text-black">
-                                    <Twitter className="w-6 h-6" />
-                                </a>
-                            </div>
+                            <button
+                                onClick={() => setShowNewsletter(true)}
+                                className="group px-6 py-4 rounded-full border border-black/10 hover:border-accent hover:bg-accent/5 transition-all flex items-center gap-3 font-medium"
+                            >
+                                <Sparkles className="w-5 h-5 text-accent group-hover:rotate-12 transition-transform" />
+                                <span>Get the Newsletter</span>
+                            </button>
                         </motion.div>
                     </div>
 
@@ -145,6 +143,35 @@ const Contact = () => {
                     </motion.div>
                 </div>
             </div>
+
+            {/* Newsletter Overlay */}
+            <AnimatePresence>
+                {showNewsletter && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+                        onClick={() => setShowNewsletter(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            className="bg-black relative rounded-3xl overflow-hidden shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                        >
+                            <button
+                                onClick={() => setShowNewsletter(false)}
+                                className="absolute top-6 right-6 z-20 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                            <Newsletter />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };

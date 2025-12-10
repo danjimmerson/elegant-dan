@@ -1,66 +1,11 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Calendar, Clock, Share2, Twitter, Linkedin, Facebook, Sparkles, PartyPopper } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Calendar, Share2, Twitter, Linkedin, Facebook } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import Newsletter from "@/components/Newsletter";
 
 import { BLOG_POSTS } from "@/data/posts";
-
-const EasterEggButton = () => {
-    const [clicked, setClicked] = useState(false);
-
-    return (
-        <div className="relative">
-            <AnimatePresence>
-                {clicked && (
-                    <>
-                        {[...Array(12)].map((_, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 1, y: 0, x: 0, scale: 0.5 }}
-                                animate={{
-                                    opacity: 0,
-                                    y: -100 - Math.random() * 100,
-                                    x: (Math.random() - 0.5) * 100,
-                                    scale: 1.5,
-                                    rotate: Math.random() * 360
-                                }}
-                                transition={{ duration: 1, ease: "easeOut" }}
-                                className="absolute left-1/2 top-0 -translate-x-1/2 pointer-events-none text-2xl"
-                            >
-                                {["🎉", "🚀", "💎", "🔥", "✨", "❤️"][Math.floor(Math.random() * 6)]}
-                            </motion.div>
-                        ))}
-                    </>
-                )}
-            </AnimatePresence>
-
-            <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setClicked(true)}
-                className={`
-                    relative px-6 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all duration-300
-                    ${clicked
-                        ? "bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white shadow-lg"
-                        : "bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600"}
-                `}
-            >
-                <span className="flex items-center gap-2">
-                    {clicked ? (
-                        <>
-                            <PartyPopper className="w-4 h-4" /> You Found It!
-                        </>
-                    ) : (
-                        <>
-                            <Sparkles className="w-4 h-4" /> Do Not Click
-                        </>
-                    )}
-                </span>
-            </motion.button>
-        </div>
-    );
-};
 
 const BlogPost = () => {
     const { slug } = useParams();
@@ -197,41 +142,40 @@ const BlogPost = () => {
                         dangerouslySetInnerHTML={{ __html: post.content }}
                     />
 
-                    <div className="mt-20 pt-10 border-t border-gray-100">
-                        <h3 className="font-serif font-bold text-2xl mb-8">More from the Feed</h3>
+                    <div className="mt-32 border-t border-gray-100 pt-16">
+                        <div className="flex items-center justify-between mb-12">
+                            <h3 className="font-serif font-bold text-3xl">Keep Reading</h3>
+                            <Link to="/feed" className="text-sm font-bold uppercase tracking-widest border-b border-black pb-1 hover:text-gray-600 hover:border-gray-300 transition-all">
+                                View Archive
+                            </Link>
+                        </div>
 
-                        <div className="grid md:grid-cols-2 gap-8">
+                        <div className="grid md:grid-cols-2 gap-12">
                             {/* Card 1 */}
                             <Link to="/feed/revenue-systems-that-scale" className="group block h-full">
                                 <motion.div
                                     whileHover={{ y: -5 }}
-                                    className="h-full flex flex-col rounded-3xl overflow-hidden bg-white shadow-sm border-2 border-black group-hover:shadow-xl transition-all duration-300"
+                                    className="h-full flex flex-col group"
                                 >
-                                    <div className="relative h-[240px] overflow-hidden">
+                                    <div className="relative h-[300px] overflow-hidden rounded-2xl mb-6">
                                         <img
                                             src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070"
                                             alt="Revenue Systems"
-                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0"
                                         />
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
-                                        <div className="absolute top-4 left-4">
-                                            <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-xs font-bold uppercase tracking-widest rounded-full text-black shadow-sm">
-                                                Business
-                                            </span>
-                                        </div>
                                     </div>
-                                    <div className="p-6 flex flex-col gap-3 flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-gray-500 font-mono">
-                                            <span className="text-accent font-bold uppercase">Business</span>
-                                            <span>•</span>
+                                    <div className="flex flex-col gap-3 flex-1">
+                                        <div className="flex items-center gap-2 text-xs text-gray-500 font-mono uppercase tracking-wider">
+                                            <span className="text-black font-bold">Business</span>
+                                            <span className="w-1 h-1 rounded-full bg-gray-300"></span>
                                             <span>Oct 08, 2024</span>
                                         </div>
-                                        <h4 className="text-xl font-serif font-bold text-gray-900 group-hover:text-accent transition-colors duration-300 leading-tight">
+                                        <h4 className="text-2xl font-serif font-bold text-gray-900 group-hover:underline decoration-1 underline-offset-4 decoration-gray-300 transition-all leading-tight">
                                             Revenue Systems that Scale
                                         </h4>
-                                        <div className="mt-auto pt-4 flex items-center gap-2 text-xs font-bold text-black uppercase tracking-wide group-hover:gap-3 transition-all">
-                                            Read Story <ArrowRight className="w-3 h-3" />
-                                        </div>
+                                        <p className="text-gray-500 line-clamp-2 leading-relaxed">
+                                            Why automation and recurring revenue models are the future of sustainable growth.
+                                        </p>
                                     </div>
                                 </motion.div>
                             </Link>
@@ -240,47 +184,39 @@ const BlogPost = () => {
                             <Link to="/feed/design-as-a-competitive-advantage" className="group block h-full">
                                 <motion.div
                                     whileHover={{ y: -5 }}
-                                    className="h-full flex flex-col rounded-3xl overflow-hidden bg-white shadow-sm border-2 border-black group-hover:shadow-xl transition-all duration-300"
+                                    className="h-full flex flex-col group"
                                 >
-                                    <div className="relative h-[240px] overflow-hidden">
+                                    <div className="relative h-[300px] overflow-hidden rounded-2xl mb-6">
                                         <img
                                             src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=2700"
                                             alt="Design Advantage"
-                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0"
                                         />
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
-                                        <div className="absolute top-4 left-4">
-                                            <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-xs font-bold uppercase tracking-widest rounded-full text-black shadow-sm">
-                                                Design
-                                            </span>
-                                        </div>
                                     </div>
-                                    <div className="p-6 flex flex-col gap-3 flex-1">
-                                        <div className="flex items-center gap-2 text-xs text-gray-500 font-mono">
-                                            <span className="text-accent font-bold uppercase">Design</span>
-                                            <span>•</span>
+                                    <div className="flex flex-col gap-3 flex-1">
+                                        <div className="flex items-center gap-2 text-xs text-gray-500 font-mono uppercase tracking-wider">
+                                            <span className="text-black font-bold">Design</span>
+                                            <span className="w-1 h-1 rounded-full bg-gray-300"></span>
                                             <span>Sep 28, 2024</span>
                                         </div>
-                                        <h4 className="text-xl font-serif font-bold text-gray-900 group-hover:text-accent transition-colors duration-300 leading-tight">
+                                        <h4 className="text-2xl font-serif font-bold text-gray-900 group-hover:underline decoration-1 underline-offset-4 decoration-gray-300 transition-all leading-tight">
                                             Design as a Competitive Advantage
                                         </h4>
-                                        <div className="mt-auto pt-4 flex items-center gap-2 text-xs font-bold text-black uppercase tracking-wide group-hover:gap-3 transition-all">
-                                            Read Story <ArrowRight className="w-3 h-3" />
-                                        </div>
+                                        <p className="text-gray-500 line-clamp-2 leading-relaxed">
+                                            How design-led companies are outperforming the S&P 500 by over 200%.
+                                        </p>
                                     </div>
                                 </motion.div>
                             </Link>
                         </div>
-
-                        {/* Easter Egg */}
-                        <div className="mt-16 flex justify-center">
-                            <EasterEggButton />
-                        </div>
                     </div>
                 </div>
             </article>
+
+            <Newsletter />
         </div>
     );
 };
 
 export default BlogPost;
+

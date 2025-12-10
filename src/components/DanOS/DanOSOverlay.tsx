@@ -192,16 +192,29 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                     </div>
                                 )}
                                 {id === "Projects" && (
-                                    <div className="p-4 space-y-4">
-                                        <h3 className="font-bold border-b-2 border-black pb-2">
+                                    <div className="p-6 h-full overflow-y-auto">
+                                        <h3 className="font-bold border-b-2 border-black pb-2 mb-6 uppercase tracking-widest text-sm sticky top-0 bg-[#E0E0E0] pt-2">
                                             Growth Philosophy
                                         </h3>
-                                        <ul className="list-disc pl-5 space-y-2 break-words">
-                                            <li>Data over opinions.</li>
-                                            <li>Speed of iteration is the ultimate competitive advantage.</li>
-                                            <li>Brand is a multiplier on performance.</li>
-                                            <li>Automation frees up creativity.</li>
-                                        </ul>
+                                        <div className="space-y-6">
+                                            {[
+                                                { title: "1. Speed is Strategy.", desc: "In a digital world, the fastest learner wins. Perfection is the enemy of profit; we ship, learn, and pivot immediately." },
+                                                { title: "2. Push Unreasonable Hospitality.", desc: "Service isn't a line item; it's a memory maker. We don't just solve problems; we curate unexpected moments of delight that turn customers into fanatics." },
+                                                { title: "3. Clarity Trumps Persuasion.", desc: "A confused prospect never buys. We stop trying to be clever with words and start being impossible to misunderstand." },
+                                                { title: "4. Test, Don't Guess.", desc: "The market is the only opinion that matters. We leave our egos at the door and let the data dictate the direction." },
+                                                { title: "5. The Offer > The Ads.", desc: "No amount of brilliant copywriting can fix a bad product. We solve the value equation first so the marketing becomes easy." },
+                                                { title: "6. Simplicity Scales.", desc: "Complex funnels break; simple systems compound. We strip away the noise until only the essential remains." },
+                                                { title: "7. Volume Negates Luck.", desc: "You don't need to be the smartest person in the room if you take 10x more swings than everyone else. We outwork the variance." },
+                                                { title: "8. Friction Kills Deals.", desc: "The biggest competitor isn't another company; it's the customer's effort. Every extra click or second of load time is a barrier we must remove." },
+                                                { title: "9. Inputs Over Outcomes.", desc: "We can't control the revenue (lag), only the daily actions (lead) that create it. Obsess over the work, and the numbers take care of themselves." },
+                                                { title: "10. Give First, Ask Later.", desc: "Radical generosity builds authority faster than any sales pitch. We provide value upfront so the \"ask\" feels like a natural next step." }
+                                            ].map((item, i) => (
+                                                <div key={i} className="break-words">
+                                                    <h4 className="font-bold text-lg mb-1">{item.title}</h4>
+                                                    <p className="text-sm text-gray-700 leading-relaxed font-sans">{item.desc}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                                 {id === "Contact" && (

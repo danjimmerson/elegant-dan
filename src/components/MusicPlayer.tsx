@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 
 import { motion } from "framer-motion";
-import { Music, Play, Pause, Volume2, VolumeX, SkipForward, Radio } from "lucide-react";
+import { Disc3, Play, Pause, Volume2, VolumeX, SkipForward, Radio } from "lucide-react";
 import { useMusic, STATIONS } from "@/context/MusicContext";
 import { Slider } from "@/components/ui/slider";
+import TrippyVisuals from "./TrippyVisuals";
 
 const MusicPlayer = () => {
     const { isPlaying, isMuted, volume, currentStation, togglePlay, toggleMute, setVolume, setStation } = useMusic();
@@ -28,10 +29,7 @@ const MusicPlayer = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className={`relative p-3 rounded-full transition-all duration-300 ${isOpen ? "bg-white text-black" : "text-white hover:bg-white/10"}`}
             >
-                <Music className={`w-5 h-5 ${isPlaying ? "animate-pulse" : ""}`} />
-                {isPlaying && (
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-green-400 rounded-full animate-ping" />
-                )}
+                <Disc3 className={`w-5 h-5 ${isPlaying ? "animate-spin" : ""}`} />
             </button>
 
             {/* Persistent Dropdown (Always Mounted) */}
@@ -51,25 +49,15 @@ const MusicPlayer = () => {
                 }}
             >
                 {/* Header / Video Area */}
-                <div className="relative h-48 bg-black border-b border-white/10 group">
+                <div className="relative h-48 bg-black border-b border-white/10 group overflow-hidden">
                     {/* Visualizer / Album Art Area */}
                     <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-                        {isPlaying ? (
-                            <div className="flex gap-1 items-end h-16">
-                                <span className="w-2 bg-accent animate-[music-bar_1s_ease-in-out_infinite]" style={{ height: '40%' }} />
-                                <span className="w-2 bg-accent animate-[music-bar_1.2s_ease-in-out_infinite]" style={{ height: '80%' }} />
-                                <span className="w-2 bg-accent animate-[music-bar_0.8s_ease-in-out_infinite]" style={{ height: '60%' }} />
-                                <span className="w-2 bg-accent animate-[music-bar_1.5s_ease-in-out_infinite]" style={{ height: '90%' }} />
-                                <span className="w-2 bg-accent animate-[music-bar_1.1s_ease-in-out_infinite]" style={{ height: '50%' }} />
-                            </div>
-                        ) : (
-                            <Music className="w-16 h-16 text-white/10" />
-                        )}
+                        <TrippyVisuals isPlaying={isPlaying} />
                     </div>
 
                     {/* Overlay Info */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end pointer-events-none">
-                        <div className="text-xs font-mono text-accent uppercase tracking-widest mb-1 flex items-center gap-2">
+                        <div className="text-xs font-sans font-medium text-accent uppercase tracking-widest mb-1 flex items-center gap-2">
                             <Radio className="w-3 h-3" />
                             {isPlaying ? "Now Broadcasting" : "Station Offline"}
                         </div>
@@ -111,7 +99,7 @@ const MusicPlayer = () => {
 
                     {/* Volume Slider */}
                     <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-gray-500 font-mono">
+                        <div className="flex justify-between text-xs text-gray-500 font-sans font-medium">
                             <span>VOL</span>
                             <span>{Math.round(volume * 100)}%</span>
                         </div>
@@ -126,14 +114,14 @@ const MusicPlayer = () => {
 
                     {/* Station List */}
                     <div className="space-y-2 pt-4 border-t border-white/10">
-                        <div className="text-xs text-gray-500 font-mono uppercase tracking-wider mb-3">Select Frequency</div>
+                        <div className="text-xs text-gray-500 font-sans font-bold uppercase tracking-wider mb-3">Select Frequency</div>
                         {STATIONS.map((station) => (
                             <button
                                 key={station.id}
                                 onClick={() => setStation(station)}
                                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between group ${currentStation.id === station.id ? "bg-white/10 text-white" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
                             >
-                                <span>{station.name}</span>
+                                <span className="font-sans font-medium">{station.name}</span>
                                 {currentStation.id === station.id && isPlaying && (
                                     <div className="flex gap-0.5 items-end h-3">
                                         <span className="w-0.5 h-full bg-accent animate-[music-bar_1s_ease-in-out_infinite]" />
