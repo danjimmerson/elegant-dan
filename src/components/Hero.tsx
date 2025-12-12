@@ -27,7 +27,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-3xl z-30 pt-24 lg:pt-0"
+            className="max-w-3xl z-30 pt-32 lg:pt-0"
           >
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -63,7 +63,7 @@ const Hero = () => {
               <img
                 src={heroImage}
                 alt="Dan Jimmerson"
-                className="w-full h-full object-cover object-[center_15%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:top-0 lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
+                className="w-full h-full object-cover object-[center_10%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:top-0 lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
               />
 
               {/* Mobile: Bottom Gradient for Text Readability */}

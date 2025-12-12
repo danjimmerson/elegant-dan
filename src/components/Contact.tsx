@@ -63,7 +63,7 @@ const Contact = () => {
             </div>
 
             <div className="container mx-auto px-6 lg:px-12 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     {/* Left Column: CTA & Newsletter */}
                     <div>
                         <motion.span

@@ -40,7 +40,7 @@ const Feed = () => {
                     <img
                         src={feedIllustration}
                         alt="Sketch of Dan working"
-                        className="absolute top-[-2rem] right-6 w-44 lg:static lg:w-auto lg:h-80 mix-blend-multiply scale-x-[-1] opacity-90 grayscale contrast-125 mb-[-8px] lg:translate-y-4"
+                        className="hidden lg:block absolute top-[-2rem] right-6 w-44 lg:static lg:w-auto lg:h-80 mix-blend-multiply scale-x-[-1] opacity-90 grayscale contrast-125 mb-[-8px] lg:translate-y-4"
                     />
                 </div>
 
