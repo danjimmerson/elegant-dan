@@ -27,7 +27,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-3xl z-30 pt-32 lg:pt-0"
+            className="max-w-3xl z-30 pt-24 lg:pt-0"
           >
             <motion.p
               initial={{ opacity: 0, y: 20 }}

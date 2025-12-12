@@ -78,7 +78,7 @@ const Contact = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight mb-12"
+                            className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight mb-12"
                         >
                             Let's do<span className="md:hidden"> </span><br className="hidden md:block" />something<br /><span className="animate-text-shine-gold">extraordinary.</span>
                         </motion.h2>

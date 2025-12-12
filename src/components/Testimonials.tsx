@@ -26,7 +26,7 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="w-[350px] md:w-[450px] relative group flex-shrink-0 select-none h-full cursor-pointer">
+                <div className="w-[85vw] md:w-[450px] relative group flex-shrink-0 select-none h-full cursor-pointer">
                     {/* Background Container */}
                     <div className="absolute inset-0 bg-black border border-white/10 rounded-[2rem] overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
                         {/* Animated Background Glow */}
@@ -152,7 +152,7 @@ const Testimonials = () => {
                 <img
                     src={testimonialsIllustration}
                     alt="Relaxing while Dan works"
-                    className="absolute top-0 right-6 w-44 md:static md:w-96 grayscale mix-blend-multiply contrast-125 brightness-110 opacity-90 -rotate-6 md:translate-y-3"
+                    className="hidden md:block absolute top-0 right-6 w-44 md:static md:w-96 grayscale mix-blend-multiply contrast-125 brightness-110 opacity-90 -rotate-6 md:translate-y-3"
                 />
             </div>
 
