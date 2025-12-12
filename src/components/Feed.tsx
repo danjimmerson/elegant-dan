@@ -48,11 +48,7 @@ const Feed = () => {
                     {/* Featured Post (Left - 7 cols) */}
                     <div className="lg:col-span-7">
                         <Link to={`/feed/${FEATURED_POST.slug}`} className="group block h-full">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5 }}
+                            <div
                                 className="h-full flex flex-col rounded-3xl overflow-hidden bg-white shadow-sm border-2 border-black group-hover:shadow-xl transition-all duration-500"
                             >
                                 <div className="relative h-[250px] lg:h-[350px] overflow-hidden">
@@ -84,7 +80,7 @@ const Feed = () => {
                                         Read Story <ArrowRight className="w-4 h-4" />
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </Link>
                     </div>
 
@@ -92,11 +88,7 @@ const Feed = () => {
                     <div className="lg:col-span-5 flex flex-col gap-4 lg:gap-6">
                         {RECENT_POSTS.map((post, index) => (
                             <Link key={post.id} to={`/feed/${post.slug}`} className="group block flex-1">
-                                <motion.div
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                                <div
                                     className="flex gap-4 lg:gap-6 p-5 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-center"
                                 >
                                     <div className="w-24 h-24 lg:w-40 lg:h-40 shrink-0 rounded-2xl overflow-hidden relative shadow-inner">
@@ -119,7 +111,7 @@ const Feed = () => {
                                             Read Article <ArrowUpRight className="w-4 h-4" />
                                         </div>
                                     </div>
-                                </motion.div>
+                                </div>
                             </Link>
                         ))}
                     </div>
