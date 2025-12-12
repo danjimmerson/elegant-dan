@@ -22,11 +22,27 @@ const facts: Fact[] = [
         color: "text-black"
     },
     {
+        id: "family",
+        icon: Heart,
+        label: "Family",
+        title: "Proud Dad & Husband",
+        description: "Family man and proud dad of 2. Living in the foothills of Boulder, CO, camping and exploring the mountains together.",
+        color: "text-red-600"
+    },
+    {
         id: "revenue",
         icon: TrendingUp,
         label: "Revenue",
         title: "Over $2B+ Generated",
         description: "Proven track record of driving massive business value through strategic technical execution.",
+        color: "text-green-600"
+    },
+    {
+        id: "outdoors",
+        icon: Mountain,
+        label: "Outdoors",
+        title: "Mountain Life",
+        description: "Regularly heading into the mountains for hikes, trail runs, and adventures. Nature is the ultimate reset button.",
         color: "text-green-600"
     },
     {
@@ -38,36 +54,20 @@ const facts: Fact[] = [
         color: "text-amber-500"
     },
     {
-        id: "microsoft",
-        icon: Award,
-        label: "Recognition",
-        title: "3x Microsoft Partner Awards",
-        description: "Fostered business development across partner channels, resulting in 3 prestigious Microsoft awards in 2 years: ISV, Public Sector, and Health & Human Service Partner of the Year.",
-        color: "text-blue-500"
-    },
-    {
-        id: "family",
-        icon: Heart,
-        label: "Family",
-        title: "Proud Dad & Husband",
-        description: "Family man and proud dad of 2. Living in the foothills of Boulder, CO, camping and exploring the mountains together.",
-        color: "text-red-600"
-    },
-    {
-        id: "outdoors",
-        icon: Mountain,
-        label: "Outdoors",
-        title: "Mountain Life",
-        description: "Regularly heading into the mountains for hikes, trail runs, and adventures. Nature is the ultimate reset button.",
-        color: "text-green-600"
-    },
-    {
         id: "curling",
         icon: Trophy,
         label: "Curling",
         title: "The Roaring Game",
         description: "I curl year-round and travel for bonspiels. It's a silly sport, but the technicality keeps me grounded and focused.",
         color: "text-blue-600"
+    },
+    {
+        id: "microsoft",
+        icon: Award,
+        label: "Recognition",
+        title: "3x Microsoft Partner Awards",
+        description: "Fostered business development across partner channels, resulting in 3 prestigious Microsoft awards in 2 years: ISV, Public Sector, and Health & Human Service Partner of the Year.",
+        color: "text-blue-500"
     },
     {
         id: "coffee",
@@ -88,14 +88,7 @@ const facts: Fact[] = [
 ];
 
 export const AboutDan = () => {
-    const [randomFacts, setRandomFacts] = useState<Fact[]>([]);
-
-    useEffect(() => {
-        // Simple shuffle function
-        const shuffled = [...facts].sort(() => Math.random() - 0.5);
-        setRandomFacts(shuffled);
-    }, []);
-
+    // No shuffle, use interspersed static order
     return (
         <div className="flex flex-col md:h-full md:flex-row bg-cream md:overflow-hidden">
             {/* Left Column: Avatar */}
@@ -136,7 +129,7 @@ export const AboutDan = () => {
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
-                        {randomFacts.map((fact, index) => (
+                        {facts.map((fact, index) => (
                             <motion.div
                                 key={fact.id}
                                 initial={{ x: 20, opacity: 0 }}

@@ -75,7 +75,7 @@ export const Taskbar = ({ openWindows, activeWindow, onWindowClick, onShutdown }
                     <div className="w-[2px] h-full bg-black mx-2" />
 
                     {/* Open Windows */}
-                    <div className="flex gap-2 h-full">
+                    <div className="hidden md:flex gap-2 h-full">
                         {openWindows.map((id) => (
                             <button
                                 key={id}
