@@ -96,22 +96,22 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                             onClick={() => toggleWindow("About Dan")}
                         />
                         <DesktopIcon
-                            id="About"
+                            id="System Protocols"
                             icon={folderIcon}
                             label="What I actually do"
-                            onClick={() => toggleWindow("About")}
+                            onClick={() => toggleWindow("System Protocols")}
                         />
                         <DesktopIcon
-                            id="Projects"
+                            id="Growth Philosophy"
                             icon={folderIcon}
                             label="How I think about growth"
-                            onClick={() => toggleWindow("Projects")}
+                            onClick={() => toggleWindow("Growth Philosophy")}
                         />
                         <DesktopIcon
-                            id="Contact"
+                            id="Track Record"
                             icon={folderIcon}
                             label="Proof it works"
-                            onClick={() => toggleWindow("Contact")}
+                            onClick={() => toggleWindow("Track Record")}
                         />
                         <DesktopIcon
                             id="Game"
@@ -143,7 +143,7 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                 {id === "About Dan" && (
                                     <AboutDan />
                                 )}
-                                {id === "About" && (
+                                {id === "System Protocols" && (
                                     <div className="p-6 space-y-8">
                                         <div>
                                             <h3 className="font-bold border-b-2 border-black pb-2 mb-4 uppercase tracking-widest text-sm">
@@ -191,7 +191,7 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                         </div>
                                     </div>
                                 )}
-                                {id === "Projects" && (
+                                {id === "Growth Philosophy" && (
                                     <div className="p-6 h-full overflow-y-auto">
                                         <h3 className="font-bold border-b-2 border-black pb-2 mb-6 uppercase tracking-widest text-sm sticky top-0 bg-[#E0E0E0] pt-2">
                                             Growth Philosophy
@@ -217,7 +217,7 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                         </div>
                                     </div>
                                 )}
-                                {id === "Contact" && (
+                                {id === "Track Record" && (
                                     <div className="p-4 space-y-4">
                                         <h3 className="font-bold border-b-2 border-black pb-2">
                                             Track Record

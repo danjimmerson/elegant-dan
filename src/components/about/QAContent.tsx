@@ -28,15 +28,15 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
           }
         });
       },
-      { 
+      {
         threshold: [0.3, 0.5, 0.7],
         rootMargin: '-20% 0px -50% 0px'
       }
     );
-    
+
     // Observe all sections
     document.querySelectorAll('[data-qa-id]').forEach(el => observer.observe(el));
-    
+
     return () => observer.disconnect();
   }, [setActiveId]);
 
@@ -62,16 +62,18 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img 
-                src={heroImages[item.id] || deskApproachImage} 
-                alt={item.title} 
+              <img
+                src={heroImages[item.id] || deskApproachImage}
+                alt={item.title}
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             )}
-            
+
             {/* Black Gradient Overlay */}
             <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            
+
             {/* Title Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
               <h3 className="text-3xl lg:text-5xl font-sans font-bold text-white">
@@ -79,14 +81,14 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
               </h3>
             </div>
           </div>
-          
+
           {/* Card Content */}
           <div className="p-8 lg:p-12 relative">
             {/* Intro */}
             <p className="text-xl lg:text-2xl font-sans mb-8 text-gray-800 leading-relaxed">
               {item.intro}
             </p>
-            
+
             {/* Bullets */}
             <ul className="space-y-4 text-base lg:text-lg">
               {item.bullets.map((bullet, i) => (
@@ -97,9 +99,9 @@ export const QAContent = ({ setActiveId }: QAContentProps) => {
               ))}
             </ul>
           </div>
-          
+
           {/* Pin Line Border - Overlays Everything */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none"
             style={{
               border: '1px solid rgba(0, 0, 0, 0.3)',

@@ -137,7 +137,8 @@ const Testimonials = () => {
         mass: 0.5
     });
 
-    const x = useTransform(smoothProgress, [0, 1], [0, -((350 + 32) * (loopTestimonials.length / 2))]);
+    // Reduced speed: multiply by 0.25 for a more elegant, subtle parallax
+    const x = useTransform(smoothProgress, [0, 1], [0, -((350 + 32) * (loopTestimonials.length / 2) * 0.25)]);
 
     return (
         <section ref={containerRef} className="py-24 lg:py-32 bg-white overflow-hidden">

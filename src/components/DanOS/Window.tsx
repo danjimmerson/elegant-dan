@@ -93,7 +93,7 @@ export const Window = ({ id, title, children, isActive, onClose, onFocus, initia
             {/* Title Bar */}
             <div
                 onPointerDown={(e) => dragControls.start(e)}
-                className={`flex items-center justify-between px-2 py-2 border-b-2 border-black shrink-0 cursor-move ${isActive ? "bg-black text-cream" : "bg-gray-300 text-black"
+                className={`flex items-center justify-between px-2 py-2 border-b-2 border-black shrink-0 cursor-move ${isActive ? "bg-black text-white" : "bg-gray-300 text-black"
                     }`}
             >
                 <span className="font-bold text-sm tracking-widest uppercase truncate font-mono select-none">

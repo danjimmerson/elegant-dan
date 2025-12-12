@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Heart, Mountain, Trophy, Coffee, Globe, Briefcase, TrendingUp, Award, Star } from "lucide-react";
 import pixelAvatar from "@/assets/pixel_avatar.jpg";
 
@@ -40,8 +41,8 @@ const facts: Fact[] = [
         id: "microsoft",
         icon: Award,
         label: "Recognition",
-        title: "Major Microsoft Award",
-        description: "Recipient of prestigious recognition from Microsoft for outstanding technical contribution.",
+        title: "3x Microsoft Partner Awards",
+        description: "Fostered business development across partner channels, resulting in 3 prestigious Microsoft awards in 2 years: ISV, Public Sector, and Health & Human Service Partner of the Year.",
         color: "text-blue-500"
     },
     {
@@ -87,6 +88,14 @@ const facts: Fact[] = [
 ];
 
 export const AboutDan = () => {
+    const [randomFacts, setRandomFacts] = useState<Fact[]>([]);
+
+    useEffect(() => {
+        // Simple shuffle function
+        const shuffled = [...facts].sort(() => Math.random() - 0.5);
+        setRandomFacts(shuffled);
+    }, []);
+
     return (
         <div className="h-full flex flex-col md:flex-row bg-cream overflow-hidden">
             {/* Left Column: Avatar */}
@@ -127,7 +136,7 @@ export const AboutDan = () => {
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
-                        {facts.map((fact, index) => (
+                        {randomFacts.map((fact, index) => (
                             <motion.div
                                 key={fact.id}
                                 initial={{ x: 20, opacity: 0 }}
