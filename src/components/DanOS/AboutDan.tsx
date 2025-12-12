@@ -97,9 +97,9 @@ export const AboutDan = () => {
     }, []);
 
     return (
-        <div className="h-full flex flex-col md:flex-row bg-cream overflow-hidden">
+        <div className="flex flex-col md:h-full md:flex-row bg-cream md:overflow-hidden">
             {/* Left Column: Avatar */}
-            <div className="w-full md:w-1/3 bg-gray-200 border-r-2 border-black flex flex-col items-center justify-center p-8 relative overflow-hidden">
+            <div className="w-full md:w-1/3 bg-gray-200 border-b-2 md:border-b-0 md:border-r-2 border-black flex flex-col items-center justify-center p-8 relative shrink-0">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black to-transparent" />
 
                 <motion.div
@@ -111,7 +111,7 @@ export const AboutDan = () => {
                     <img
                         src={pixelAvatar}
                         alt="Dan Jimmerson 8-bit"
-                        className="w-full h-full object-contain object-center md:object-cover md:object-top"
+                        className="w-full h-full object-contain object-bottom md:object-cover md:object-top"
                         style={{ imageRendering: "pixelated" }}
                     />
                 </motion.div>
@@ -125,7 +125,7 @@ export const AboutDan = () => {
             </div>
 
             {/* Right Column: Stats/Facts */}
-            <div className="w-full md:w-2/3 p-8 overflow-y-auto">
+            <div className="w-full md:w-2/3 p-4 md:p-8 md:overflow-y-auto">
                 <div className="space-y-6">
                     <div className="border-b-2 border-black pb-4 mb-6">
                         <h3 className="text-xl font-bold font-mono uppercase tracking-widest mb-2">About Dan</h3>
