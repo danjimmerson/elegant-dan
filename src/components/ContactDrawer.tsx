@@ -8,6 +8,7 @@ const ContactDrawer = () => {
     const { isOpen, closeContact } = useContact();
     const [isLoading, setIsLoading] = useState(false);
     const [showDisco, setShowDisco] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -16,8 +17,41 @@ const ContactDrawer = () => {
         consent: false
     });
 
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!formData.name.trim()) newErrors.name = "Name is required";
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) newErrors.email = "Please enter a valid email address";
+
+        if (formData.phone) {
+            const phoneDigits = formData.phone.replace(/\D/g, '');
+            if (phoneDigits.length < 10) newErrors.phone = "Please enter a valid phone number";
+        }
+
+        if (!formData.message.trim()) newErrors.message = "Message is required";
+        if (!formData.consent) newErrors.consent = "You must agree to the terms";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const formatPhoneNumber = (value: string) => {
+        const phone = value.replace(/\D/g, '');
+        if (phone.length < 4) return phone;
+        if (phone.length < 7) return `(${phone.slice(0, 3)}) ${phone.slice(3)}`;
+        return `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6, 10)}`;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            toast.error("Please fix the errors in the form");
+            return;
+        }
+
         setIsLoading(true);
 
         const FORMSPREE_ENDPOINT = "https://formspree.io/f/myzrbqgo";
@@ -35,6 +69,7 @@ const ContactDrawer = () => {
                 // Trigger Disco Party
                 setShowDisco(true);
                 setFormData({ name: "", email: "", phone: "", message: "", consent: false });
+                setErrors({});
 
                 // Close after 4 seconds (time for the party!)
                 setTimeout(() => {
@@ -59,9 +94,21 @@ const ContactDrawer = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
-        const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+        let val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+        if (name === 'phone') {
+            val = formatPhoneNumber(val as string);
+        }
 
         setFormData(prev => ({ ...prev, [name]: val }));
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[name];
+                return newErrors;
+            });
+        }
     };
 
     return (
@@ -135,14 +182,14 @@ const ContactDrawer = () => {
                         className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white border-l border-gray-200 shadow-2xl z-[70] flex flex-col"
                     >
                         {/* Header - Sticky */}
-                        <div className="flex justify-between items-center p-8 bg-white border-b border-gray-100 shrink-0 z-10">
+                        <div className="flex justify-between items-center p-8 bg-black border-b border-gray-800 shrink-0 z-10">
                             <div>
-                                <h3 className="text-3xl font-serif font-bold text-black tracking-tight">Get in Touch</h3>
-                                <p className="text-gray-500 mt-1 font-sans">Let's do something extraordinary together.</p>
+                                <h3 className="text-3xl font-serif font-bold text-white tracking-tight">Get in Touch</h3>
+                                <p className="text-gray-400 mt-1 font-sans">Let's do something extraordinary together.</p>
                             </div>
                             <button
                                 onClick={closeContact}
-                                className="p-2 rounded-full hover:bg-black/5 transition-colors text-black"
+                                className="p-2 rounded-full hover:bg-white/10 transition-colors text-white"
                             >
                                 <X className="w-6 h-6" />
                             </button>
@@ -159,9 +206,9 @@ const ContactDrawer = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Enter your name"
-                                        required
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans"
+                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
                                     />
+                                    {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -173,9 +220,9 @@ const ContactDrawer = () => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             placeholder="name@company.com"
-                                            required
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans"
+                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
                                         />
+                                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Phone</label>
@@ -184,9 +231,10 @@ const ContactDrawer = () => {
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleChange}
-                                            placeholder="(Optional)"
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans"
+                                            placeholder="(555) 555-5555"
+                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.phone ? 'border-red-500' : 'border-gray-200'}`}
                                         />
+                                        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                                     </div>
                                 </div>
 
@@ -198,30 +246,32 @@ const ContactDrawer = () => {
                                         value={formData.message}
                                         onChange={handleChange}
                                         placeholder="Tell me about your project..."
-                                        required
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans resize-none"
+                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans resize-none ${errors.message ? 'border-red-500' : 'border-gray-200'}`}
                                     />
+                                    {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                                 </div>
 
-                                <div className="flex items-start gap-4 p-5 bg-gray-50 rounded-xl border border-gray-100">
-                                    <input
-                                        type="checkbox"
-                                        id="consent"
-                                        name="consent"
-                                        checked={formData.consent}
-                                        onChange={handleChange}
-                                        required
-                                        className="mt-1 w-5 h-5 text-black border-gray-300 rounded focus:ring-black"
-                                    />
-                                    <label htmlFor="consent" className="text-sm text-gray-600 leading-relaxed font-sans">
-                                        By submitting this form, you agree to receive communications from Dan Jimmerson. Your data is secure.
-                                    </label>
+                                <div className="space-y-2">
+                                    <div className={`flex items-start gap-4 p-5 bg-gray-50 rounded-xl border ${errors.consent ? 'border-red-500 bg-red-50' : 'border-gray-100'}`}>
+                                        <input
+                                            type="checkbox"
+                                            id="consent"
+                                            name="consent"
+                                            checked={formData.consent}
+                                            onChange={handleChange}
+                                            className="mt-1 w-5 h-5 text-black border-gray-300 rounded focus:ring-black"
+                                        />
+                                        <label htmlFor="consent" className="text-sm text-gray-600 leading-relaxed font-sans">
+                                            By submitting this form, you agree to receive communications from Dan Jimmerson. Your data is secure.
+                                        </label>
+                                    </div>
+                                    {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-gray-900 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
+                                    className="w-full py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
                                 >
                                     {isLoading ? "Sending..." : "Send Message"} <Send className="w-5 h-5" />
                                 </button>
