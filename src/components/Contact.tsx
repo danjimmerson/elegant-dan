@@ -91,7 +91,7 @@ const Contact = () => {
                         >
                             <button
                                 onClick={openContact}
-                                className="group relative px-8 py-4 bg-black text-white rounded-full font-bold text-lg overflow-hidden transition-transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                                className="w-full md:w-auto group relative px-8 py-4 bg-black text-white rounded-full font-bold text-lg overflow-hidden transition-transform hover:scale-105 shadow-xl hover:shadow-2xl flex justify-center"
                             >
                                 <span className="relative z-10 flex items-center gap-3">
                                     Speak to Dan <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -101,7 +101,7 @@ const Contact = () => {
 
                             <button
                                 onClick={() => setShowNewsletter(true)}
-                                className="group px-6 py-4 rounded-full border border-black/10 hover:border-accent hover:bg-accent/5 transition-all flex items-center gap-3 font-medium"
+                                className="w-full md:w-auto group px-6 py-4 rounded-full border border-black/10 hover:border-accent hover:bg-accent/5 transition-all flex items-center justify-center gap-3 font-medium"
                             >
                                 <Sparkles className="w-5 h-5 text-accent group-hover:rotate-12 transition-transform" />
                                 <span>Get the Newsletter</span>
@@ -114,7 +114,7 @@ const Contact = () => {
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="relative"
+                        className="relative mb-8 lg:mb-0"
                     >
                         <div className="p-8 lg:p-12 bg-white/80 backdrop-blur-xl rounded-[2rem] lg:rounded-[3rem] border border-white/40 shadow-2xl relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-50" />

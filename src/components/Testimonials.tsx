@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Quote } from "lucide-react";
+import { Quote, X } from "lucide-react";
 
 import testimonialsIllustration from "@/assets/testimonials-illustration.jpg";
 
@@ -83,15 +83,22 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
                 </div>
             </DialogTrigger>
 
-            <DialogContent className="max-w-2xl bg-black/95 border-white/10 text-white p-0 overflow-hidden">
+            <DialogContent className="max-w-2xl bg-black/95 border-white/10 text-white p-0 overflow-hidden [&>button]:hidden">
                 <div className="relative p-8 md:p-12 overflow-hidden">
+                    {/* Custom Close Button */}
+                    <DialogTrigger asChild>
+                        <button className="absolute top-4 right-4 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </DialogTrigger>
+
                     {/* Ambient Background for Modal */}
                     <div
                         className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20 blur-[100px] pointer-events-none"
                         style={{ backgroundColor: t.color }}
                     />
 
-                    <div className="relative z-10">
+                    <div className="relative z-10 p-2">
                         <Quote className="w-12 h-12 mb-6 opacity-80" fill={t.color} stroke="none" />
 
                         <p className="text-xl md:text-2xl font-sans leading-relaxed text-white/90 mb-8 max-h-[60vh] overflow-y-auto custom-scrollbar">
@@ -166,18 +173,33 @@ const Testimonials = () => {
             </div>
 
             {/* Draggable Slider Container */}
-            <div className="relative w-full cursor-grab active:cursor-grabbing">
-                <motion.div
-                    style={{ x: isMobile ? 0 : x }}
-                    className="flex gap-8 px-6 lg:px-12 w-max items-stretch"
-                    drag="x"
-                    dragConstraints={{ right: 0, left: -((350 + 32) * (loopTestimonials.length - 2)) }}
-                    whileTap={{ cursor: "grabbing" }}
-                >
-                    {loopTestimonials.map((t, index) => (
-                        <TestimonialCard key={`${t.id}-${index}`} t={t} />
-                    ))}
-                </motion.div>
+            {/* Testimonials Slider */}
+            <div className="relative w-full">
+                {isMobile ? (
+                    /* Native Scroll Snap for Mobile */
+                    <div className="flex gap-4 overflow-x-auto px-6 pb-8 snap-x snap-mandatory scrollbar-hide -mx-6 md:mx-0">
+                        {loopTestimonials.map((t, index) => (
+                            <div key={`${t.id}-${index}-mobile`} className="snap-center shrink-0 first:pl-6 last:pr-6">
+                                <TestimonialCard t={t} />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    /* Framer Motion Drag for Desktop */
+                    <div className="cursor-grab active:cursor-grabbing overflow-hidden">
+                        <motion.div
+                            style={{ x }}
+                            className="flex gap-8 px-6 lg:px-12 w-max items-stretch"
+                            drag="x"
+                            dragConstraints={{ right: 0, left: -((350 + 32) * (loopTestimonials.length - 2)) }}
+                            whileTap={{ cursor: "grabbing" }}
+                        >
+                            {loopTestimonials.map((t, index) => (
+                                <TestimonialCard key={`${t.id}-${index}`} t={t} />
+                            ))}
+                        </motion.div>
+                    </div>
+                )}
             </div>
         </section>
     );
