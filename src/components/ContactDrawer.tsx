@@ -138,7 +138,7 @@ const ContactDrawer = () => {
                         <div className="flex justify-between items-center p-8 bg-white border-b border-gray-100 shrink-0 z-10">
                             <div>
                                 <h3 className="text-3xl font-serif font-bold text-black tracking-tight">Get in Touch</h3>
-                                <p className="text-gray-500 mt-1 font-sans">I'm currently accepting new projects.</p>
+                                <p className="text-gray-500 mt-1 font-sans">Let's build something extraordinary together.</p>
                             </div>
                             <button
                                 onClick={closeContact}
