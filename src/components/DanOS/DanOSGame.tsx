@@ -613,18 +613,18 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     }, [gameStarted, restartKey]);
 
     return (
-        <div className="flex flex-col items-center justify-center h-full bg-[#1a1a1a] text-white font-mono p-4 relative overflow-hidden select-none">
+        <div className="flex flex-col items-center justify-center h-full bg-[#1a1a1a] text-white font-mono p-1 md:p-4 relative overflow-hidden select-none">
             {/* Header */}
-            <div className="mb-4 flex justify-between w-full max-w-[800px] items-end z-10">
+            <div className="mb-2 md:mb-4 flex justify-between w-full max-w-[800px] items-end z-10 px-2 md:px-0">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-widest text-[#E9B44C] drop-shadow-md">DANPONG</h2>
-                    <p className="text-xs text-gray-400 uppercase tracking-widest">RETRO EDITION v1.0</p>
+                    <h2 className="text-xl md:text-3xl font-bold tracking-widest text-[#E9B44C] drop-shadow-md">DANPONG</h2>
+                    <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-widest">RETRO EDITION v1.0</p>
                 </div>
-                <div className="text-3xl font-bold font-mono text-white drop-shadow-md">{score.toString().padStart(5, '0')}</div>
+                <div className="text-xl md:text-3xl font-bold font-mono text-white drop-shadow-md">{score.toString().padStart(5, '0')}</div>
             </div>
 
             {/* Game Container */}
-            <div className="relative w-full h-full max-w-[800px] max-h-[600px] border-[4px] border-[#4A5859] shadow-2xl flex items-center justify-center bg-black rounded-sm overflow-hidden">
+            <div className="relative w-full h-full max-w-[800px] max-h-[600px] border-2 md:border-[4px] border-[#4A5859] shadow-2xl flex items-center justify-center bg-black rounded-sm overflow-hidden">
                 <canvas
                     ref={canvasRef}
                     width={CANVAS_WIDTH}

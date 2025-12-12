@@ -69,9 +69,10 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
             {/* Top Right Exit Button */}
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 z-[60] group flex items-center gap-3 bg-red-600/90 hover:bg-red-600 text-white px-6 py-3 rounded-full font-bold border-2 border-white/20 hover:border-white transition-all shadow-lg hover:shadow-red-900/50 hover:scale-105"
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-[60] group flex items-center gap-2 md:gap-3 bg-red-600/90 hover:bg-red-600 text-white px-3 py-2 md:px-6 md:py-3 rounded-full font-bold border-2 border-white/20 hover:border-white transition-all shadow-lg hover:shadow-red-900/50 hover:scale-105"
             >
-                <span className="uppercase tracking-widest text-sm">Exit Dan_OS</span>
+                <span className="uppercase tracking-widest text-xs md:text-sm">Exit</span>
+                <span className="hidden md:inline uppercase tracking-widest text-sm">Dan_OS</span>
                 <LogOut className="w-4 h-4" />
             </button>
 
@@ -93,7 +94,7 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
 
                     {/* Desktop Icons */}
                     {/* Desktop Icons - Responsive Grid */}
-                    <div className="absolute top-4 left-4 md:top-8 md:left-8 flex flex-col md:flex-row gap-8 md:gap-24 z-10 w-full md:w-auto pointer-events-none">
+                    <div className="absolute top-16 left-4 md:top-8 md:left-8 grid grid-cols-2 md:flex md:flex-row gap-4 md:gap-24 z-10 w-[90%] md:w-auto pointer-events-none">
                         {/* Column 1 */}
                         <div className="flex flex-col gap-6 md:gap-8 pointer-events-auto">
                             <DesktopIcon
