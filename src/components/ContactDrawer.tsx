@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Send } from "lucide-react";
 import { useContact } from "@/context/ContactContext";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const ContactDrawer = () => {
@@ -17,39 +16,32 @@ const ContactDrawer = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        console.log("Form submission started");
-        console.log("Form Data:", formData);
 
-        // Check if Supabase client is initialized
-        if (!supabase) {
-            console.error("Supabase client is not initialized");
-            toast.error("System Error: Database connection missing");
-            setIsLoading(false);
-            return;
-        }
+        // Replace 'YOUR_FORM_ID' with your actual Formspree Form ID
+        // You can create one for free at https://formspree.io
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwqqryz"; // Using a placeholder or asking user to update
 
         try {
-            console.log("Sending request to Supabase...");
-            const { data, error } = await supabase
-                .from('contact_submissions')
-                .insert([
-                    {
-                        name: formData.name,
-                        email: formData.email,
-                        message: formData.message
-                    }
-                ])
-                .select();
+            const response = await fetch(FORMSPREE_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
 
-            if (error) {
-                console.error("Supabase Error:", error);
-                throw error;
+            if (response.ok) {
+                toast.success("Message sent successfully! I'll be in touch.");
+                setFormData({ name: "", email: "", message: "" });
+                closeContact();
+            } else {
+                const data = await response.json();
+                if (data && 'errors' in data) {
+                    throw new Error(data["errors"].map((error: any) => error["message"]).join(", "));
+                } else {
+                    throw new Error("Oops! There was a problem submitting your form");
+                }
             }
-
-            console.log("Supabase Success:", data);
-            toast.success("Message sent successfully!");
-            setFormData({ name: "", email: "", message: "" });
-            closeContact();
         } catch (error) {
             console.error('Error submitting form:', error);
             toast.error(`Failed to send: ${(error as Error).message || "Unknown error"}`);
