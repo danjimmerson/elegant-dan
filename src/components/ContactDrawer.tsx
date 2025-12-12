@@ -182,23 +182,23 @@ const ContactDrawer = () => {
                         className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white border-l border-gray-200 shadow-2xl z-[70] flex flex-col"
                     >
                         {/* Header - Sticky */}
-                        <div className="flex justify-between items-center p-8 bg-black border-b border-gray-800 shrink-0 z-10">
+                        <div className="flex justify-between items-center p-6 bg-white border-b border-gray-100 shrink-0 z-10">
                             <div>
-                                <h3 className="text-3xl font-serif font-bold text-white tracking-tight">Get in Touch</h3>
-                                <p className="text-gray-400 mt-1 font-sans">Let's do something extraordinary together.</p>
+                                <h3 className="text-2xl font-serif font-bold text-black tracking-tight">Get in Touch</h3>
+                                <p className="text-gray-500 mt-1 font-sans text-sm">Let's do something extraordinary together.</p>
                             </div>
                             <button
                                 onClick={closeContact}
-                                className="p-2 rounded-full hover:bg-white/10 transition-colors text-white"
+                                className="p-2 rounded-full hover:bg-black/5 transition-colors text-black"
                             >
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
 
                         {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-8">
-                            <form className="space-y-6 pb-8" onSubmit={handleSubmit}>
-                                <div className="space-y-2">
+                        <div className="flex-1 overflow-y-auto p-6">
+                            <form className="space-y-4 pb-6" onSubmit={handleSubmit}>
+                                <div className="space-y-1.5">
                                     <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Name</label>
                                     <input
                                         type="text"
@@ -206,13 +206,13 @@ const ContactDrawer = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Enter your name"
-                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
+                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
                                     />
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
                                         <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Email</label>
                                         <input
                                             type="email"
@@ -220,11 +220,11 @@ const ContactDrawer = () => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             placeholder="name@company.com"
-                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
+                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
                                         />
                                         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                     </div>
-                                    <div className="space-y-2">
+                                    <div className="space-y-1.5">
                                         <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Phone</label>
                                         <input
                                             type="tel"
@@ -232,36 +232,36 @@ const ContactDrawer = () => {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             placeholder="(555) 555-5555"
-                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.phone ? 'border-red-500' : 'border-gray-200'}`}
+                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.phone ? 'border-red-500' : 'border-gray-200'}`}
                                         />
                                         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="space-y-1.5">
                                     <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Message</label>
                                     <textarea
-                                        rows={5}
+                                        rows={4}
                                         name="message"
                                         value={formData.message}
                                         onChange={handleChange}
                                         placeholder="Tell me about your project..."
-                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-4 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans resize-none ${errors.message ? 'border-red-500' : 'border-gray-200'}`}
+                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans resize-none ${errors.message ? 'border-red-500' : 'border-gray-200'}`}
                                     />
                                     {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                                 </div>
 
-                                <div className="space-y-2">
-                                    <div className={`flex items-start gap-4 p-5 bg-gray-50 rounded-xl border ${errors.consent ? 'border-red-500 bg-red-50' : 'border-gray-100'}`}>
+                                <div className="space-y-1.5">
+                                    <div className={`flex items-start gap-3 p-4 bg-gray-50 rounded-xl border ${errors.consent ? 'border-red-500 bg-red-50' : 'border-gray-100'}`}>
                                         <input
                                             type="checkbox"
                                             id="consent"
                                             name="consent"
                                             checked={formData.consent}
                                             onChange={handleChange}
-                                            className="mt-1 w-5 h-5 text-black border-gray-300 rounded focus:ring-black"
+                                            className="mt-0.5 w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
                                         />
-                                        <label htmlFor="consent" className="text-sm text-gray-600 leading-relaxed font-sans">
+                                        <label htmlFor="consent" className="text-xs text-gray-600 leading-relaxed font-sans">
                                             By submitting this form, you agree to receive communications from Dan Jimmerson. Your data is secure.
                                         </label>
                                     </div>
@@ -271,7 +271,7 @@ const ContactDrawer = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
+                                    className="w-full py-4 bg-black text-white font-bold text-lg rounded-full hover:bg-gray-800 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
                                 >
                                     {isLoading ? "Sending..." : "Send Message"} <Send className="w-5 h-5" />
                                 </button>
@@ -285,4 +285,3 @@ const ContactDrawer = () => {
 };
 
 export default ContactDrawer;
-
