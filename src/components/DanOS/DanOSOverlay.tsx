@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { PersonalInjury } from "./PersonalInjury";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Folder, Trash2, Gamepad2, LogOut } from "lucide-react";
@@ -112,6 +112,12 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                             icon={folderIcon}
                             label="Proof it works"
                             onClick={() => toggleWindow("Track Record")}
+                        />
+                        <DesktopIcon
+                            id="Personal Injury"
+                            icon={folderIcon}
+                            label="Personal Injury"
+                            onClick={() => toggleWindow("Personal Injury")}
                         />
                         <DesktopIcon
                             id="Game"
@@ -245,6 +251,9 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                             </li>
                                         </ul>
                                     </div>
+                                )}
+                                {id === "Personal Injury" && (
+                                    <PersonalInjury />
                                 )}
                                 {id === "Game" && (
                                     <DanOSGame onClose={() => closeWindow("Game")} />
