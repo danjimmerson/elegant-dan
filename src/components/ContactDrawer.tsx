@@ -19,7 +19,7 @@ const ContactDrawer = () => {
 
         // Replace 'YOUR_FORM_ID' with your actual Formspree Form ID
         // You can create one for free at https://formspree.io
-        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwqqryz"; // Using a placeholder or asking user to update
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/myzrbqgo"; // User provided URL
 
         try {
             const response = await fetch(FORMSPREE_ENDPOINT, {
