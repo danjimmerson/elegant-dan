@@ -92,10 +92,10 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                     </div>
 
                     {/* Desktop Icons */}
-                    {/* Desktop Icons - 2 Column Grid */}
-                    <div className="absolute top-8 left-8 flex gap-24 z-10">
+                    {/* Desktop Icons - Responsive Grid */}
+                    <div className="absolute top-4 left-4 md:top-8 md:left-8 flex flex-col md:flex-row gap-8 md:gap-24 z-10 w-full md:w-auto pointer-events-none">
                         {/* Column 1 */}
-                        <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-6 md:gap-8 pointer-events-auto">
                             <DesktopIcon
                                 id="About Dan"
                                 icon={logoMark}
@@ -114,10 +114,16 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                 label="How I think about growth"
                                 onClick={() => toggleWindow("Growth Philosophy")}
                             />
+                            <DesktopIcon
+                                id="Recycle Bin"
+                                icon={trashIcon}
+                                label="Recycle Bin"
+                                onClick={() => toggleWindow("Recycle Bin")}
+                            />
                         </div>
 
                         {/* Column 2 */}
-                        <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-6 md:gap-8 pointer-events-auto">
                             <DesktopIcon
                                 id="Game"
                                 icon={Gamepad2} // Using Gamepad2 icon
@@ -135,12 +141,6 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                 icon={folderIcon}
                                 label="Proof it works"
                                 onClick={() => toggleWindow("Track Record")}
-                            />
-                            <DesktopIcon
-                                id="Recycle Bin"
-                                icon={trashIcon}
-                                label="Recycle Bin"
-                                onClick={() => toggleWindow("Recycle Bin")}
                             />
                         </div>
                     </div>

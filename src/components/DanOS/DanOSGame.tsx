@@ -366,10 +366,39 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             }
         };
 
+        const touchMoveHandler = (e: TouchEvent) => {
+            e.preventDefault(); // Prevent scrolling
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const relativeX = touch.clientX - rect.left;
+            const scaleX = canvas.width / rect.width;
+            const canvasX = relativeX * scaleX;
+
+            if (canvasX > 0 && canvasX < canvas.width) {
+                gameStateRef.current.paddleX = canvasX - PADDLE_WIDTH / 2;
+            }
+        };
+
+        const touchStartHandler = (e: TouchEvent) => {
+            // If ball is attached, launch it.
+            // If not, maybe we could use tapping on sides to move? 
+            // But touchmove is better for paddle control.
+            // Just use tap for launch.
+            if (gameStateRef.current.ballAttached) {
+                gameStateRef.current.ballAttached = false;
+                gameStateRef.current.dy = -6;
+                gameStateRef.current.dx = 2 * (Math.random() > 0.5 ? 1 : -1);
+                playSound("launch");
+            }
+        };
+
         document.addEventListener("keydown", keyDownHandler);
         document.addEventListener("keyup", keyUpHandler);
         document.addEventListener("mousemove", mouseMoveHandler);
         document.addEventListener("mousedown", mouseClickHandler);
+        // Add passive: false to allow preventDefault
+        canvas.addEventListener("touchmove", touchMoveHandler, { passive: false });
+        canvas.addEventListener("touchstart", touchStartHandler, { passive: false });
 
         // -- UPDATE & DRAW --
         const loop = () => {
@@ -574,6 +603,10 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             document.removeEventListener("keyup", keyUpHandler);
             document.removeEventListener("mousemove", mouseMoveHandler);
             document.removeEventListener("mousedown", mouseClickHandler);
+            if (canvas) {
+                canvas.removeEventListener("touchmove", touchMoveHandler);
+                canvas.removeEventListener("touchstart", touchStartHandler);
+            }
             cancelAnimationFrame(animationFrameId);
         };
 

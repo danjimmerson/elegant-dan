@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import {
-    TrendingUp, Target, circleDollarSign, Rocket, Globe, Zap,
+    TrendingUp, Target, Rocket, Globe, Zap,
     ShieldCheck, Wrench, Lightbulb, Palette,
     CircleDollarSign
 } from "lucide-react";
 
 export const TrackRecord = () => {
     return (
-        <div className="p-8 h-full overflow-y-auto bg-gray-50/50">
+        <div className="p-4 md:p-8 h-full overflow-y-auto bg-gray-50/50">
             <div className="max-w-4xl mx-auto pb-12">
                 {/* Main Header */}
                 <div className="mb-12 border-b-2 border-black pb-6">

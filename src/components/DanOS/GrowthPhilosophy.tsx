@@ -3,7 +3,7 @@ import { Zap, HeartHandshake, Eye, FlaskConical, Gift, Box, TrendingUp, ZapOff, 
 
 export const GrowthPhilosophy = () => {
     return (
-        <div className="p-8 h-full overflow-y-auto bg-gray-50/50">
+        <div className="p-4 md:p-8 h-full overflow-y-auto bg-gray-50/50">
             <div className="max-w-4xl mx-auto">
                 {/* Header - Now inside the scrollable area */}
                 <div className="mb-8 border-b-2 border-black pb-6">
