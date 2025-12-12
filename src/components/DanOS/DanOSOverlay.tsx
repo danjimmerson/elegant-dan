@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { PersonalInjury } from "./PersonalInjury";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,6 +8,9 @@ import { Taskbar } from "./Taskbar";
 import { Window } from "./Window";
 import { BootScreen } from "./BootScreen";
 import { DanOSGame } from "./DanOSGame";
+import { SystemProtocols } from "./SystemProtocols";
+import { GrowthPhilosophy } from "./GrowthPhilosophy";
+import { TrackRecord } from "./TrackRecord";
 import { AboutDan } from "./AboutDan";
 import { qaData } from "../about/qaData";
 import flatironsImg from "@/assets/pixel_flatirons.jpg";
@@ -88,49 +92,57 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                     </div>
 
                     {/* Desktop Icons */}
-                    <div className="absolute top-8 left-8 flex flex-col gap-8 z-10">
-                        <DesktopIcon
-                            id="About Dan"
-                            icon={logoMark}
-                            label="About Dan"
-                            onClick={() => toggleWindow("About Dan")}
-                        />
-                        <DesktopIcon
-                            id="System Protocols"
-                            icon={folderIcon}
-                            label="What I actually do"
-                            onClick={() => toggleWindow("System Protocols")}
-                        />
-                        <DesktopIcon
-                            id="Growth Philosophy"
-                            icon={folderIcon}
-                            label="How I think about growth"
-                            onClick={() => toggleWindow("Growth Philosophy")}
-                        />
-                        <DesktopIcon
-                            id="Track Record"
-                            icon={folderIcon}
-                            label="Proof it works"
-                            onClick={() => toggleWindow("Track Record")}
-                        />
-                        <DesktopIcon
-                            id="Personal Injury"
-                            icon={folderIcon}
-                            label="Personal Injury"
-                            onClick={() => toggleWindow("Personal Injury")}
-                        />
-                        <DesktopIcon
-                            id="Game"
-                            icon={Gamepad2} // Using Gamepad2 icon
-                            label="DanPong"
-                            onClick={() => toggleWindow("Game")}
-                        />
-                        <DesktopIcon
-                            id="Recycle Bin"
-                            icon={trashIcon}
-                            label="Recycle Bin"
-                            onClick={() => toggleWindow("Recycle Bin")}
-                        />
+                    {/* Desktop Icons - 2 Column Grid */}
+                    <div className="absolute top-8 left-8 flex gap-24 z-10">
+                        {/* Column 1 */}
+                        <div className="flex flex-col gap-8">
+                            <DesktopIcon
+                                id="About Dan"
+                                icon={logoMark}
+                                label="About Dan"
+                                onClick={() => toggleWindow("About Dan")}
+                            />
+                            <DesktopIcon
+                                id="System Protocols"
+                                icon={folderIcon}
+                                label="What I actually do"
+                                onClick={() => toggleWindow("System Protocols")}
+                            />
+                            <DesktopIcon
+                                id="Growth Philosophy"
+                                icon={folderIcon}
+                                label="How I think about growth"
+                                onClick={() => toggleWindow("Growth Philosophy")}
+                            />
+                        </div>
+
+                        {/* Column 2 */}
+                        <div className="flex flex-col gap-8">
+                            <DesktopIcon
+                                id="Game"
+                                icon={Gamepad2} // Using Gamepad2 icon
+                                label="DanPong"
+                                onClick={() => toggleWindow("Game")}
+                            />
+                            <DesktopIcon
+                                id="Personal Injury"
+                                icon={folderIcon}
+                                label="Personal Injury"
+                                onClick={() => toggleWindow("Personal Injury")}
+                            />
+                            <DesktopIcon
+                                id="Track Record"
+                                icon={folderIcon}
+                                label="Proof it works"
+                                onClick={() => toggleWindow("Track Record")}
+                            />
+                            <DesktopIcon
+                                id="Recycle Bin"
+                                icon={trashIcon}
+                                label="Recycle Bin"
+                                onClick={() => toggleWindow("Recycle Bin")}
+                            />
+                        </div>
                     </div>
 
                     {/* Windows */}
@@ -149,109 +161,9 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                 {id === "About Dan" && (
                                     <AboutDan />
                                 )}
-                                {id === "System Protocols" && (
-                                    <div className="p-6 space-y-8">
-                                        <div>
-                                            <h3 className="font-bold border-b-2 border-black pb-2 mb-4 uppercase tracking-widest text-sm">
-                                                System Protocols
-                                            </h3>
-                                            <ul className="space-y-3 font-mono text-sm leading-relaxed break-words">
-                                                <li className="flex gap-3">
-                                                    <span className="text-accent shrink-0">&gt;</span>
-                                                    <span>Translate firm goals into channel strategy, budgets, and CAC targets.</span>
-                                                </li>
-                                                <li className="flex gap-3">
-                                                    <span className="text-accent shrink-0">&gt;</span>
-                                                    <span>Own the mix across brand, PI lead gen, paid/local search, and social.</span>
-                                                </li>
-                                                <li className="flex gap-3">
-                                                    <span className="text-accent shrink-0">&gt;</span>
-                                                    <span>Build feedback loops with intake, call center, and ops to optimize for cases, not clicks.</span>
-                                                </li>
-                                                <li className="flex gap-3">
-                                                    <span className="text-accent shrink-0">&gt;</span>
-                                                    <span>Design experiments, kill what doesn't work fast, double-down on what moves pipeline.</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="font-bold border-b-2 border-black pb-2 mb-4 uppercase tracking-widest text-sm">
-                                                Active Modules
-                                            </h3>
-                                            <div className="grid grid-cols-2 gap-3">
-                                                {[
-                                                    "Revenue Marketing",
-                                                    "GEO / AEO",
-                                                    "Growth Strategy",
-                                                    "Data Engineering",
-                                                    "Full-Funnel Analytics",
-                                                    "Conversion Rate Opt"
-                                                ].map((module) => (
-                                                    <div key={module} className="bg-gray-100 px-3 py-2 rounded border border-gray-200 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                                        {module}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                {id === "Growth Philosophy" && (
-                                    <div className="p-6 h-full overflow-y-auto">
-                                        <h3 className="font-bold border-b-2 border-black pb-2 mb-6 uppercase tracking-widest text-sm sticky top-0 bg-[#E0E0E0] pt-2">
-                                            Growth Philosophy
-                                        </h3>
-                                        <div className="space-y-6">
-                                            {[
-                                                { title: "1. Speed is Strategy.", desc: "In a digital world, the fastest learner wins. Perfection is the enemy of profit; we ship, learn, and pivot immediately." },
-                                                { title: "2. Push Unreasonable Hospitality.", desc: "Service isn't a line item; it's a memory maker. We don't just solve problems; we curate unexpected moments of delight that turn customers into fanatics." },
-                                                { title: "3. Clarity Trumps Persuasion.", desc: "A confused prospect never buys. We stop trying to be clever with words and start being impossible to misunderstand." },
-                                                { title: "4. Test, Don't Guess.", desc: "The market is the only opinion that matters. We leave our egos at the door and let the data dictate the direction." },
-                                                { title: "5. The Offer > The Ads.", desc: "No amount of brilliant copywriting can fix a bad product. We solve the value equation first so the marketing becomes easy." },
-                                                { title: "6. Simplicity Scales.", desc: "Complex funnels break; simple systems compound. We strip away the noise until only the essential remains." },
-                                                { title: "7. Volume Negates Luck.", desc: "You don't need to be the smartest person in the room if you take 10x more swings than everyone else. We outwork the variance." },
-                                                { title: "8. Friction Kills Deals.", desc: "The biggest competitor isn't another company; it's the customer's effort. Every extra click or second of load time is a barrier we must remove." },
-                                                { title: "9. Inputs Over Outcomes.", desc: "We can't control the revenue (lag), only the daily actions (lead) that create it. Obsess over the work, and the numbers take care of themselves." },
-                                                { title: "10. Give First, Ask Later.", desc: "Radical generosity builds authority faster than any sales pitch. We provide value upfront so the \"ask\" feels like a natural next step." }
-                                            ].map((item, i) => (
-                                                <div key={i} className="break-words">
-                                                    <h4 className="font-bold text-lg mb-1">{item.title}</h4>
-                                                    <p className="text-sm text-gray-700 leading-relaxed font-sans">{item.desc}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                                {id === "Track Record" && (
-                                    <div className="p-4 space-y-4">
-                                        <h3 className="font-bold border-b-2 border-black pb-2">
-                                            Track Record
-                                        </h3>
-                                        <p className="font-bold">
-                                            I've led marketing at PI firms operating at national scale and
-                                            high spend.
-                                        </p>
-                                        <ul className="list-disc pl-5 space-y-2 text-sm break-words">
-                                            <li>
-                                                Drove triple-digit growth in lead volume while stabilizing
-                                                cost-per-case.
-                                            </li>
-                                            <li>
-                                                Rebuilt local search + GMB to 3x inbound volume in key
-                                                markets.
-                                            </li>
-                                            <li>
-                                                Launched brand and social programs that added tens of
-                                                thousands of followers/subscribers in months.
-                                            </li>
-                                            <li>
-                                                Led full-firm rebrands and website relaunches (strategy →
-                                                design → UX → performance → CRO) on aggressive timelines.
-                                            </li>
-                                        </ul>
-                                    </div>
-                                )}
+                                {id === "System Protocols" && <SystemProtocols />}
+                                {id === "Growth Philosophy" && <GrowthPhilosophy />}
+                                {id === "Track Record" && <TrackRecord />}
                                 {id === "Personal Injury" && (
                                     <PersonalInjury />
                                 )}
