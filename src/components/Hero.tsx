@@ -63,7 +63,7 @@ const Hero = () => {
               <img
                 src={heroImage}
                 alt="Dan Jimmerson"
-                className="w-full h-[120%] absolute -top-20 md:top-0 md:h-full object-cover object-[center_top] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
+                className="w-full h-[110%] absolute top-0 md:top-0 md:h-full object-cover object-[center_15%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
               />
 
               {/* Mobile: Bottom Gradient for Text Readability */}
