@@ -181,23 +181,26 @@ const ContactDrawer = () => {
                         transition={{ type: "spring", damping: 30, stiffness: 300 }}
                         className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white border-l border-gray-200 shadow-2xl z-[70] flex flex-col"
                     >
-                        {/* Header - Sticky */}
-                        <div className="flex justify-between items-center p-6 bg-white border-b border-gray-100 shrink-0 z-10">
-                            <div>
-                                <h3 className="text-2xl font-serif font-bold text-black tracking-tight">Get in Touch</h3>
-                                <p className="text-gray-500 mt-1 font-sans text-sm">Let's do something extraordinary together.</p>
+                        {/* Header - Sticky with "Pop" */}
+                        <div className="flex justify-between items-start p-8 bg-black text-white shrink-0 z-10 relative overflow-hidden">
+                            {/* Decorative accent */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full pointer-events-none" />
+
+                            <div className="relative z-10">
+                                <h3 className="text-4xl font-serif font-bold tracking-tight mb-2">Get in Touch</h3>
+                                <p className="text-white/70 font-sans text-sm tracking-wide uppercase">Let's build something extraordinary</p>
                             </div>
                             <button
                                 onClick={closeContact}
-                                className="p-2 rounded-full hover:bg-black/5 transition-colors text-black"
+                                className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white z-10"
                             >
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
 
                         {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-6">
-                            <form className="space-y-8 pb-6" onSubmit={handleSubmit}>
+                        <div className="flex-1 overflow-y-auto p-8">
+                            <form className="space-y-10 pb-6" onSubmit={handleSubmit}>
                                 {/* Name Input */}
                                 <div className="relative group">
                                     <input
@@ -275,7 +278,7 @@ const ContactDrawer = () => {
                                         htmlFor="message"
                                         className={`absolute left-0 top-7 text-gray-500 cursor-text transition-all duration-200 peer-focus:top-0 peer-focus:text-xs peer-focus:text-black peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs font-medium tracking-wide ${errors.message ? 'text-red-500' : ''}`}
                                     >
-                                        TELL ME ABOUT YOUR PROJECT
+                                        SHARE ANYTHING YOU'D LIKE TO CHAT ABOUT
                                     </label>
                                     {errors.message && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px] uppercase font-bold tracking-wider">{errors.message}</p>}
                                 </div>
