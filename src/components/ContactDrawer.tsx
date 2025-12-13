@@ -3,6 +3,7 @@ import { X, Send } from "lucide-react";
 import { useContact } from "@/context/ContactContext";
 import { useState } from "react";
 import { toast } from "sonner";
+import TrippyVisuals from "./TrippyVisuals";
 
 const ContactDrawer = () => {
     const { isOpen, closeContact } = useContact();
@@ -182,17 +183,19 @@ const ContactDrawer = () => {
                         className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white border-l border-gray-200 shadow-2xl z-[70] flex flex-col"
                     >
                         {/* Header - Sticky with "Pop" */}
-                        <div className="flex justify-between items-start p-8 bg-black text-white shrink-0 z-10 relative overflow-hidden">
-                            {/* Decorative accent */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full pointer-events-none" />
+                        <div className="relative p-8 shrink-0 z-10 overflow-hidden bg-black">
+                            {/* Animated Background */}
+                            <div className="absolute inset-0 opacity-50">
+                                <TrippyVisuals isPlaying={false} />
+                            </div>
 
-                            <div className="relative z-10">
-                                <h3 className="text-4xl font-serif font-bold tracking-tight mb-2">Get in Touch</h3>
+                            <div className="relative z-10 text-white">
+                                <h3 className="text-4xl font-serif font-bold tracking-tight mb-2">Speak with Dan</h3>
                                 <p className="text-white/70 font-sans text-sm tracking-wide uppercase">Let's build something extraordinary</p>
                             </div>
                             <button
                                 onClick={closeContact}
-                                className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white z-10"
+                                className="absolute top-8 right-8 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white z-20"
                             >
                                 <X className="w-6 h-6" />
                             </button>
@@ -286,7 +289,7 @@ const ContactDrawer = () => {
                                 {/* Consent Checkbox */}
                                 <div className="pt-2">
                                     <label className="flex items-start gap-4 cursor-pointer group">
-                                        <div className="relative flex items-center">
+                                        <div className="relative flex items-center shrink-0">
                                             <input
                                                 type="checkbox"
                                                 name="consent"
@@ -299,7 +302,7 @@ const ContactDrawer = () => {
                                             </div>
                                         </div>
                                         <span className={`text-xs leading-relaxed transition-colors ${errors.consent ? 'text-red-500' : 'text-gray-500 group-hover:text-black'}`}>
-                                            By submitting this form, you agree to receive communications from Dan Jimmerson.<br />Your data is secure.
+                                            By submitting this form, you agree to receive communications from Dan Jimmerson. Your data is secure.
                                         </span>
                                     </label>
                                 </div>
@@ -307,9 +310,9 @@ const ContactDrawer = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest mt-8"
+                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest mt-8"
                                 >
-                                    {isLoading ? "Sending..." : "Send Input"} <Send className="w-4 h-4" />
+                                    {isLoading ? "Sending..." : "Send to Dan"} <Send className="w-4 h-4" />
                                 </button>
                             </form>
                         </div>
