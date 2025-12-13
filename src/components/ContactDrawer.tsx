@@ -197,83 +197,116 @@ const ContactDrawer = () => {
 
                         {/* Scrollable Content */}
                         <div className="flex-1 overflow-y-auto p-6">
-                            <form className="space-y-4 pb-6" onSubmit={handleSubmit}>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Name</label>
+                            <form className="space-y-8 pb-6" onSubmit={handleSubmit}>
+                                {/* Name Input */}
+                                <div className="relative group">
                                     <input
                                         type="text"
                                         name="name"
+                                        id="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        placeholder="Enter your name"
-                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
+                                        placeholder=" "
+                                        className={`peer w-full bg-transparent border-b border-gray-300 py-3 text-lg font-sans text-black focus:border-black focus:outline-none transition-colors placeholder-transparent ${errors.name ? 'border-red-500' : ''}`}
                                     />
-                                    {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                                    <label
+                                        htmlFor="name"
+                                        className={`absolute left-0 top-3 text-gray-500 cursor-text transition-all duration-200 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs font-medium tracking-wide ${errors.name ? 'text-red-500' : ''}`}
+                                    >
+                                        NAME
+                                    </label>
+                                    {errors.name && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px] uppercase font-bold tracking-wider">{errors.name}</p>}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Email</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {/* Email Input */}
+                                    <div className="relative group">
                                         <input
                                             type="email"
                                             name="email"
+                                            id="email"
                                             value={formData.email}
                                             onChange={handleChange}
-                                            placeholder="name@company.com"
-                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.email ? 'border-red-500' : 'border-gray-200'}`}
+                                            placeholder=" "
+                                            className={`peer w-full bg-transparent border-b border-gray-300 py-3 text-lg font-sans text-black focus:border-black focus:outline-none transition-colors placeholder-transparent ${errors.email ? 'border-red-500' : ''}`}
                                         />
-                                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                                        <label
+                                            htmlFor="email"
+                                            className={`absolute left-0 top-3 text-gray-500 cursor-text transition-all duration-200 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs font-medium tracking-wide ${errors.email ? 'text-red-500' : ''}`}
+                                        >
+                                            EMAIL
+                                        </label>
+                                        {errors.email && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px] uppercase font-bold tracking-wider">{errors.email}</p>}
                                     </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Phone</label>
+
+                                    {/* Phone Input */}
+                                    <div className="relative group">
                                         <input
                                             type="tel"
                                             name="phone"
+                                            id="phone"
                                             value={formData.phone}
                                             onChange={handleChange}
-                                            placeholder="(555) 555-5555"
-                                            className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans ${errors.phone ? 'border-red-500' : 'border-gray-200'}`}
+                                            placeholder=" "
+                                            className={`peer w-full bg-transparent border-b border-gray-300 py-3 text-lg font-sans text-black focus:border-black focus:outline-none transition-colors placeholder-transparent ${errors.phone ? 'border-red-500' : ''}`}
                                         />
-                                        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                                        <label
+                                            htmlFor="phone"
+                                            className={`absolute left-0 top-3 text-gray-500 cursor-text transition-all duration-200 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs font-medium tracking-wide ${errors.phone ? 'text-red-500' : ''}`}
+                                        >
+                                            PHONE
+                                        </label>
+                                        {errors.phone && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px] uppercase font-bold tracking-wider">{errors.phone}</p>}
                                     </div>
                                 </div>
 
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Message</label>
+                                {/* Message Input */}
+                                <div className="relative group pt-4">
                                     <textarea
-                                        rows={4}
+                                        rows={3}
                                         name="message"
+                                        id="message"
                                         value={formData.message}
                                         onChange={handleChange}
-                                        placeholder="Tell me about your project..."
-                                        className={`w-full bg-gray-50 border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all placeholder:text-gray-400 font-sans resize-none ${errors.message ? 'border-red-500' : 'border-gray-200'}`}
+                                        placeholder=" "
+                                        className={`peer w-full bg-transparent border-b border-gray-300 py-3 text-lg font-sans text-black focus:border-black focus:outline-none transition-colors placeholder-transparent resize-none ${errors.message ? 'border-red-500' : ''}`}
                                     />
-                                    {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                                    <label
+                                        htmlFor="message"
+                                        className={`absolute left-0 top-7 text-gray-500 cursor-text transition-all duration-200 peer-focus:top-0 peer-focus:text-xs peer-focus:text-black peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs font-medium tracking-wide ${errors.message ? 'text-red-500' : ''}`}
+                                    >
+                                        TELL ME ABOUT YOUR PROJECT
+                                    </label>
+                                    {errors.message && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px] uppercase font-bold tracking-wider">{errors.message}</p>}
                                 </div>
 
-                                <div className="space-y-1.5">
-                                    <div className={`flex items-start gap-3 p-4 bg-gray-50 rounded-xl border ${errors.consent ? 'border-red-500 bg-red-50' : 'border-gray-100'}`}>
-                                        <input
-                                            type="checkbox"
-                                            id="consent"
-                                            name="consent"
-                                            checked={formData.consent}
-                                            onChange={handleChange}
-                                            className="mt-0.5 w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
-                                        />
-                                        <label htmlFor="consent" className="text-xs text-gray-600 leading-relaxed font-sans">
-                                            By submitting this form, you agree to receive communications from Dan Jimmerson. Your data is secure.
-                                        </label>
-                                    </div>
-                                    {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
+                                {/* Consent Checkbox */}
+                                <div className="pt-2">
+                                    <label className="flex items-start gap-4 cursor-pointer group">
+                                        <div className="relative flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                name="consent"
+                                                checked={formData.consent}
+                                                onChange={handleChange}
+                                                className="peer sr-only"
+                                            />
+                                            <div className={`w-5 h-5 border-2 rounded transition-colors ${formData.consent ? 'bg-black border-black' : 'border-gray-300 group-hover:border-black'}`}>
+                                                {formData.consent && <Send className="w-3 h-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-[3]" />}
+                                            </div>
+                                        </div>
+                                        <span className={`text-xs leading-relaxed transition-colors ${errors.consent ? 'text-red-500' : 'text-gray-500 group-hover:text-black'}`}>
+                                            By submitting this form, you agree to receive communications from Dan Jimmerson.<br />Your data is secure.
+                                        </span>
+                                    </label>
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full py-4 bg-black text-white font-bold text-lg rounded-full hover:bg-gray-800 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
+                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest mt-8"
                                 >
-                                    {isLoading ? "Sending..." : "Send Message"} <Send className="w-5 h-5" />
+                                    {isLoading ? "Sending..." : "Send Input"} <Send className="w-4 h-4" />
                                 </button>
                             </form>
                         </div>
