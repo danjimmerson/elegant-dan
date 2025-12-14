@@ -2,11 +2,19 @@ import { useEffect, useRef } from 'react';
 
 interface TrippyVisualsProps {
     isPlaying: boolean;
+    mode?: number;
 }
 
-const TrippyVisuals = ({ isPlaying }: TrippyVisualsProps) => {
+const TrippyVisuals = ({ isPlaying, mode }: TrippyVisualsProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const modeRef = useRef<number>(Math.floor(Math.random() * 3)); // 0: Aurora, 1: Nebula, 2: Stars
+    const modeRef = useRef<number>(mode !== undefined ? mode : Math.floor(Math.random() * 3));
+
+    // Update mode if prop changes
+    useEffect(() => {
+        if (mode !== undefined) {
+            modeRef.current = mode;
+        }
+    }, [mode]);
 
     useEffect(() => {
         const canvas = canvasRef.current;

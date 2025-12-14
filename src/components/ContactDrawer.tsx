@@ -186,7 +186,7 @@ const ContactDrawer = () => {
                         <div className="relative p-8 shrink-0 z-10 overflow-hidden bg-black">
                             {/* Animated Background */}
                             <div className="absolute inset-0 opacity-60">
-                                <TrippyVisuals isPlaying={false} />
+                                <TrippyVisuals isPlaying={true} mode={0} />
                             </div>
 
                             <div className="relative z-10 text-white">
