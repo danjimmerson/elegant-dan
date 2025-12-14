@@ -5,6 +5,8 @@ import { supabase } from "@/lib/supabase";
 
 import testimonialsIllustration from "@/assets/testimonials-illustration.jpg";
 
+import fallbackTestimonials from "@/data/testimonials";
+
 interface Testimonial {
     id: number;
     quote: string;
@@ -127,7 +129,7 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
 
 const Testimonials = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+    const [testimonials, setTestimonials] = useState<Testimonial[]>(fallbackTestimonials);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -137,7 +139,7 @@ const Testimonials = () => {
                 .select('*')
                 .order('id', { ascending: true });
 
-            if (data) {
+            if (data && data.length > 0) {
                 setTestimonials(data as Testimonial[]);
             }
             setLoading(false);
@@ -173,7 +175,7 @@ const Testimonials = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    if (loading) return <section className="py-32 bg-white flex justify-center"><div className="animate-pulse text-gray-400 font-mono text-xs">LOADING ENDORSEMENTS...</div></section>;
+    if (loading && testimonials.length === 0) return <section className="py-32 bg-white flex justify-center"><div className="animate-pulse text-gray-400 font-mono text-xs">LOADING ENDORSEMENTS...</div></section>;
     if (testimonials.length === 0) return null;
 
     return (
