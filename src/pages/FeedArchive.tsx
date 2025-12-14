@@ -228,6 +228,7 @@ interface ArticlePost {
     slug?: string;
     type?: string;
     link?: string;
+    author?: string; // Source Name
 }
 
 const ArticleCard = ({ post, isExternal = false }: { post: ArticlePost, isExternal?: boolean }) => (
@@ -246,6 +247,12 @@ const ArticleCard = ({ post, isExternal = false }: { post: ArticlePost, isExtern
         </div>
         <div className="w-full md:w-2/3 flex flex-col">
             <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 font-mono">
+                {post.author && (
+                    <>
+                        <span className="text-black">{post.author}</span>
+                        <span className="text-gray-300">•</span>
+                    </>
+                )}
                 <span className="text-accent">{post.category}</span>
                 <span>•</span>
                 <span>{post.date}</span>
