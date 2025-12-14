@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Github, ExternalLink, Gamepad2, Code2, Sparkles, Briefcase, Play, Shapes } from "lucide-react";
+import { ArrowUpRight, Github, ExternalLink, Gamepad2, Code2, Sparkles, Briefcase, Play, Shapes, FlaskConical } from "lucide-react";
 import showcaseIllustration from "@/assets/showcase-illustration.jpg";
 import queenMaryVideo from "@/assets/Queen_Mary_Cinematic_K_Video.mp4";
+import danpongLogo from "@/assets/danpong_logo.png";
 
 // Combined Data
 const items = [
-    // Work Items
+    // Work Items (Labs - Business)
     {
         id: 1,
         type: "work",
@@ -38,17 +39,18 @@ const items = [
         tags: ["Three.js", "WebGL", "Audio API"],
         links: { github: "#", external: "#" }
     },
-    // Play Items
+    // Play Items (Labs - Fun)
     {
         id: 4,
         type: "play",
         title: "DanPong",
         category: "Interactive Game",
         description: "A retro-style breakout game built with React & Canvas. Features custom physics and sound synthesis.",
-        icon: <Gamepad2 className="w-8 h-8" />,
+        icon: <img src={danpongLogo} alt="DanPong" className="w-12 h-auto rendering-pixelated" />,
         color: "bg-blue-500",
         tags: ["Game Dev", "Canvas API", "Audio API"],
-        links: { play: "#" }
+        links: { play: "#" },
+        action: "game" // Marker for action
     },
     {
         id: 5,
@@ -107,7 +109,11 @@ const BackgroundVideo = ({ src }: { src: string }) => {
     );
 };
 
-const WorkPlay = () => {
+interface WorkPlayProps {
+    onLaunchGame?: () => void;
+}
+
+const WorkPlay = ({ onLaunchGame }: WorkPlayProps) => {
     const [mode, setMode] = useState<"work" | "play">("work");
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -123,14 +129,14 @@ const WorkPlay = () => {
                 {/* Full Width Header */}
                 <div className="flex flex-col lg:flex-row justify-between items-end mb-12 lg:mb-16 gap-8 lg:gap-12 relative">
                     <div className="max-w-3xl z-10 w-full">
-                        <span className={`font-bold tracking-widest uppercase mb-4 block transition-colors duration-500 ${mode === "work" ? "text-accent" : "text-accent-tangerine"}`}>
-                            Showcase
+                        <span className="font-bold tracking-widest uppercase mb-4 block transition-colors duration-500 text-accent">
+                            The Lab
                         </span>
                         <h2 className="text-5xl md:text-7xl font-serif font-bold leading-tight mb-6">
-                            Work and Play
+                            Innovation Lab
                         </h2>
                         <p className={`text-lg md:text-xl leading-relaxed max-w-xl ${mode === "work" ? "text-gray-600" : "text-gray-400"}`}>
-                            A collection of strategic initiatives, product designs, and creative experiments that push the boundaries of what's possible.
+                            My playground for new AI projects, exploring tooling, having fun, and pushing the boundaries of what's possible with code.
                         </p>
                     </div>
 
@@ -206,7 +212,12 @@ const WorkPlay = () => {
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true, margin: "-100px" }}
                                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                                        className="group"
+                                        className="group cursor-pointer"
+                                        onClick={() => {
+                                            if (item.action === "game" && onLaunchGame) {
+                                                onLaunchGame();
+                                            }
+                                        }}
                                     >
                                         {/* Card */}
                                         <div className={`relative rounded-[2.5rem] overflow-hidden mb-8 border ${mode === "work" ? "border-black/5 bg-gray-50" : "border-white/10 bg-white/5"}`}>

@@ -19,15 +19,21 @@ import logoMark from "@/assets/dan-jimmerson-logo.svg";
 // Import generated icons
 import folderIcon from "@/assets/pixel_folder_icon.png";
 import trashIcon from "@/assets/pixel_trash_icon.png";
+import danpongLogo from "@/assets/danpong_logo.png";
+import cookieIcon from "@/assets/pixel_cookie_crumbles.png";
+import nftIcon from "@/assets/pixel_nft_monkey.png";
+import metaverseIcon from "@/assets/pixel_vr_headset.png";
+import clubhouseIcon from "@/assets/pixel_ghost_mic.png";
 
 interface DanOSOverlayProps {
     onClose: () => void;
+    initialWindow?: string | null;
 }
 
-export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
+export const DanOSOverlay = ({ onClose, initialWindow }: DanOSOverlayProps) => {
     const [booted, setBooted] = useState(false);
-    const [openWindows, setOpenWindows] = useState<string[]>([]);
-    const [activeWindow, setActiveWindow] = useState<string | null>(null);
+    const [openWindows, setOpenWindows] = useState<string[]>(initialWindow ? [initialWindow] : []);
+    const [activeWindow, setActiveWindow] = useState<string | null>(initialWindow || null);
 
     // Handle Escape key to close and lock body scroll
     useEffect(() => {
@@ -127,9 +133,10 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                         <div className="flex flex-col gap-6 md:gap-8 pointer-events-auto">
                             <DesktopIcon
                                 id="Game"
-                                icon={Gamepad2} // Using Gamepad2 icon
+                                icon={danpongLogo}
                                 label="DanPong"
                                 onClick={() => toggleWindow("Game")}
+                                imageClassName="bg-white p-1 rounded w-16 h-auto"
                             />
                             <DesktopIcon
                                 id="Personal Injury"
@@ -171,9 +178,14 @@ export const DanOSOverlay = ({ onClose }: DanOSOverlayProps) => {
                                 {id === "Game" && (
                                     <DanOSGame onClose={() => closeWindow("Game")} />
                                 )}
+
+
                                 {id === "Recycle Bin" && (
-                                    <div className="flex items-center justify-center h-full text-gray-400 italic">
-                                        The bin is empty.
+                                    <div className="grid grid-cols-4 gap-8 p-8 items-start align-top h-full overflow-y-auto">
+                                        <DesktopIcon id="Cookie" label="3rd Party Cookies" icon={cookieIcon} onClick={() => { }} imageClassName="opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+                                        <DesktopIcon id="NFT" label="NFTs" icon={nftIcon} onClick={() => { }} imageClassName="opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+                                        <DesktopIcon id="Metaverse" label="Metaverse" icon={metaverseIcon} onClick={() => { }} imageClassName="opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+                                        <DesktopIcon id="Clubhouse" label="Social Audio" icon={clubhouseIcon} onClick={() => { }} imageClassName="opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
                                     </div>
                                 )}
                             </Window>

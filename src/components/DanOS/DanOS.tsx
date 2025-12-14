@@ -3,8 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { DanOSLauncher } from "./DanOSLauncher";
 import { DanOSOverlay } from "./DanOSOverlay";
 
-export const DanOS = () => {
-    const [isOSOpen, setIsOSOpen] = useState(false);
+interface DanOSProps {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    initialWindow?: string | null;
+}
+
+export const DanOS = ({ isOpen, onOpen, onClose, initialWindow }: DanOSProps) => {
 
     return (
         <>
@@ -57,7 +63,7 @@ export const DanOS = () => {
 
                         {/* Right: Launcher */}
                         <div className="block md:flex md:justify-end">
-                            <DanOSLauncher onLaunch={() => setIsOSOpen(true)} />
+                            <DanOSLauncher onLaunch={onOpen} />
                         </div>
                     </div>
                 </div>
@@ -65,7 +71,7 @@ export const DanOS = () => {
 
             {/* OS Overlay */}
             <AnimatePresence>
-                {isOSOpen && <DanOSOverlay onClose={() => setIsOSOpen(false)} />}
+                {isOpen && <DanOSOverlay onClose={onClose} initialWindow={initialWindow} />}
             </AnimatePresence>
         </>
     );

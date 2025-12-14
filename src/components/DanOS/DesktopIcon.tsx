@@ -6,9 +6,10 @@ interface DesktopIconProps {
     icon: string | LucideIcon;
     onClick: () => void;
     id?: string; // Add optional id to fix type error in parent
+    imageClassName?: string;
 }
 
-export const DesktopIcon = ({ label, icon: Icon, onClick }: DesktopIconProps) => {
+export const DesktopIcon = ({ label, icon: Icon, onClick, imageClassName }: DesktopIconProps) => {
     return (
         <button
             onClick={onClick}
@@ -18,7 +19,7 @@ export const DesktopIcon = ({ label, icon: Icon, onClick }: DesktopIconProps) =>
                 <img
                     src={Icon}
                     alt={label}
-                    className="w-12 h-12 object-contain pixelated rendering-pixelated mb-1"
+                    className={`w-12 h-12 object-contain pixelated rendering-pixelated mb-1 ${imageClassName || ''}`}
                     style={{ imageRendering: "pixelated" }}
                 />
             ) : (

@@ -131,8 +131,8 @@ const Navigation = ({ alwaysShowBackground = true }: { alwaysShowBackground?: bo
             <div className="hidden md:flex items-center gap-8">
               <NavItem to="/" label="Home" />
               <NavItem to="#about" label="About" isHash />
-              <NavItem to="#work" label="Work" isHash />
               <NavItem to="/feed" label="Feed" />
+              <NavItem to="#labs" label="Labs" isHash />
               <NavItem to="#contact" label="Contact" isHash />
             </div>
 
@@ -204,8 +204,8 @@ const Navigation = ({ alwaysShowBackground = true }: { alwaysShowBackground?: bo
               <div className="relative z-10 flex flex-col items-center gap-6 text-center">
                 <NavItem to="/" label="Home" mobile />
                 <NavItem to="#about" label="About" isHash mobile />
-                <NavItem to="#work" label="Work" isHash mobile />
                 <NavItem to="/feed" label="Feed" mobile />
+                <NavItem to="#labs" label="Labs" isHash mobile />
                 <NavItem to="#contact" label="Contact" isHash mobile />
 
                 <motion.div
@@ -217,7 +217,7 @@ const Navigation = ({ alwaysShowBackground = true }: { alwaysShowBackground?: bo
                   <Button
                     variant="accent"
                     size="lg"
-                    className="text-white text-lg px-8 py-6 rounded-full"
+                    className="text-white text-2xl px-12 py-8 rounded-full"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       openContact();

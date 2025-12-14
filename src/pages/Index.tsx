@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
@@ -16,6 +16,8 @@ import flatironsVideo from "@/assets/cinematic_Flatirons_flyover.mp4";
 
 const Index = () => {
   const location = useLocation();
+  const [osOpen, setOsOpen] = useState(false);
+  const [initialWindow, setInitialWindow] = useState<string | null>(null);
 
   useEffect(() => {
     if (location.hash) {
@@ -27,6 +29,11 @@ const Index = () => {
       }
     }
   }, [location]);
+
+  const handleLaunchGame = () => {
+    setInitialWindow("Game");
+    setOsOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background dark">
@@ -43,7 +50,15 @@ const Index = () => {
       />
 
       <div id="about">
-        <DanOS />
+        <DanOS
+          isOpen={osOpen}
+          onOpen={() => setOsOpen(true)}
+          onClose={() => {
+            setOsOpen(false);
+            setInitialWindow(null);
+          }}
+          initialWindow={initialWindow}
+        />
       </div>
 
       <Feed />
@@ -56,8 +71,8 @@ const Index = () => {
         description="Marketing isn't just art; it's physics. I fine-tune your revenue engine with data-driven precision, optimizing CAC, LTV, and conversion rates like a Formula 1 team. Maximum output, zero drag."
       />
 
-      <div id="work">
-        <WorkPlay />
+      <div id="labs">
+        <WorkPlay onLaunchGame={handleLaunchGame} />
       </div>
 
       {/* Chapter 3: The Summit */}

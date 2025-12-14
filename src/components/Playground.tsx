@@ -35,7 +35,7 @@ const Playground = () => {
                 <div className="mb-16">
                     <span className="text-accent font-bold tracking-widest uppercase mb-4 block">Playground</span>
                     <h2 className="text-5xl md:text-7xl font-serif font-bold leading-tight">
-                        Work & Play
+                        Innovation Lab
                     </h2>
                     <p className="text-xl text-gray-400 mt-6 max-w-2xl">
                         A collection of experiments, side projects, and digital toys.
