@@ -5,15 +5,20 @@ import feedIllustration from "@/assets/feed-illustration.jpg";
 
 import { BLOG_POSTS } from "@/data/posts";
 
-const FEATURED_POST = BLOG_POSTS["the-future-of-brand-architecture"];
+const FEAT_KEY = "brand-is-the-only-moat";
+const FEATURED_POST = BLOG_POSTS[FEAT_KEY];
 
-const RECENT_POSTS = [
-    BLOG_POSTS["revenue-systems-that-scale"],
-    BLOG_POSTS["design-as-a-competitive-advantage"],
-    BLOG_POSTS["the-psychology-of-micro-interactions"]
+const RECENT_KEYS = [
+    "local-seo-is-dead",
+    "cro-is-dead",
+    "collapse-of-traditional-search"
 ];
 
+const RECENT_POSTS = RECENT_KEYS.map(key => BLOG_POSTS[key]).filter(post => post !== undefined);
+
 const Feed = () => {
+    if (!FEATURED_POST) return null;
+
     return (
         <section className="pt-12 lg:pt-16 pb-24 lg:pb-32 bg-cream relative overflow-hidden">
             <div className="container mx-auto px-6 lg:px-12">

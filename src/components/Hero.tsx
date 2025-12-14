@@ -6,9 +6,9 @@ import { useTypewriter } from "@/hooks/useTypewriter";
 
 const Hero = () => {
   const typewriterText = useTypewriter([
-    "Marketing Executive",
-    "Brand Architect",
-    "Revenue Catalyst"
+    "Marketing\nExecutive",
+    "Brand\nArchitect",
+    "Revenue\nCatalyst"
   ]);
 
   return (
@@ -38,7 +38,7 @@ const Hero = () => {
               Hi, I'm Dan Jimmerson.
             </motion.p>
 
-            <h1 className="text-5xl lg:text-7xl font-sans font-bold leading-[1.1] mb-6 tracking-tight text-white min-h-[120px] lg:min-h-[160px]">
+            <h1 className="text-5xl lg:text-7xl font-sans font-bold leading-[1.1] mb-6 tracking-tight text-white min-h-[120px] lg:min-h-[160px] whitespace-pre-line">
               {typewriterText}<span className="animate-cursor-blink text-accent">|</span>
             </h1>
 

@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const Index = lazy(() => import("./pages/Index"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -16,33 +17,39 @@ import ContactDrawer from "./components/ContactDrawer";
 import GlobalAudioPlayer from "./components/GlobalAudioPlayer";
 import { MusicProvider } from "./context/MusicContext";
 
+const Login = lazy(() => import("./pages/Login"));
+const Admin = lazy(() => import("./pages/Admin"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ContactProvider>
-      <MusicProvider>
-        <GlobalAudioPlayer />
-        <TooltipProvider>
-          <CustomCursor />
-          <Toaster />
-          <Sonner />
-          <ContactDrawer />
-          <BrowserRouter>
-            <ScrollToTop />
-            <Suspense fallback={null}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/feed/:slug" element={<BlogPost />} />
-                <Route path="/feed" element={<FeedArchive />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </TooltipProvider>
-      </MusicProvider>
-    </ContactProvider>
+    <AuthProvider>
+      <ContactProvider>
+        <MusicProvider>
+          <GlobalAudioPlayer />
+          <TooltipProvider>
+            <CustomCursor />
+            <Toaster />
+            <Sonner />
+            <ContactDrawer />
+            <BrowserRouter>
+              <ScrollToTop />
+              <Suspense fallback={<div className="min-h-screen bg-cream flex items-center justify-center">Loading...</div>}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/feed/:slug" element={<BlogPost />} />
+                  <Route path="/feed" element={<FeedArchive />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </TooltipProvider>
+        </MusicProvider>
+      </ContactProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

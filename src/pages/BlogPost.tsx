@@ -152,29 +152,29 @@ const BlogPost = () => {
 
                         <div className="grid md:grid-cols-2 gap-12">
                             {/* Card 1 */}
-                            <Link to="/feed/revenue-systems-that-scale" className="group block h-full">
+                            <Link to="/feed/brand-is-the-only-moat" className="group block h-full">
                                 <motion.div
                                     whileHover={{ y: -5 }}
                                     className="h-full flex flex-col group"
                                 >
                                     <div className="relative h-[300px] overflow-hidden rounded-2xl mb-6">
                                         <img
-                                            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070"
-                                            alt="Revenue Systems"
+                                            src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=2070"
+                                            alt="Brand Strategy"
                                             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0"
                                         />
                                     </div>
                                     <div className="flex flex-col gap-3 flex-1">
                                         <div className="flex items-center gap-2 text-xs text-gray-500 font-mono uppercase tracking-wider">
-                                            <span className="text-black font-bold">Business</span>
+                                            <span className="text-black font-bold">Strategy</span>
                                             <span className="w-1 h-1 rounded-full bg-gray-300"></span>
-                                            <span>Oct 08, 2024</span>
+                                            <span>Dec 12, 2025</span>
                                         </div>
                                         <h4 className="text-2xl font-serif font-bold text-gray-900 group-hover:underline decoration-1 underline-offset-4 decoration-gray-300 transition-all leading-tight">
-                                            Revenue Systems that Scale
+                                            Brand is the Only Moat
                                         </h4>
                                         <p className="text-gray-500 line-clamp-2 leading-relaxed">
-                                            Why automation and recurring revenue models are the future of sustainable growth.
+                                            When the cost of creating 'average' drops to zero, the value of 'trust' becomes infinite.
                                         </p>
                                     </div>
                                 </motion.div>

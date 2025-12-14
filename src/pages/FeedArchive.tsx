@@ -7,16 +7,17 @@ import SwipeFeed from "@/components/SwipeFeed";
 
 import { BLOG_POSTS } from "@/data/posts";
 
-const COVER_STORY = BLOG_POSTS["the-future-of-brand-architecture"];
+const COVER_STORY = BLOG_POSTS["brand-is-the-only-moat"];
 
-const ARCHIVE_POSTS = [
-    BLOG_POSTS["revenue-systems-that-scale"],
-    BLOG_POSTS["design-as-a-competitive-advantage"],
-    BLOG_POSTS["the-psychology-of-user-retention"],
-    BLOG_POSTS["building-for-the-spatial-web"],
-    BLOG_POSTS["the-end-of-average"],
-    BLOG_POSTS["minimalism-in-complex-systems"]
+const ARCHIVE_IDS = [
+    "local-seo-is-dead",
+    "cro-is-dead",
+    "collapse-of-traditional-search",
+    "the-future-of-brand-architecture",
+    "design-as-a-competitive-advantage"
 ];
+
+const ARCHIVE_POSTS = ARCHIVE_IDS.map(id => BLOG_POSTS[id]).filter(post => post !== undefined);
 
 const FeedArchive = () => {
     const [activeTab, setActiveTab] = useState<'created' | 'curated'>('created');
