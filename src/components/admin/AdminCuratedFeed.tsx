@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Plus, Loader2, Save, Trash2, Globe, ExternalLink, RefreshCw, X, Image as ImageIcon } from 'lucide-react';
+import { Plus, Loader2, Save, Trash2, Globe, ExternalLink, Edit2, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from "@/lib/utils";
 import { useImageUpload } from '@/hooks/useImageUpload';
@@ -12,83 +12,119 @@ interface AdminCuratedFeedProps {
 interface CuratedPost {
     id: string;
     title: string;
-    description: string; // Mapped to excerpt
+    description: string;
     image: string;
-    url: string; // Mapped to link
-    source_site: string; // Mapped to source
+    url: string;
+    source_site: string;
     category: string;
     date: string;
     status: 'draft' | 'published' | 'trash';
 }
 
+const COMMON_CATEGORIES = ['Strategy', 'Design', 'Technology', 'Culture', 'Marketing', 'Business', 'AI', 'Productivity'];
+
 const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
     const [urlInput, setUrlInput] = useState('');
     const [isFetchingUrl, setIsFetchingUrl] = useState(false);
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<CuratedPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [activePost, setActivePost] = useState<Partial<CuratedPost>>({});
     const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const { uploadImage, uploading: isUploadingImage } = useImageUpload();
 
-    // Fetch existing curated posts
     const fetchPosts = async () => {
-        setIsLoading(true);
-        const { data, error } = await supabase
-            .from('posts')
-            .select('*')
-            .eq('type', 'curated')
-            .order('created_at', { ascending: false });
+        try {
+            setIsLoading(true);
+            const { data, error } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('type', 'curated')
+                .order('created_at', { ascending: false });
 
-        if (!error && data) {
-            setPosts(data.map(p => ({
-                id: p.id,
-                title: p.title,
-                description: p.excerpt,
-                image: p.image,
-                url: p.link,
-                source_site: p.source || p.author, // Fallback
-                category: p.category,
-                date: p.date,
-                status: p.status
-            })));
+            if (error) {
+                console.error("Supabase Error:", error);
+                throw error;
+            }
+
+            if (data) {
+                const safePosts: CuratedPost[] = data.map(p => ({
+                    id: p.id || Math.random().toString(),
+                    title: p.title || 'Untitled',
+                    description: p.excerpt || '',
+                    image: p.image || '',
+                    url: p.link || '#',
+                    source_site: p.source || p.author || 'Unknown Source',
+                    category: p.category || 'Uncategorized',
+                    date: p.date || new Date().toISOString(),
+                    status: (p.status as any) || 'draft'
+                }));
+                setPosts(safePosts);
+            }
+        } catch (err: any) {
+            console.error("Fetch Posts Error:", err);
+            setError("Failed to load curated feed. Please check console.");
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     useEffect(() => {
         fetchPosts();
     }, []);
 
+    const detectCategory = (text: string): string => {
+        if (!text) return 'Strategy';
+        const lower = text.toLowerCase();
+        if (lower.includes('design') || lower.includes('ux') || lower.includes('ui')) return 'Design';
+        if (lower.includes('ai') || lower.includes('tech') || lower.includes('code')) return 'Technology';
+        if (lower.includes('brand') || lower.includes('market') || lower.includes('ad')) return 'Marketing';
+        if (lower.includes('money') || lower.includes('business')) return 'Strategy';
+        if (lower.includes('culture') || lower.includes('life')) return 'Culture';
+        return 'Strategy';
+    };
+
     const fetchMetadata = async () => {
         if (!urlInput) return;
         setIsFetchingUrl(true);
+        setError(null);
 
         try {
             // Use a CORS proxy to fetch the HTML
             const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(urlInput)}`;
             const response = await fetch(proxyUrl);
-            const html = await response.text();
+            if (!response.ok) throw new Error("Proxy failed");
 
-            // Parse HTML
+            const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, "text/html");
 
-            // Extract Metadata
             const title = doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || doc.title || '';
-            const description = doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+            const description = doc.querySelector('meta[property="og:description"]')?.getAttribute('content') ||
+                doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
             const image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
-            const siteName = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content') || new URL(urlInput).hostname.replace('www.', '');
+            let siteName = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content');
 
-            // Auto-fill form
+            if (!siteName) {
+                try {
+                    const hostname = new URL(urlInput).hostname;
+                    siteName = hostname.replace('www.', '');
+                } catch (e) {
+                    siteName = 'Unknown';
+                }
+            }
+
+            const detectedCategory = detectCategory(`${title} ${description} ${siteName}`);
+
             setActivePost({
                 title,
                 description,
                 image,
                 url: urlInput,
-                source_site: siteName,
-                category: 'Strategy', // Default
+                source_site: siteName || '',
+                category: detectedCategory,
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
                 status: 'draft'
             });
@@ -96,12 +132,12 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
 
         } catch (error) {
             console.error(error);
-            toast.error("Failed to fetch metadata. Please enter details manually.");
-            // Open empty form
+            toast.error("Could not fetch metadata automatically.");
             setActivePost({
                 url: urlInput,
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-                status: 'draft'
+                status: 'draft',
+                category: 'Strategy'
             });
             setIsEditing(true);
         } finally {
@@ -111,46 +147,52 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
     };
 
     const handleSave = async () => {
-        if (!activePost.title || !activePost.url) {
-            toast.error("Title and URL are required.");
-            return;
+        try {
+            setIsSaving(true);
+
+            // Validation
+            if (!activePost.title) {
+                throw new Error("Title is required");
+            }
+
+            const payload = {
+                title: activePost.title,
+                slug: `curated-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                excerpt: activePost.description || '',
+                image: activePost.image || '',
+                link: activePost.url || '#',
+                source: activePost.source_site || 'Unknown',
+                category: activePost.category || 'Strategy',
+                date: activePost.date || new Date().toISOString(),
+                type: 'curated',
+                status: activePost.status || 'draft',
+                author: activePost.source_site || 'Unknown' // Fallback
+            };
+
+            if (activePost.id) {
+                const { error } = await supabase
+                    .from('posts')
+                    .update(payload)
+                    .eq('id', activePost.id);
+                if (error) throw error;
+                toast.success("Updated successfully");
+            } else {
+                const { error } = await supabase
+                    .from('posts')
+                    .insert([payload]);
+                if (error) throw error;
+                toast.success("Curated post added!");
+            }
+
+            setIsEditing(false);
+            setActivePost({});
+            await fetchPosts();
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err.message || "Failed to save");
+        } finally {
+            setIsSaving(false);
         }
-
-        setIsSaving(true);
-
-        const payload = {
-            title: activePost.title,
-            slug: `curated-${Date.now()}`, // Simple unique slug
-            excerpt: activePost.description,
-            image: activePost.image,
-            link: activePost.url,
-            source: activePost.source_site,
-            category: activePost.category,
-            date: activePost.date,
-            type: 'curated',
-            status: activePost.status,
-            author: activePost.source_site // Store source as author too for compatibility
-        };
-
-        if (activePost.id) {
-            const { error } = await supabase
-                .from('posts')
-                .update(payload)
-                .eq('id', activePost.id);
-            if (error) toast.error(error.message);
-            else toast.success("Updated successfully");
-        } else {
-            const { error } = await supabase
-                .from('posts')
-                .insert([payload]);
-            if (error) toast.error(error.message);
-            else toast.success("Curated post added!");
-        }
-
-        setIsSaving(false);
-        setIsEditing(false);
-        setActivePost({});
-        fetchPosts();
     };
 
     const handleDelete = async (id: string) => {
@@ -163,6 +205,10 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
             toast.error("Error deleting");
         }
     };
+
+    if (error) {
+        return <div className="p-8 text-red-500 border border-red-500 rounded-xl bg-red-500/10">{error}</div>;
+    }
 
     if (isEditing) {
         return (
@@ -226,27 +272,31 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
                             <label className="text-[10px] uppercase font-bold tracking-widest opacity-50">Source Site</label>
-                            <input
-                                type="text"
+                            <textarea
                                 value={activePost.source_site || ''}
                                 onChange={(e) => setActivePost({ ...activePost, source_site: e.target.value })}
-                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/10 focus:border-accent" : "border-gray-200 focus:border-accent")}
+                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm resize-none h-10 leading-tight", isDarkMode ? "border-white/10 focus:border-accent" : "border-gray-200 focus:border-accent")}
                                 placeholder="e.g. The Verge"
+                                rows={1}
                             />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-[10px] uppercase font-bold tracking-widest opacity-50">Category</label>
-                            <select
-                                value={activePost.category || 'Strategy'}
-                                onChange={(e) => setActivePost({ ...activePost, category: e.target.value })}
-                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/10 focus:border-accent bg-black" : "border-gray-200 focus:border-accent bg-white")}
-                            >
-                                <option value="Strategy">Strategy</option>
-                                <option value="Design">Design</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Culture">Culture</option>
-                                <option value="Marketing">Marketing</option>
-                            </select>
+                            <label className="text-[10px] uppercase font-bold tracking-widest opacity-50">Category (Tag)</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    list="categories-list"
+                                    value={activePost.category || ''}
+                                    onChange={(e) => setActivePost({ ...activePost, category: e.target.value })}
+                                    className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/10 focus:border-accent bg-transparent" : "border-gray-200 focus:border-accent bg-transparent")}
+                                    placeholder="Type or select a tag..."
+                                />
+                                <datalist id="categories-list">
+                                    {COMMON_CATEGORIES.map(c => (
+                                        <option key={c} value={c} />
+                                    ))}
+                                </datalist>
+                            </div>
                         </div>
                     </div>
 
@@ -340,8 +390,8 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
                     {posts.map((post) => (
                         <div key={post.id} className={cn("group flex items-center justify-between p-4 rounded-xl border transition-all", isDarkMode ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-white border-gray-100 hover:shadow-md")}>
                             <div className="flex items-center gap-4 flex-1 min-w-0">
-                                <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-800 shrink-0 relative">
-                                    {post.image && <img src={post.image} className="w-full h-full object-cover" alt="" />}
+                                <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-800 shrink-0 relative flex items-center justify-center">
+                                    {post.image ? <img src={post.image} className="w-full h-full object-cover" alt="" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} /> : <Globe className="w-6 h-6 opacity-20" />}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">
