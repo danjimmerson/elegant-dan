@@ -183,29 +183,116 @@ const Admin = () => {
                     )}
 
                     {editingPost ? (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="max-w-3xl mx-auto space-y-8">
-                                <div className="space-y-4">
+                        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            {/* Big Title & Slug */}
+                            <div className="space-y-4">
+                                <input
+                                    type="text"
+                                    value={editingPost.title}
+                                    onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
+                                    className={cn(
+                                        "w-full text-5xl lg:text-7xl font-serif font-black bg-transparent outline-none placeholder-opacity-30 leading-tight",
+                                        isDarkMode ? "text-white placeholder-white" : "text-gray-900 placeholder-gray-300"
+                                    )}
+                                    placeholder="Untitled"
+                                />
+                                <div className={cn("flex items-center gap-2 font-mono text-xs lg:text-sm opacity-60", isDarkMode ? "text-gray-400" : "text-gray-600")}>
+                                    <span>https://elegant-dan.com/blog/</span>
                                     <input
                                         type="text"
-                                        value={editingPost.title}
-                                        onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                                        className={cn(
-                                            "w-full text-4xl lg:text-5xl font-serif font-bold bg-transparent outline-none placeholder-opacity-50",
-                                            isDarkMode ? "text-white placeholder-white/20" : "text-gray-900 placeholder-gray-300"
-                                        )}
-                                        placeholder="Title..."
+                                        value={editingPost.slug}
+                                        onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
+                                        className="bg-transparent outline-none border-b border-dashed border-current min-w-[200px]"
+                                        placeholder="post-slug"
                                     />
-                                    <div className="flex gap-4">
-                                        <input
-                                            type="text"
-                                            value={editingPost.slug}
-                                            onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
-                                            className={cn("font-mono text-sm bg-transparent outline-none", isDarkMode ? "text-gray-500" : "text-gray-400")}
-                                            placeholder="url-slug"
-                                        />
+                                </div>
+                            </div>
+
+                            {/* Metadata Grid */}
+                            <div className={cn(
+                                "grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-2xl border",
+                                isDarkMode ? "bg-white/5 border-white/10" : "bg-gray-50 border-gray-100"
+                            )}>
+                                {/* Featured Image */}
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Featured Image</label>
+                                    <div
+                                        onClick={() => {
+                                            const url = window.prompt("Image URL", editingPost.image);
+                                            if (url) setEditingPost({ ...editingPost, image: url });
+                                        }}
+                                        className={cn(
+                                            "aspect-video rounded-lg overflow-hidden border border-dashed flex items-center justify-center cursor-pointer group relative transition-all",
+                                            isDarkMode ? "border-white/20 hover:border-accent hover:bg-white/5" : "border-gray-300 hover:border-accent hover:bg-white"
+                                        )}
+                                    >
+                                        {editingPost.image ? (
+                                            <>
+                                                <img src={editingPost.image} alt="Cover" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-opacity">
+                                                    Change Image
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <span className="text-xs font-bold uppercase tracking-widest opacity-50">Add Cover</span>
+                                        )}
                                     </div>
                                 </div>
+
+                                {/* Date & Category */}
+                                <div className="col-span-1 md:col-span-2 space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Publish Date</label>
+                                        <input
+                                            type="date"
+                                            value={new Date(editingPost.date).toISOString().split('T')[0]} // Very basic handling, ideally utilize date-fns for robust parsing
+                                            onChange={(e) => {
+                                                const date = new Date(e.target.value);
+                                                setEditingPost({ ...editingPost, date: date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) });
+                                            }}
+                                            className={cn(
+                                                "w-full bg-transparent border-b outline-none py-2 font-mono text-sm",
+                                                isDarkMode ? "border-white/20 focus:border-white" : "border-gray-300 focus:border-black"
+                                            )}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Category / Tag</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {Array.from(new Set(posts.map(p => p.category))).map(cat => (
+                                                <button
+                                                    key={cat}
+                                                    onClick={() => setEditingPost({ ...editingPost, category: cat })}
+                                                    className={cn(
+                                                        "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all",
+                                                        editingPost.category === cat
+                                                            ? "bg-accent border-accent text-white"
+                                                            : (isDarkMode ? "border-white/20 hover:border-white text-gray-400" : "border-gray-200 hover:border-black text-gray-500")
+                                                    )}
+                                                >
+                                                    {cat}
+                                                </button>
+                                            ))}
+                                            <button
+                                                onClick={() => {
+                                                    const newCat = window.prompt("New Tag Name");
+                                                    if (newCat) setEditingPost({ ...editingPost, category: newCat });
+                                                }}
+                                                className={cn(
+                                                    "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-dashed transition-all opacity-50 hover:opacity-100",
+                                                    isDarkMode ? "border-white/40 hover:border-white" : "border-gray-400 hover:border-black"
+                                                )}
+                                            >
+                                                + Create
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Editor Area */}
+                            <div>
                                 <Editor content={editorContent} onChange={setEditorContent} isDarkMode={isDarkMode} />
                             </div>
                         </div>

@@ -108,7 +108,6 @@ const Editor = ({ content, onChange, isDarkMode }: { content: string, onChange: 
             {editor && (
                 <BubbleMenu
                     editor={editor}
-                    tippyOptions={{ duration: 100 }}
                     className={cn(
                         "flex items-center gap-1 p-1 rounded-full shadow-xl border backdrop-blur-md overflow-hidden",
                         isDarkMode ? "bg-black/90 border-white/20" : "bg-white border-gray-200"
@@ -146,7 +145,6 @@ const Editor = ({ content, onChange, isDarkMode }: { content: string, onChange: 
             {editor && (
                 <FloatingMenu
                     editor={editor}
-                    tippyOptions={{ duration: 100 }}
                     className="flex items-center gap-2"
                 >
                     <div className="relative">
