@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Plus, Edit2, Loader2, Save, Trash2, Quote } from 'lucide-react';
+import { useRef, useState, useEffect } from 'react';
+import { Plus, Edit2, Loader2, Save, Trash2, Quote, Upload } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Testimonial } from '@/data/testimonials';
 import { toast } from 'sonner';
 import { cn } from "@/lib/utils";
+import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface AdminTestimonialsProps {
     isDarkMode: boolean;
@@ -15,6 +16,9 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [formData, setFormData] = useState<Partial<Testimonial>>({});
     const [isSaving, setIsSaving] = useState(false);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const { uploadImage, uploading: isUploadingImage } = useImageUpload();
 
     // Fetch testimonials
     const fetchTestimonials = async () => {
@@ -97,6 +101,15 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
         setIsSaving(false);
     };
 
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const url = await uploadImage(e.target.files[0]);
+            if (url) {
+                setFormData({ ...formData, image: url });
+            }
+        }
+    };
+
     if (editingId !== null) {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
@@ -166,14 +179,25 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
                             <label className={cn("text-[10px] uppercase tracking-widest font-bold opacity-50 block", isDarkMode ? "text-white" : "text-black")}>Appearance</label>
                             <div className="flex gap-4 items-center">
                                 <div
-                                    className="w-16 h-16 rounded-full overflow-hidden border border-dashed flex items-center justify-center bg-gray-100 dark:bg-white/5 cursor-pointer"
-                                    onClick={() => {
-                                        const url = window.prompt("Image URL", formData.image);
-                                        if (url) setFormData({ ...formData, image: url });
-                                    }}
+                                    className="w-16 h-16 rounded-full overflow-hidden border border-dashed flex items-center justify-center bg-gray-100 dark:bg-white/5 cursor-pointer relative group"
+                                    onClick={() => fileInputRef.current?.click()}
                                 >
-                                    {formData.image ? (
-                                        <img src={formData.image} alt="Avatar" className="w-full h-full object-cover" />
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleImageSelect}
+                                    />
+                                    {isUploadingImage ? (
+                                        <Loader2 className="w-6 h-6 animate-spin opacity-50" />
+                                    ) : formData.image ? (
+                                        <>
+                                            <img src={formData.image} alt="Avatar" className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                <Upload className="w-4 h-4 text-white" />
+                                            </div>
+                                        </>
                                     ) : (
                                         <span className="text-[9px] uppercase">Img</span>
                                     )}
@@ -222,7 +246,7 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
                             "group p-6 rounded-2xl border transition-all duration-300 flex items-start gap-6",
                             isDarkMode ? "bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10" : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-xl"
                         )}>
-                            <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 mt-1 ring-2 ring-offset-2 ring-offset-black" style={{ ringColor: t.color }}>
+                            <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 mt-1 ring-2 ring-offset-2 ring-offset-black" style={{ '--tw-ring-color': t.color } as React.CSSProperties}>
                                 <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 space-y-2">

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Plus, Edit2, Loader2, Save } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { Plus, Edit2, Loader2, Save, Upload } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import Editor from '@/components/cms/Editor';
 import { BlogPost, BLOG_POSTS } from '@/data/posts';
 import { toast } from 'sonner';
 import { cn } from "@/lib/utils";
 import { useAuth } from '@/contexts/AuthContext';
+import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface AdminFeedProps {
     isDarkMode: boolean;
@@ -18,6 +19,9 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
     const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
     const [editorContent, setEditorContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const { uploadImage, uploading: isUploadingImage } = useImageUpload();
 
     // Fetch posts
     useEffect(() => {
@@ -87,6 +91,15 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
         setIsSaving(false);
     };
 
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0] && editingPost) {
+            const url = await uploadImage(e.target.files[0]);
+            if (url) {
+                setEditingPost({ ...editingPost, image: url });
+            }
+        }
+    };
+
     if (editingPost) {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
@@ -143,20 +156,26 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Featured Image</label>
                             <div
-                                onClick={() => {
-                                    const url = window.prompt("Image URL", editingPost.image);
-                                    if (url) setEditingPost({ ...editingPost, image: url });
-                                }}
+                                onClick={() => fileInputRef.current?.click()}
                                 className={cn(
                                     "aspect-video rounded-lg overflow-hidden border border-dashed flex items-center justify-center cursor-pointer group relative transition-all",
                                     isDarkMode ? "border-white/20 hover:border-accent hover:bg-white/5" : "border-gray-300 hover:border-accent hover:bg-white"
                                 )}
                             >
-                                {editingPost.image ? (
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleImageSelect}
+                                />
+                                {isUploadingImage ? (
+                                    <Loader2 className="w-8 h-8 animate-spin opacity-50" />
+                                ) : editingPost.image ? (
                                     <>
                                         <img src={editingPost.image} alt="Cover" className="w-full h-full object-cover" />
                                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-opacity">
-                                            Change Image
+                                            <Upload className="w-4 h-4 mr-2" /> Change Image
                                         </div>
                                     </>
                                 ) : (
