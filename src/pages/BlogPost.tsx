@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Calendar, Share2, Twitter, Linkedin, Facebook } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Share2, Linkedin } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { toast } from "sonner";
 import Newsletter from "@/components/Newsletter";
 import { supabase } from "@/lib/supabase";
 import { BlogPost as BlogPostType, BLOG_POSTS } from "@/data/posts";
+import authorAvatar from "@/assets/dan-hero-brand.png";
 
 const BlogPost = () => {
     const { slug } = useParams();
@@ -114,7 +116,7 @@ const BlogPost = () => {
                         <div className="flex items-center justify-between border-t border-b border-gray-100 py-6 mb-12">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                                    <img src="https://github.com/shadcn.png" alt={post.author} className="w-full h-full object-cover" />
+                                    <img src={authorAvatar} alt={post.author} className="w-full h-full object-cover" />
                                 </div>
                                 <div>
                                     <div className="font-bold text-sm">{post.author}</div>
@@ -122,10 +124,28 @@ const BlogPost = () => {
                                 </div>
                             </div>
                             <div className="flex gap-4">
-                                <button className="text-gray-400 hover:text-black transition-colors"><Twitter className="w-5 h-5" /></button>
-                                <button className="text-gray-400 hover:text-black transition-colors"><Linkedin className="w-5 h-5" /></button>
-                                <button className="text-gray-400 hover:text-black transition-colors"><Facebook className="w-5 h-5" /></button>
-                                <button className="text-gray-400 hover:text-black transition-colors"><Share2 className="w-5 h-5" /></button>
+                                <a href="https://www.linkedin.com/in/danjimmerson/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black transition-colors">
+                                    <Linkedin className="w-5 h-5" />
+                                </a>
+                                <button
+                                    onClick={() => {
+                                        if (navigator.share) {
+                                            navigator.share({
+                                                title: post.title,
+                                                text: post.subtitle || "Check out this article by Dan Jimmerson",
+                                                url: window.location.href,
+                                            }).catch(console.error);
+                                        } else {
+                                            navigator.clipboard.writeText(window.location.href);
+                                            toast.success("Link copied to clipboard", {
+                                                description: "Ready to share with the world."
+                                            });
+                                        }
+                                    }}
+                                    className="text-gray-400 hover:text-black transition-colors"
+                                >
+                                    <Share2 className="w-5 h-5" />
+                                </button>
                             </div>
                         </div>
                     </motion.div>
