@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Reorder, useDragControls } from 'framer-motion';
+import { Reorder } from 'framer-motion';
 import { Plus, Edit2, Loader2, Save, Trash2, Upload, GripVertical } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Testimonial } from '@/data/testimonials';
@@ -11,70 +11,6 @@ import { useImageUpload } from '@/hooks/useImageUpload';
 interface AdminTestimonialsProps {
     isDarkMode: boolean;
 }
-
-interface TestimonialItemProps {
-    t: Testimonial;
-    isDarkMode: boolean;
-    onEdit: (t: Testimonial) => void;
-    onDelete: (id: number) => void;
-}
-
-const TestimonialItem = ({ t, isDarkMode, onEdit, onDelete }: TestimonialItemProps) => {
-    const dragControls = useDragControls();
-
-    return (
-        <Reorder.Item
-            value={t}
-            id={String(t.id)}
-            dragListener={false}
-            dragControls={dragControls}
-            className={cn(
-                "group p-6 rounded-2xl border transition-all duration-300 flex items-center gap-6 relative select-none",
-                isDarkMode ? "bg-white/5 border-white/10 hover:bg-white/10" : "bg-white border-gray-200 hover:shadow-lg"
-            )}
-        >
-            {/* Drag Handle */}
-            <div
-                className="cursor-grab active:cursor-grabbing p-2 hover:bg-white/10 rounded transition-colors touch-none"
-                onPointerDown={(e) => dragControls.start(e)}
-            >
-                <GripVertical className="w-5 h-5 opacity-30 group-hover:opacity-100" />
-            </div>
-
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-800 shrink-0">
-                {t.image ? (
-                    <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white bg-indigo-500">
-                        {t.author.charAt(0)}
-                    </div>
-                )}
-            </div>
-
-            <div className="flex-1 min-w-0">
-                <div className="text-lg font-serif font-bold truncate pr-8">{t.quote}</div>
-                <div className={cn("text-xs font-bold uppercase tracking-widest mt-1", isDarkMode ? "text-gray-500" : "text-gray-400")}>
-                    {t.author} • {t.company}
-                </div>
-            </div>
-
-            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                    onClick={() => onEdit(t)}
-                    className="p-2 hover:bg-blue-500/20 hover:text-blue-500 rounded-lg transition-colors"
-                >
-                    <Edit2 className="w-4 h-4" />
-                </button>
-                <button
-                    onClick={() => onDelete(t.id)}
-                    className="p-2 hover:bg-red-500/20 hover:text-red-500 rounded-lg transition-colors"
-                >
-                    <Trash2 className="w-4 h-4" />
-                </button>
-            </div>
-        </Reorder.Item>
-    );
-};
 
 const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
     const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -215,16 +151,24 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
         const headerActions = document.getElementById('admin-header-actions');
 
         return (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24 w-full max-w-4xl mx-auto">
                 {headerActions && createPortal(
-                    <button
-                        onClick={handleSave}
-                        disabled={isSaving}
-                        className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
-                    >
-                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                        Save
-                    </button>,
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setEditingId(null)}
+                            className="flex items-center gap-2 px-6 py-2 bg-transparent border border-white/20 text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-all"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSave}
+                            disabled={isSaving}
+                            className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
+                        >
+                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                            Save
+                        </button>
+                    </div>,
                     headerActions
                 )}
 
@@ -232,84 +176,105 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
                     {editingId === 0 ? "New Testimonial" : "Editing Testimonial"}
                 </h2>
 
-                <div className="max-w-2xl mx-auto space-y-8">
+                <div className="space-y-8 bg-zinc-900/50 p-8 rounded-3xl border border-white/5">
                     <div className="space-y-4">
                         <label className={cn("text-[10px] uppercase tracking-widest font-bold opacity-50 block", isDarkMode ? "text-white" : "text-black")}>Quote</label>
                         <textarea
                             value={formData.quote || ''}
                             onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
                             className={cn(
-                                "w-full min-h-[150px] text-xl font-serif bg-transparent outline-none border p-4 rounded-xl",
-                                isDarkMode ? "border-white/20 focus:border-white text-white" : "border-gray-200 focus:border-black text-gray-900"
+                                "w-full min-h-[150px] text-xl font-serif bg-transparent outline-none border p-4 rounded-xl resize-none",
+                                isDarkMode ? "border-white/10 focus:border-accent/50 text-white placeholder:text-white/20" : "border-gray-200 focus:border-black text-gray-900"
                             )}
                             placeholder="Type the testimonial here..."
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                            <label className={cn("text-[10px] uppercase tracking-widest font-bold opacity-50 block", isDarkMode ? "text-white" : "text-black")}>Author Details</label>
-                            <input
-                                type="text"
-                                value={formData.author || ''}
-                                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/20 text-white" : "border-gray-300 text-black")}
-                                placeholder="Author Name"
-                            />
-                            <input
-                                type="text"
-                                value={formData.role || ''}
-                                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/20 text-white" : "border-gray-300 text-black")}
-                                placeholder="Role (e.g. CEO)"
-                            />
-                            <input
-                                type="text"
-                                value={formData.company || ''}
-                                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                className={cn("w-full bg-transparent border-b outline-none py-2 text-sm", isDarkMode ? "border-white/20 text-white" : "border-gray-300 text-black")}
-                                placeholder="Company"
-                            />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <h3 className={cn("text-xs font-bold uppercase tracking-widest border-b pb-2", isDarkMode ? "border-white/10 text-white/50" : "border-black/10 text-black/50")}>Details</h3>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-[10px] text-white/30 uppercase font-bold mb-1 block">Author Name</label>
+                                    <input
+                                        type="text"
+                                        value={formData.author || ''}
+                                        onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                                        className={cn("w-full bg-transparent border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent/50 transition-colors", isDarkMode ? "border-white/10 text-white" : "border-gray-300 text-black")}
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-white/30 uppercase font-bold mb-1 block">Role</label>
+                                    <input
+                                        type="text"
+                                        value={formData.role || ''}
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                        className={cn("w-full bg-transparent border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent/50 transition-colors", isDarkMode ? "border-white/10 text-white" : "border-gray-300 text-black")}
+                                        placeholder="CEO"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-white/30 uppercase font-bold mb-1 block">Company</label>
+                                    <input
+                                        type="text"
+                                        value={formData.company || ''}
+                                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                                        className={cn("w-full bg-transparent border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent/50 transition-colors", isDarkMode ? "border-white/10 text-white" : "border-gray-300 text-black")}
+                                        placeholder="Acme Corp"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <label className={cn("text-[10px] uppercase tracking-widest font-bold opacity-50 block", isDarkMode ? "text-white" : "text-black")}>Appearance</label>
-                            <div className="flex gap-4 items-center">
-                                <div
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className={cn(
-                                        "w-16 h-16 rounded-full overflow-hidden border border-dashed flex items-center justify-center cursor-pointer group relative transition-all",
-                                        isDarkMode ? "border-white/20 hover:border-accent hover:bg-white/5" : "border-gray-300 hover:border-accent hover:bg-white"
-                                    )}
-                                >
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        className="hidden"
-                                        accept="image/*"
-                                        onChange={handleImageSelect}
-                                    />
-                                    {isUploadingImage ? (
-                                        <Loader2 className="w-8 h-8 animate-spin opacity-50" />
-                                    ) : formData.image ? (
-                                        <>
-                                            <img src={formData.image} alt="Author" className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-opacity">
-                                                <Upload className="w-4 h-4 mr-2" /> Change
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <span className="text-xs font-bold uppercase tracking-widest opacity-50">Upload</span>
-                                    )}
+                        <div className="space-y-6">
+                            <h3 className={cn("text-xs font-bold uppercase tracking-widest border-b pb-2", isDarkMode ? "border-white/10 text-white/50" : "border-black/10 text-black/50")}>Visuals</h3>
+                            <div className="space-y-4">
+                                <label className="text-[10px] text-white/30 uppercase font-bold mb-1 block">Author Image</label>
+                                <div className="flex gap-4 items-center">
+                                    <div
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className={cn(
+                                            "w-20 h-20 rounded-2xl overflow-hidden border border-dashed flex items-center justify-center cursor-pointer group relative transition-all",
+                                            isDarkMode ? "border-white/20 hover:border-accent hover:bg-white/5" : "border-gray-300 hover:border-accent hover:bg-white"
+                                        )}
+                                    >
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={handleImageSelect}
+                                        />
+                                        {isUploadingImage ? (
+                                            <Loader2 className="w-8 h-8 animate-spin opacity-50" />
+                                        ) : formData.image ? (
+                                            <>
+                                                <img src={formData.image} alt="Author" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-opacity">
+                                                    <Upload className="w-4 h-4" />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Upload className="w-6 h-6 opacity-30" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-xs text-white/50 mb-2">Upload a high-res formatted image.</p>
+                                    </div>
                                 </div>
-                                <div className="flex-1">
-                                    <input
-                                        type="color"
-                                        value={formData.color || '#6366f1'}
-                                        onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                                        className="h-10 w-full rounded cursor-pointer"
-                                    />
-                                    <span className="text-[10px] opacity-50 uppercase tracking-widest">Brand Color</span>
+
+                                <div>
+                                    <label className="text-[10px] text-white/30 uppercase font-bold mb-1 block">Accent Color</label>
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            type="color"
+                                            value={formData.color || '#6366f1'}
+                                            onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                                            className="h-10 w-20 rounded cursor-pointer bg-transparent"
+                                        />
+                                        <span className="text-xs font-mono opacity-50">{formData.color}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -322,7 +287,7 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
     const headerActions = document.getElementById('admin-header-actions');
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="animate-in fade-in duration-500 w-full max-w-5xl mx-auto">
             {isOrderChanged && headerActions && createPortal(
                 <button
                     onClick={saveOrder}
@@ -335,15 +300,14 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
                 headerActions
             )}
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-8">
                 <div>
                     <h2 className={cn("text-3xl font-serif font-bold", isDarkMode ? "text-white" : "text-gray-900")}>Testimonials</h2>
-                    <p className={cn("text-sm mt-1", isDarkMode ? "text-gray-400" : "text-gray-500")}>Manage social proof.</p>
                 </div>
                 <button
                     onClick={handleCreate}
                     className={cn(
-                        "flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-xl",
+                        "flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5",
                         isDarkMode ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"
                     )}
                 >
@@ -354,21 +318,75 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
             {fetching ? (
                 <div className="py-20 text-center font-mono text-xs animate-pulse opacity-50">Loading testimonials...</div>
             ) : (
-                <Reorder.Group axis="y" values={testimonials} onReorder={handleReorder} className="space-y-4">
+                <Reorder.Group axis="y" values={testimonials} onReorder={handleReorder} className="space-y-3 w-full">
                     {testimonials.map((t) => (
-                        <TestimonialItem
+                        <Reorder.Item
                             key={t.id}
-                            t={t}
-                            isDarkMode={isDarkMode}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                        />
+                            value={t}
+                            id={String(t.id)}
+                            className={cn(
+                                "group relative w-full flex items-center gap-5 p-4 rounded-xl border transition-all select-none cursor-grab active:cursor-grabbing",
+                                isDarkMode ? "bg-zinc-900/80 border-white/5 hover:border-white/20 hover:bg-zinc-900" : "bg-white border-gray-100 hover:border-gray-300 hover:shadow-md"
+                            )}
+                        >
+                            {/* Drag Handle Indicator */}
+                            <div className="text-white/10 group-hover:text-white/40 transition-colors">
+                                <GripVertical className="w-5 h-5" />
+                            </div>
+
+                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800 shrink-0 border border-white/10">
+                                {t.image ? (
+                                    <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white bg-indigo-500">
+                                        {t.author.charAt(0)}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex-1 min-w-0 pr-4">
+                                <div className={cn("text-base font-serif font-medium leading-snug line-clamp-1", isDarkMode ? "text-white/90" : "text-gray-900")}>{t.quote}</div>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <span className={cn("text-[10px] font-bold uppercase tracking-widest", isDarkMode ? "text-white/40" : "text-gray-500")}>
+                                        {t.author}
+                                    </span>
+                                    <span className="text-white/20">•</span>
+                                    <span className={cn("text-[10px] font-bold uppercase tracking-widest", isDarkMode ? "text-accent" : "text-accent")}>
+                                        {t.company}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-200">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleEdit(t);
+                                    }}
+                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-blue-400 hover:text-blue-300"
+                                    title="Edit"
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(t.id);
+                                    }}
+                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-red-500 hover:text-red-400"
+                                    title="Delete"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </Reorder.Item>
                     ))}
                 </Reorder.Group>
             )}
             {!fetching && testimonials.length === 0 && (
-                <div className="py-20 text-center opacity-50">
-                    <p className="text-sm">No testimonials yet.</p>
+                <div className="py-20 text-center opacity-50 border-2 border-dashed border-white/10 rounded-3xl">
+                    <p className="text-sm uppercase tracking-widest font-bold">No testimonials found</p>
+                    <p className="text-xs mt-2 opacity-50">Add one to get started</p>
                 </div>
             )}
         </div>
