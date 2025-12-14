@@ -1,10 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Quote, X } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 import testimonialsIllustration from "@/assets/testimonials-illustration.jpg";
-
-import testimonials from "@/data/testimonials";
 
 interface Testimonial {
     id: number;
@@ -128,9 +127,27 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
 
 const Testimonials = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            const { data, error } = await supabase
+                .from('testimonials')
+                .select('*')
+                .order('id', { ascending: true });
+
+            if (data) {
+                setTestimonials(data as Testimonial[]);
+            }
+            setLoading(false);
+        };
+        fetchTestimonials();
+    }, []);
 
     // Optimized loop for "infinite" feel without excessive DOM
-    const loopTestimonials = Array(6).fill(testimonials).flat();
+    // Only loop if we have testimonials
+    const loopTestimonials = testimonials.length > 0 ? Array(6).fill(testimonials).flat() : [];
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -155,6 +172,9 @@ const Testimonials = () => {
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
+
+    if (loading) return <section className="py-32 bg-white flex justify-center"><div className="animate-pulse text-gray-400 font-mono text-xs">LOADING ENDORSEMENTS...</div></section>;
+    if (testimonials.length === 0) return null;
 
     return (
         <section ref={containerRef} className="py-24 lg:py-32 bg-white overflow-hidden">
