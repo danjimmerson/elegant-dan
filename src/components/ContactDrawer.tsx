@@ -180,13 +180,13 @@ const ContactDrawer = () => {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                        className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white border-l border-gray-200 shadow-2xl z-[70] flex flex-col"
+                        className="fixed top-0 right-0 h-full w-full md:w-[600px] bg-white shadow-2xl z-[70] flex flex-col"
                     >
                         {/* Header - Sticky with "Pop" */}
                         <div className="relative p-8 shrink-0 z-10 overflow-hidden bg-black">
                             {/* Animated Background */}
-                            <div className="absolute inset-0 opacity-50">
-                                <TrippyVisuals isPlaying={false} />
+                            <div className="absolute inset-0 opacity-40">
+                                <TrippyVisuals isPlaying={true} />
                             </div>
 
                             <div className="relative z-10 text-white">
