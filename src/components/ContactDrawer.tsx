@@ -185,13 +185,13 @@ const ContactDrawer = () => {
                         {/* Header - Sticky with "Pop" */}
                         <div className="relative p-8 shrink-0 z-10 overflow-hidden bg-black">
                             {/* Animated Background */}
-                            <div className="absolute inset-0 opacity-40">
-                                <TrippyVisuals isPlaying={true} />
+                            <div className="absolute inset-0 opacity-60">
+                                <TrippyVisuals isPlaying={false} />
                             </div>
 
                             <div className="relative z-10 text-white">
-                                <h3 className="text-4xl font-serif font-bold tracking-tight mb-2">Speak with Dan</h3>
-                                <p className="text-white/70 font-sans text-sm tracking-wide uppercase">Let's build something extraordinary</p>
+                                <h3 className="text-4xl font-serif font-bold tracking-tight mb-3">Speak with Dan</h3>
+                                <p className="text-white/80 font-sans text-base tracking-wide">Let's build something extraordinary</p>
                             </div>
                             <button
                                 onClick={closeContact}
@@ -310,7 +310,7 @@ const ContactDrawer = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest mt-8"
+                                    className="w-full py-5 bg-black text-white font-bold text-lg rounded-full hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed mt-8"
                                 >
                                     {isLoading ? "Sending..." : "Send to Dan"} <Send className="w-4 h-4" />
                                 </button>
