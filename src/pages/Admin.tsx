@@ -120,7 +120,7 @@ const Admin = () => {
                 <Navigation alwaysShowBackground={false} />
             </div>
 
-            <main className="pt-24 px-6 lg:px-12 pb-24 relative z-10">
+            <main className="pt-32 md:pt-40 px-6 lg:px-12 pb-24 relative z-10">
                 <div className="container mx-auto max-w-6xl">
                     <div className="flex items-center justify-between mb-12">
                         <div>
