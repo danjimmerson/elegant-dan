@@ -90,10 +90,7 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
     if (editingPost) {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
-                <div className="flex items-center justify-between mb-8 sticky top-20 z-30 py-4 backdrop-blur-md bg-opacity-80 -mx-6 px-6 border-b border-transparent transition-colors">
-                    <h2 className={cn("text-lg font-bold uppercase tracking-widest", isDarkMode ? "text-white" : "text-black")}>
-                        Editing Protocol
-                    </h2>
+                <div className="flex items-center justify-end mb-8 sticky top-20 z-30 py-4 backdrop-blur-md bg-opacity-80 -mx-6 px-6 border-b border-transparent transition-colors">
                     <div className="flex gap-4">
                         <button
                             onClick={() => setEditingPost(null)}
