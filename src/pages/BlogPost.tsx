@@ -1,20 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Calendar, Share2, Twitter, Linkedin, Facebook } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Newsletter from "@/components/Newsletter";
-
-import { BLOG_POSTS } from "@/data/posts";
+import { supabase } from "@/lib/supabase";
+import { BlogPost as BlogPostType, BLOG_POSTS } from "@/data/posts";
 
 const BlogPost = () => {
     const { slug } = useParams();
+    const [post, setPost] = useState<BlogPostType | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Default to first post if slug not found (or handle 404)
-    // Default to first post if slug not found (or handle 404)
-    const originalPost = BLOG_POSTS[slug || "the-future-of-brand-architecture"] || BLOG_POSTS["the-future-of-brand-architecture"];
+    useEffect(() => {
+        const fetchPost = async () => {
+            // 1. Try fetching from Supabase
+            if (slug) {
+                const { data, error } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .eq('slug', slug)
+                    .maybeSingle();
 
-    if (!originalPost) {
+                if (!error && data) {
+                    setPost(data as BlogPostType);
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            // 2. Fallback to local data
+            const localPost = BLOG_POSTS[slug || ""];
+            if (localPost) {
+                setPost(localPost);
+            }
+            setLoading(false);
+        };
+        fetchPost();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white text-black flex items-center justify-center font-mono animate-pulse">
+                LOADING TRANSMISSION...
+            </div>
+        );
+    }
+
+    if (!post) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white text-black">
                 <div className="text-center">
@@ -27,12 +60,10 @@ const BlogPost = () => {
         );
     }
 
-    // Create a shallow copy to avoid mutating the shared object
-    const post = { ...originalPost };
-
-    // Inject the long content if it's missing (for the new stubs)
-    if (!post.content || post.content.length < 200) {
-        post.content = `
+    // Inject the long content if it's missing (for the new stubs, if coming from DB without content)
+    // Note: The seed data usually has content, but safe to keep fallback logic if desired.
+    // However, let's treat the content as authentic if present.
+    const displayContent = (post.content && post.content.length > 50) ? post.content : `
     <p class="lead">This is a placeholder for the full article content. In a real application, this would be fetched from a CMS or markdown file.</p>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     <h2>The Core Concept</h2>
@@ -40,7 +71,6 @@ const BlogPost = () => {
     <blockquote>"Innovation distinguishes between a leader and a follower."</blockquote>
     <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
     `;
-    }
 
     return (
         <div className="min-h-screen bg-white text-gray-900 selection:bg-black selection:text-white">
@@ -139,7 +169,7 @@ const BlogPost = () => {
               prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-16
               prose-li:text-lg prose-li:text-gray-900 prose-li:leading-relaxed
               [&>.lead]:text-2xl md:[&>.lead]:text-3xl [&>.lead]:font-serif [&>.lead]:text-black [&>.lead]:leading-[1.4] [&>.lead]:mb-16 [&>.lead]:font-medium"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
+                        dangerouslySetInnerHTML={{ __html: displayContent }}
                     />
 
                     <div className="mt-32 border-t border-gray-100 pt-16">
@@ -219,4 +249,3 @@ const BlogPost = () => {
 };
 
 export default BlogPost;
-

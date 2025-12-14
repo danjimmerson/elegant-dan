@@ -13,6 +13,7 @@ export interface BlogPost {
     content?: string;
     type?: 'created' | 'curated';
     link?: string;
+    status?: 'published' | 'draft' | 'trash';
 }
 
 export const BLOG_POSTS: Record<string, BlogPost> = {

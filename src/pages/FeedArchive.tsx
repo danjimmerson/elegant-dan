@@ -2,31 +2,41 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Globe, ExternalLink, LayoutGrid, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SwipeFeed from "@/components/SwipeFeed";
-
-import { BLOG_POSTS } from "@/data/posts";
-
-const COVER_STORY = BLOG_POSTS["brand-is-the-only-moat"];
-
-const ARCHIVE_IDS = [
-    "local-seo-is-dead",
-    "cro-is-dead",
-    "collapse-of-traditional-search",
-    "the-future-of-brand-architecture",
-    "design-as-a-competitive-advantage"
-];
-
-const ARCHIVE_POSTS = ARCHIVE_IDS.map(id => BLOG_POSTS[id]).filter(post => post !== undefined);
+import { supabase } from "@/lib/supabase";
+import { BlogPost, BLOG_POSTS } from "@/data/posts";
 
 const FeedArchive = () => {
     const [activeTab, setActiveTab] = useState<'created' | 'curated'>('created');
     const [viewMode, setViewMode] = useState<'list' | 'swipe'>('list');
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredPosts = ARCHIVE_POSTS.filter(post => post.type === activeTab);
+    useEffect(() => {
+        const fetchPosts = async () => {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('status', 'published')
+                .order('date', { ascending: false });
 
-    // For swipe mode, we might want to include the cover story in the stack if it matches the type
-    const swipePosts = activeTab === 'created' ? [COVER_STORY, ...filteredPosts] : filteredPosts;
+            if (!error && data && data.length > 0) {
+                setPosts(data as BlogPost[]);
+            } else {
+                setPosts(Object.values(BLOG_POSTS));
+            }
+            setLoading(false);
+        };
+        fetchPosts();
+    }, []);
+
+    const filteredPosts = posts.filter(post => post.type === activeTab);
+    const coverStory = activeTab === 'created' ? filteredPosts[0] : null;
+
+    // For swipe mode, pass all
+    const swipePosts = filteredPosts;
 
     return (
         <div className="min-h-screen bg-cream text-gray-900 selection:bg-black selection:text-white">
@@ -102,12 +112,16 @@ const FeedArchive = () => {
                         </motion.div>
                     </div>
 
-                    {viewMode === 'list' ? (
+                    {loading ? (
+                        <div className="text-center py-24 text-gray-500 animate-pulse font-mono tracking-widest">
+                            LOADING ARCHIVE...
+                        </div>
+                    ) : viewMode === 'list' ? (
                         <>
                             {/* Cover Story (Only show on Created tab in List mode) */}
-                            {activeTab === 'created' && (
+                            {activeTab === 'created' && coverStory && (
                                 <section className="mb-24">
-                                    <Link to={`/feed/${COVER_STORY.slug}`} className="group block">
+                                    <Link to={`/feed/${coverStory.slug}`} className="group block">
                                         <motion.div
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
@@ -117,8 +131,8 @@ const FeedArchive = () => {
                                             <div className="grid lg:grid-cols-12 gap-0">
                                                 <div className="lg:col-span-7 relative h-[400px] lg:h-[600px] overflow-hidden">
                                                     <img
-                                                        src={COVER_STORY.image}
-                                                        alt={COVER_STORY.title}
+                                                        src={coverStory.image}
+                                                        alt={coverStory.title}
                                                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                                                     />
                                                     <div className="absolute top-8 left-8">
@@ -129,15 +143,15 @@ const FeedArchive = () => {
                                                 </div>
                                                 <div className="lg:col-span-5 p-10 lg:p-16 flex flex-col justify-center bg-white relative">
                                                     <div className="mb-6 flex items-center gap-3 text-sm font-medium text-gray-400 font-mono">
-                                                        <span className="text-accent uppercase tracking-wider font-bold">{COVER_STORY.category}</span>
+                                                        <span className="text-accent uppercase tracking-wider font-bold">{coverStory.category}</span>
                                                         <span>•</span>
-                                                        <span>{COVER_STORY.date}</span>
+                                                        <span>{coverStory.date}</span>
                                                     </div>
                                                     <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6 leading-[1.1] group-hover:text-accent transition-colors duration-300 tracking-tight">
-                                                        {COVER_STORY.title}
+                                                        {coverStory.title}
                                                     </h2>
-                                                    <p className="text-lg text-gray-600 mb-8 leading-relaxed font-sans">
-                                                        {COVER_STORY.excerpt}
+                                                    <p className="text-lg text-gray-600 mb-8 leading-relaxed font-sans line-clamp-4">
+                                                        {coverStory.excerpt}
                                                     </p>
                                                     <div className="flex items-center gap-2 text-sm font-bold text-black uppercase tracking-widest group-hover:gap-4 transition-all duration-300">
                                                         Read Article <ArrowRight className="w-4 h-4" />
@@ -151,7 +165,10 @@ const FeedArchive = () => {
 
                             {/* Feed List (Single Column) */}
                             <section className="max-w-3xl mx-auto space-y-8">
-                                {filteredPosts.map((post, index) => (
+                                {/* If cover story exists, exclude it from the list if desired, or keep it. 
+                                    Standard pattern is to keep it, or exclude. Let's exclude for 'created' tab if we showed it.
+                                */}
+                                {(activeTab === 'created' ? filteredPosts.slice(1) : filteredPosts).map((post, index) => (
                                     <motion.div
                                         key={post.id}
                                         initial={{ opacity: 0, y: 20 }}

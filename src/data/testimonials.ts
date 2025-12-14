@@ -13,6 +13,7 @@ export interface Testimonial {
     company: string;
     image: string;
     color: string;
+    sort_order?: number;
 }
 
 const testimonials: Testimonial[] = [

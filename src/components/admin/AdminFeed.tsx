@@ -61,7 +61,8 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
             category: 'Thoughts',
             readTime: '5 min read',
             image: '',
-            description: 'New draft...'
+            description: 'New draft...',
+            status: 'draft'
         } as BlogPost;
         setEditingPost(newPost);
         setEditorContent(newPost.content || '');
@@ -180,25 +181,42 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
                             </div>
                         </div>
 
-                        {/* Date & Category */}
+                        {/* Date & Category & Status */}
                         <div className="col-span-1 md:col-span-2 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Publish Date</label>
-                                <input
-                                    type="date"
-                                    value={new Date(editingPost.date).toISOString().split('T')[0]}
-                                    onChange={(e) => {
-                                        const date = new Date(e.target.value);
-                                        // Adjust for timezone offset to prevent off-by-one errors
-                                        const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-                                        const adjustedDate = new Date(date.getTime() + userTimezoneOffset);
-                                        setEditingPost({ ...editingPost, date: adjustedDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) });
-                                    }}
-                                    className={cn(
-                                        "w-full bg-transparent border-b outline-none py-2 font-mono text-sm",
-                                        isDarkMode ? "border-white/20 focus:border-white" : "border-gray-300 focus:border-black"
-                                    )}
-                                />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Publish Date</label>
+                                    <input
+                                        type="date"
+                                        value={new Date(editingPost.date).toISOString().split('T')[0]}
+                                        onChange={(e) => {
+                                            const date = new Date(e.target.value);
+                                            // Adjust for timezone offset to prevent off-by-one errors
+                                            const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+                                            const adjustedDate = new Date(date.getTime() + userTimezoneOffset);
+                                            setEditingPost({ ...editingPost, date: adjustedDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) });
+                                        }}
+                                        className={cn(
+                                            "w-full bg-transparent border-b outline-none py-2 font-mono text-sm",
+                                            isDarkMode ? "border-white/20 focus:border-white" : "border-gray-300 focus:border-black"
+                                        )}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Status</label>
+                                    <select
+                                        value={editingPost.status || 'draft'}
+                                        onChange={(e) => setEditingPost({ ...editingPost, status: e.target.value as any })}
+                                        className={cn(
+                                            "w-full bg-transparent border-b outline-none py-2 font-mono text-sm uppercase cursor-pointer",
+                                            isDarkMode ? "border-white/20 focus:border-white text-white option:text-black" : "border-gray-300 focus:border-black text-black"
+                                        )}
+                                    >
+                                        <option value="draft" className="text-black">Draft</option>
+                                        <option value="published" className="text-black">Published</option>
+                                        <option value="trash" className="text-black">Trash</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className="space-y-2">
@@ -275,6 +293,15 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
                                 {post.image && <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100" />}
                                 <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur rounded text-[9px] font-bold uppercase tracking-widest text-white border border-white/10">
                                     {post.category}
+                                </div>
+                                {/* Status Badge */}
+                                <div className={cn(
+                                    "absolute top-2 left-2 px-2 py-1 backdrop-blur rounded text-[9px] font-bold uppercase tracking-widest text-white border border-white/10 shadow-lg",
+                                    post.status === 'published' ? "bg-green-600/90" :
+                                        post.status === 'trash' ? "bg-red-600/90" :
+                                            "bg-yellow-600/90"
+                                )}>
+                                    {post.status || 'draft'}
                                 </div>
                             </div>
                             <h3 className={cn("font-serif font-bold text-xl mb-2 leading-tight transition-colors line-clamp-2", isDarkMode ? "text-gray-200 group-hover:text-white" : "text-gray-900")}>

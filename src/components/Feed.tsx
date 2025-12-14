@@ -2,22 +2,40 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import feedIllustration from "@/assets/feed-illustration.jpg";
-
-import { BLOG_POSTS } from "@/data/posts";
-
-const FEAT_KEY = "brand-is-the-only-moat";
-const FEATURED_POST = BLOG_POSTS[FEAT_KEY];
-
-const RECENT_KEYS = [
-    "local-seo-is-dead",
-    "cro-is-dead",
-    "collapse-of-traditional-search"
-];
-
-const RECENT_POSTS = RECENT_KEYS.map(key => BLOG_POSTS[key]).filter(post => post !== undefined);
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { BlogPost, BLOG_POSTS } from "@/data/posts";
 
 const Feed = () => {
-    if (!FEATURED_POST) return null;
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const { data, error } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('status', 'published')
+                .order('date', { ascending: false });
+
+            if (!error && data && data.length > 0) {
+                setPosts(data as BlogPost[]);
+            } else {
+                // Fallback to local data if DB is empty, but filter by existing logic if needed
+                // Ideally we just start empty or use seeded data which matches DB
+                const local = Object.values(BLOG_POSTS);
+                setPosts(local);
+            }
+            setLoading(false);
+        };
+        fetchPosts();
+    }, []);
+
+    const featuredPost = posts.length > 0 ? posts[0] : null;
+    const recentPosts = posts.length > 1 ? posts.slice(1, 4) : [];
+
+    if (loading && posts.length === 0) return null; // Or skeleton
+    if (!featuredPost) return null;
 
     return (
         <section className="pt-12 lg:pt-16 pb-24 lg:pb-32 bg-cream relative overflow-hidden">
@@ -52,14 +70,14 @@ const Feed = () => {
                 <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
                     {/* Featured Post (Left - 7 cols) */}
                     <div className="lg:col-span-7">
-                        <Link to={`/feed/${FEATURED_POST.slug}`} className="group block h-full">
+                        <Link to={`/feed/${featuredPost.slug}`} className="group block h-full">
                             <div
                                 className="h-full flex flex-col rounded-3xl overflow-hidden bg-white shadow-sm border-2 border-black group-hover:shadow-xl transition-all duration-500"
                             >
                                 <div className="relative h-[250px] lg:h-[350px] overflow-hidden">
                                     <img
-                                        src={FEATURED_POST.image}
-                                        alt={FEATURED_POST.title}
+                                        src={featuredPost.image}
+                                        alt={featuredPost.title}
                                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                                     />
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
@@ -71,15 +89,15 @@ const Feed = () => {
                                 </div>
                                 <div className="p-6 lg:p-10 flex flex-col gap-4 flex-1">
                                     <div className="flex items-center gap-3 text-sm text-gray-500 font-mono">
-                                        <span className="text-accent font-bold uppercase">{FEATURED_POST.category}</span>
+                                        <span className="text-accent font-bold uppercase">{featuredPost.category}</span>
                                         <span>•</span>
-                                        <span>{FEATURED_POST.date}</span>
+                                        <span>{featuredPost.date}</span>
                                     </div>
                                     <h3 className="text-2xl lg:text-4xl font-serif font-bold text-gray-900 group-hover:text-accent transition-colors duration-300 leading-tight">
-                                        {FEATURED_POST.title}
+                                        {featuredPost.title}
                                     </h3>
                                     <p className="text-base lg:text-lg text-gray-600 leading-relaxed font-sans max-w-2xl">
-                                        {FEATURED_POST.excerpt}
+                                        {featuredPost.excerpt}
                                     </p>
                                     <div className="mt-auto pt-6 flex items-center gap-2 text-sm font-bold text-black uppercase tracking-wide group-hover:gap-4 transition-all">
                                         Read Story <ArrowRight className="w-4 h-4" />
@@ -91,7 +109,7 @@ const Feed = () => {
 
                     {/* Recent Posts (Right - 5 cols) */}
                     <div className="lg:col-span-5 flex flex-col gap-4 lg:gap-6">
-                        {RECENT_POSTS.map((post, index) => (
+                        {recentPosts.map((post, index) => (
                             <Link key={post.id} to={`/feed/${post.slug}`} className="group block flex-1">
                                 <div
                                     className="flex gap-4 lg:gap-6 p-5 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-center"
