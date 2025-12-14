@@ -81,7 +81,7 @@ const BlogPost = () => {
                 <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
                     <div className="flex items-center justify-between mb-8">
                         <Link
-                            to="/feed"
+                            to="/feed" // Static back to feed
                             className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors group"
                         >
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Feed
@@ -157,17 +157,30 @@ const BlogPost = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.6 }}
                         className="prose prose-lg md:prose-xl prose-slate max-w-none
+              /* Headers */
               prose-headings:font-serif prose-headings:font-bold prose-headings:text-black prose-headings:tracking-tight prose-headings:mb-8 prose-headings:mt-16
               prose-h2:text-4xl md:prose-h2:text-5xl prose-h2:leading-tight
               prose-h3:text-3xl md:prose-h3:text-4xl prose-h3:leading-tight
               prose-h4:text-2xl md:prose-h4:text-3xl prose-h4:leading-tight
-              prose-h5:text-xl md:prose-h5:text-2xl prose-h5:leading-tight
-              prose-h6:text-lg md:prose-h6:text-xl prose-h6:leading-tight prose-h6:uppercase prose-h6:tracking-widest
-              prose-p:font-sans prose-p:text-[1.125rem] md:prose-p:text-[1.25rem] prose-p:leading-[1.9] prose-p:text-gray-900 prose-p:font-normal prose-p:tracking-normal prose-p:mb-8
-              prose-a:text-black prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-l-4 prose-blockquote:border-black prose-blockquote:pl-8 prose-blockquote:py-4 prose-blockquote:my-12 prose-blockquote:italic prose-blockquote:text-2xl md:prose-blockquote:text-4xl prose-blockquote:font-serif prose-blockquote:text-black prose-blockquote:leading-tight
-              prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-16
-              prose-li:text-lg prose-li:text-gray-900 prose-li:leading-relaxed
+              
+              /* Text */
+              prose-p:font-sans prose-p:text-[1.125rem] md:prose-p:text-[1.25rem] prose-p:leading-[1.8] prose-p:text-gray-800 prose-p:font-light prose-p:tracking-normal prose-p:mb-8
+              
+              /* Links */
+              prose-a:text-black prose-a:font-bold prose-a:no-underline hover:prose-a:text-accent transition-colors prose-a:border-b prose-a:border-black/20 hover:prose-a:border-accent
+              
+              /* AI Enhanced Blockquotes */
+              prose-blockquote:not-italic prose-blockquote:font-serif prose-blockquote:text-3xl md:prose-blockquote:text-4xl prose-blockquote:leading-tight prose-blockquote:text-black prose-blockquote:my-16 prose-blockquote:pl-10 prose-blockquote:border-l-4 prose-blockquote:border-black
+              prose-blockquote:relative prose-blockquote:py-4
+              prose-blockquote:before:content-['\201C'] prose-blockquote:before:absolute prose-blockquote:before:-top-4 prose-blockquote:before:-left-6 prose-blockquote:before:text-[6rem] prose-blockquote:before:text-gray-100 prose-blockquote:before:font-serif prose-blockquote:before:leading-none prose-blockquote:before:-z-10
+              
+              /* Images */
+              prose-img:rounded-3xl prose-img:shadow-2xl prose-img:my-16 prose-img:w-full prose-img:object-cover prose-img:aspect-[16/10]
+              
+              /* Lists */
+              prose-li:text-lg prose-li:text-gray-800 prose-li:leading-relaxed prose-li:marker:text-black
+              
+              /* Lead Paragraph */
               [&>.lead]:text-2xl md:[&>.lead]:text-3xl [&>.lead]:font-serif [&>.lead]:text-black [&>.lead]:leading-[1.4] [&>.lead]:mb-16 [&>.lead]:font-medium"
                         dangerouslySetInnerHTML={{ __html: displayContent }}
                     />

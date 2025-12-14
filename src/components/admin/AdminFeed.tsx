@@ -31,12 +31,16 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
             const { data, error } = await supabase
                 .from('posts')
                 .select('*')
+                .neq('type', 'curated')
                 .order('date', { ascending: false });
 
             if (!error && data && data.length > 0) {
                 setPosts(data as BlogPost[]);
             } else {
-                setPosts(Object.values(BLOG_POSTS));
+                // Only use local fallback if DB is empty AND we aren't filtering (not relevant here with Supabase working)
+                // Actually, local posts don't have 'type', so we might want to skip them if we are fully DB-driven now.
+                // For safety, let's just set empty if DB works but has no 'created' posts.
+                if (data) setPosts([]);
             }
             setFetching(false);
         };
@@ -62,7 +66,8 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
             readTime: '5 min read',
             image: '',
             description: 'New draft...',
-            status: 'draft'
+            status: 'draft',
+            type: 'created' // Explicitly set type to created
         } as BlogPost;
         setEditingPost(newPost);
         setEditorContent(newPost.content || '');
@@ -73,7 +78,12 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
         setIsSaving(true);
 
         // Remove id if it's empty to let DB generate it (if creating)
-        const postToSave = { ...editingPost, content: editorContent, updated_at: new Date().toISOString() };
+        const postToSave = {
+            ...editingPost,
+            content: editorContent,
+            updated_at: new Date().toISOString(),
+            type: 'created' // Ensure type is saved
+        };
         if (!postToSave.id) delete (postToSave as any).id;
 
         const { error } = await supabase
@@ -87,7 +97,7 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
             toast.success("Content secured.");
             setEditingPost(null);
             // Re-fetch posts
-            const { data } = await supabase.from('posts').select('*').order('date', { ascending: false });
+            const { data } = await supabase.from('posts').select('*').neq('type', 'curated').order('date', { ascending: false });
             if (data) setPosts(data as BlogPost[]);
         }
         setIsSaving(false);
@@ -108,14 +118,22 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
                 {headerActions && createPortal(
-                    <button
-                        onClick={handleSave}
-                        disabled={isSaving}
-                        className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
-                    >
-                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                        Save
-                    </button>,
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setEditingPost(null)}
+                            className="flex items-center gap-2 px-6 py-2 bg-transparent border border-white/20 text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-all"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSave}
+                            disabled={isSaving}
+                            className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
+                        >
+                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                            Save
+                        </button>
+                    </div>,
                     headerActions
                 )}
 
