@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, Edit2, Loader2, Save, Trash2, Quote, Upload } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Testimonial } from '@/data/testimonials';
@@ -111,29 +112,25 @@ const AdminTestimonials = ({ isDarkMode }: AdminTestimonialsProps) => {
     };
 
     if (editingId !== null) {
+        const headerActions = document.getElementById('admin-header-actions');
+
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
-                <div className="flex items-center justify-between mb-8 sticky top-20 z-30 py-4 backdrop-blur-md bg-opacity-80 -mx-6 px-6 border-b border-transparent transition-colors">
-                    <h2 className={cn("text-lg font-bold uppercase tracking-widest", isDarkMode ? "text-white" : "text-black")}>
-                        {editingId === 0 ? "New Testimonial" : "Editing Testimonial"}
-                    </h2>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => setEditingId(null)}
-                            className={cn("px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest border transition-all", isDarkMode ? "border-white/20 hover:bg-white/10 text-white/70 hover:text-white" : "border-gray-300 hover:bg-gray-100 text-gray-600")}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSave}
-                            disabled={isSaving}
-                            className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
-                        >
-                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                            Save
-                        </button>
-                    </div>
-                </div>
+                {headerActions && createPortal(
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
+                    >
+                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        Save
+                    </button>,
+                    headerActions
+                )}
+
+                <h2 className={cn("text-3xl font-serif font-bold mb-8", isDarkMode ? "text-white" : "text-gray-900")}>
+                    {editingId === 0 ? "New Testimonial" : "Editing Testimonial"}
+                </h2>
 
                 <div className="max-w-2xl mx-auto space-y-8">
                     <div className="space-y-4">

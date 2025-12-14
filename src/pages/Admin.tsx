@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import AdminFeed from '@/components/admin/AdminFeed';
 import AdminTestimonials from '@/components/admin/AdminTestimonials';
 
+import logoWhite from '@/assets/dan-jimmerson-logo.svg';
+import logoBlack from '@/assets/dan-jimmerson-logo-black.svg';
+
 type AdminTab = 'feed' | 'testimonials';
 
 const Admin = () => {
@@ -54,13 +57,22 @@ const Admin = () => {
                 isSidebarCollapsed ? "w-20" : "w-64"
             )}>
                 {/* Sidebar Header */}
-                <div className="h-16 flex items-center px-6 border-b border-transparent">
+                <div className="h-16 flex items-center px-6 border-b border-transparent overflow-hidden">
+                    <img src={isDarkMode ? logoWhite : logoBlack} alt="Logo" className={cn("w-8 h-8 object-contain transition-all", !isSidebarCollapsed && "mr-3")} />
                     {!isSidebarCollapsed && (
                         <span className="font-serif font-bold text-xl tracking-tight">DanOS</span>
                     )}
                     <button
                         onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                        className={cn("p-2 rounded-lg hover:bg-white/10 transition-colors ml-auto", isSidebarCollapsed && "mx-auto")}
+                        className={cn("p-2 rounded-lg hover:bg-white/10 transition-colors ml-auto hidden md:block", isSidebarCollapsed && "absolute right-[-100px]")}
+                    >
+                        {/* We rely on the layout for collapsing, chevron purely visual hint typically */}
+                        {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+                    </button>
+                    {/* Simplified collapsible toggle for cleaner look */}
+                    <button
+                        onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                        className={cn("absolute right-2 top-4 p-2 rounded-lg hover:bg-white/10 transition-colors md:hidden")}
                     >
                         {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
                     </button>
@@ -127,6 +139,7 @@ const Admin = () => {
             )}>
                 {/* Top Bar for Theme Toggle */}
                 <header className="sticky top-0 z-30 h-16 flex items-center justify-end px-8">
+                    <div id="admin-header-actions" className="flex items-center gap-4 mr-4"></div>
                     <button
                         onClick={() => setIsDarkMode(!isDarkMode)}
                         className={cn("p-2 rounded-full transition-colors", isDarkMode ? "hover:bg-white/10 text-yellow-400" : "hover:bg-gray-100 text-gray-600")}

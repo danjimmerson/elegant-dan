@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, Edit2, Loader2, Save, Upload } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import Editor from '@/components/cms/Editor';
@@ -101,26 +102,21 @@ const AdminFeed = ({ isDarkMode }: AdminFeedProps) => {
     };
 
     if (editingPost) {
+        const headerActions = document.getElementById('admin-header-actions');
+
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24">
-                <div className="flex items-center justify-end mb-8 sticky top-20 z-30 py-4 backdrop-blur-md bg-opacity-80 -mx-6 px-6 border-b border-transparent transition-colors">
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => setEditingPost(null)}
-                            className={cn("px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest border transition-all", isDarkMode ? "border-white/20 hover:bg-white/10 text-white/70 hover:text-white" : "border-gray-300 hover:bg-gray-100 text-gray-600")}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSave}
-                            disabled={isSaving}
-                            className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
-                        >
-                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                            Save
-                        </button>
-                    </div>
-                </div>
+                {headerActions && createPortal(
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
+                    >
+                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        Save
+                    </button>,
+                    headerActions
+                )}
 
                 <div className="max-w-3xl mx-auto space-y-8">
                     {/* Big Title & Slug */}
