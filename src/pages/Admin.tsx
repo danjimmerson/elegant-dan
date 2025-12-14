@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
-import { LogOut, LayoutList, MessageSquareQuote, ChevronLeft, ChevronRight, Sun, Moon, ArrowLeft } from 'lucide-react';
+import { LogOut, LayoutList, MessageSquareQuote, ChevronLeft, ChevronRight, Sun, Moon, ArrowLeft, Globe } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import TrippyVisuals from '@/components/TrippyVisuals';
 import { cn } from "@/lib/utils";
 import AdminFeed from '@/components/admin/AdminFeed';
 import AdminTestimonials from '@/components/admin/AdminTestimonials';
+import AdminCuratedFeed from '@/components/admin/AdminCuratedFeed';
 
 import logoWhite from '@/assets/dan-jimmerson-logo.svg';
 import logoBlack from '@/assets/dan-jimmerson-logo-black.svg';
 
-type AdminTab = 'feed' | 'testimonials';
+type AdminTab = 'feed' | 'curated' | 'testimonials';
 
 const Admin = () => {
     const { user, loading } = useAuth();
@@ -95,6 +96,20 @@ const Admin = () => {
                     </button>
 
                     <button
+                        onClick={() => setActiveTab('curated')}
+                        className={cn(
+                            "w-full flex items-center gap-4 px-3 py-3 rounded-xl transition-all group",
+                            activeTab === 'curated'
+                                ? "bg-accent text-white shadow-lg shadow-accent/20"
+                                : (isDarkMode ? "hover:bg-white/10 text-gray-400 hover:text-white" : "hover:bg-gray-100 text-gray-500 hover:text-black")
+                        )}
+                        title="Curated"
+                    >
+                        <Globe className="w-5 h-5 shrink-0" />
+                        {!isSidebarCollapsed && <span className="font-bold text-xs uppercase tracking-widest">Curated</span>}
+                    </button>
+
+                    <button
                         onClick={() => setActiveTab('testimonials')}
                         className={cn(
                             "w-full flex items-center gap-4 px-3 py-3 rounded-xl transition-all group",
@@ -150,6 +165,7 @@ const Admin = () => {
 
                 <div className="px-8 lg:px-12 pb-24 max-w-7xl mx-auto">
                     {activeTab === 'feed' && <AdminFeed isDarkMode={isDarkMode} />}
+                    {activeTab === 'curated' && <AdminCuratedFeed isDarkMode={isDarkMode} />}
                     {activeTab === 'testimonials' && <AdminTestimonials isDarkMode={isDarkMode} />}
                 </div>
             </main>
