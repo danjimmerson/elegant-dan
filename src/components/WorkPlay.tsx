@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Github, ExternalLink, Gamepad2, Code2, Sparkles, Briefcase, Play, Shapes, FlaskConical } from "lucide-react";
-import showcaseIllustration from "@/assets/showcase-illustration.jpg";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Gamepad2, Code2, Sparkles, Briefcase } from "lucide-react";
+import labsIllustration from "@/assets/labs-illustration.jpg";
 import queenMaryVideo from "@/assets/Queen_Mary_Cinematic_K_Video.mp4";
 import danpongLogo from "@/assets/danpong_logo.png";
+import danpongVideo from "@/assets/danpong-trimmed.mov";
 
 // Combined Data
 const items = [
@@ -50,7 +51,9 @@ const items = [
         color: "bg-blue-500",
         tags: ["Game Dev", "Canvas API", "Audio API"],
         links: { play: "#" },
-        action: "game" // Marker for action
+        action: "game", // Marker for action
+        video: danpongVideo,
+        continuousLoop: true
     },
     {
         id: 5,
@@ -76,12 +79,18 @@ const items = [
     }
 ];
 
-const BackgroundVideo = ({ src }: { src: string }) => {
+const BackgroundVideo = ({ src, continuous = false }: { src: string; continuous?: boolean }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
+
+        if (continuous) {
+            video.loop = true;
+            video.play();
+            return;
+        }
 
         const handleEnded = () => {
             setTimeout(() => {
@@ -94,7 +103,7 @@ const BackgroundVideo = ({ src }: { src: string }) => {
 
         video.addEventListener('ended', handleEnded);
         return () => video.removeEventListener('ended', handleEnded);
-    }, []);
+    }, [continuous]);
 
     return (
         <video
@@ -103,8 +112,7 @@ const BackgroundVideo = ({ src }: { src: string }) => {
             autoPlay
             muted
             playsInline
-            // Scale 1.35 to zoom in and remove baked-in black bars
-            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 scale-[1.35]"
+            className={`absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 ${continuous ? 'animate-pan-zoom' : 'scale-[1.35]'}`}
         />
     );
 };
@@ -142,9 +150,9 @@ const WorkPlay = ({ onLaunchGame }: WorkPlayProps) => {
 
                     <div className="hidden lg:block relative shrink-0">
                         <img
-                            src={showcaseIllustration}
-                            alt="Showcase"
-                            className="w-[500px] h-auto grayscale mix-blend-multiply contrast-125 object-contain"
+                            src={labsIllustration}
+                            alt="Innovation Lab"
+                            className="w-[500px] h-auto grayscale mix-blend-multiply contrast-150 brightness-110 object-contain"
                         />
                     </div>
                 </div>
@@ -225,7 +233,7 @@ const WorkPlay = ({ onLaunchGame }: WorkPlayProps) => {
                                             <div className="h-[400px] md:h-[500px] relative overflow-hidden">
                                                 {/* Video Background */}
                                                 {item.video ? (
-                                                    <BackgroundVideo src={item.video} />
+                                                    <BackgroundVideo src={item.video} continuous={item.continuousLoop} />
                                                 ) : (
                                                     mode === "work" ? (
                                                         <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />

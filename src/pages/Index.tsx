@@ -37,7 +37,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background dark">
-      <Navigation />
+      <Navigation alwaysShowBackground={false} />
       <Hero />
       <Testimonials />
 
