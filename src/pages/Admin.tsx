@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
-import { LogOut, Plus, Edit2, Loader2, Save, Trash2, LayoutGrid } from 'lucide-react';
+import { Navigate, Link } from 'react-router-dom';
+import { LogOut, Plus, Edit2, Loader2, Save, ArrowLeft, Sun, Moon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import Editor from '@/components/cms/Editor';
 import { BlogPost, BLOG_POSTS } from '@/data/posts';
 import { toast } from 'sonner';
 import TrippyVisuals from '@/components/TrippyVisuals';
+import { cn } from "@/lib/utils";
 
 const Admin = () => {
     const { user, loading } = useAuth();
@@ -16,6 +16,7 @@ const Admin = () => {
     const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
     const [editorContent, setEditorContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
 
     // Fetch posts
     useEffect(() => {
@@ -105,117 +106,146 @@ const Admin = () => {
         } else {
             toast.success("Content secured.");
             setEditingPost(null);
-            // Refresh list logic would go here
+            // Refresh list logic would go here: re-fetch posts
         }
         setIsSaving(false);
     };
 
     return (
-        <div className="min-h-screen bg-black flex flex-col relative text-white selection:bg-accent selection:text-black">
-            <div className="fixed inset-0 z-0 opacity-30 pointer-events-none">
+        <div className={cn(
+            "min-h-screen flex flex-col relative transition-colors duration-500",
+            isDarkMode ? "bg-black text-white selection:bg-accent selection:text-black" : "bg-white text-black selection:bg-accent selection:text-white"
+        )}>
+            {/* Trippy BG only in dark mode */}
+            <div className={cn("fixed inset-0 z-0 pointer-events-none transition-opacity duration-500", isDarkMode ? "opacity-30" : "opacity-0")}>
                 <TrippyVisuals isPlaying={true} mode={1} />
             </div>
 
-            <div className="relative z-10 w-full pt-8">
-                <Navigation alwaysShowBackground={false} />
-            </div>
+            {/* Admin Header */}
+            <header className={cn(
+                "fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-6 border-b backdrop-blur-md transition-colors",
+                isDarkMode ? "bg-black/80 border-white/10" : "bg-white/80 border-gray-200"
+            )}>
+                <div className="flex items-center gap-4">
+                    <Link to="/" className={cn("flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors", isDarkMode ? "text-gray-400" : "text-gray-600")}>
+                        <ArrowLeft className="w-4 h-4" /> Exit to Site
+                    </Link>
+                </div>
 
-            <main className="pt-32 md:pt-40 px-6 lg:px-12 pb-24 relative z-10">
-                <div className="container mx-auto max-w-6xl">
-                    <div className="flex items-center justify-between mb-12">
-                        <div>
-                            <span className="text-accent text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse">Root Access Granted</span>
-                            <h1 className="text-4xl lg:text-5xl font-serif font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                                {editingPost ? 'Edit Protocol' : 'Data Matrix'}
-                            </h1>
-                        </div>
-                        <div className="flex gap-4">
-                            {editingPost ? (
-                                <>
-                                    <button
-                                        onClick={() => setEditingPost(null)}
-                                        className="px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest border border-white/20 hover:bg-white/10 transition-all text-white/70 hover:text-white"
-                                    >
-                                        Abort
-                                    </button>
-                                    <button
-                                        onClick={handleSave}
-                                        disabled={isSaving}
-                                        className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-full font-bold text-xs uppercase tracking-widest hover:bg-accent hover:scale-105 transition-all shadow-lg hover:shadow-accent/50"
-                                    >
-                                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                                        Commit Changes
-                                    </button>
-                                </>
-                            ) : (
-                                <button
-                                    onClick={handleLogout}
-                                    className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest border border-white/20 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all group"
-                                >
-                                    <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" /> Disconnect
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => setIsDarkMode(!isDarkMode)}
+                        className={cn("p-2 rounded-full transition-colors", isDarkMode ? "hover:bg-white/10 text-yellow-400" : "hover:bg-gray-100 text-gray-600")}
+                        title="Toggle Theme"
+                    >
+                        {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    </button>
 
                     {editingPost ? (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 bg-black/50 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl">
-                            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Title</label>
+                        <>
+                            <button
+                                onClick={() => setEditingPost(null)}
+                                className={cn("px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest border transition-all", isDarkMode ? "border-white/20 hover:bg-white/10 text-white/70 hover:text-white" : "border-gray-300 hover:bg-gray-100 text-gray-600")}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSave}
+                                disabled={isSaving}
+                                className="flex items-center gap-2 px-6 py-2 bg-accent text-white rounded-full font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
+                            >
+                                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                                Save
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={handleLogout}
+                            className={cn("flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest border transition-all group", isDarkMode ? "border-white/20 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400" : "border-gray-200 hover:bg-red-50 text-gray-500 hover:text-red-600")}
+                        >
+                            <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" /> Logout
+                        </button>
+                    )}
+                </div>
+            </header>
+
+            <main className="pt-24 px-6 lg:px-12 pb-24 relative z-10 font-sans">
+                <div className="container mx-auto max-w-6xl">
+                    {!editingPost && (
+                        <div className="flex items-center justify-between mb-12">
+                            <div>
+                                <span className="text-accent text-[10px] font-bold uppercase tracking-[0.2em] animate-pulse">System Active</span>
+                                <h1 className={cn("text-4xl lg:text-5xl font-serif font-bold mt-2", isDarkMode ? "text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400" : "text-gray-900")}>
+                                    Data Matrix
+                                </h1>
+                            </div>
+                        </div>
+                    )}
+
+                    {editingPost ? (
+                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            <div className="max-w-3xl mx-auto space-y-8">
+                                <div className="space-y-4">
                                     <input
                                         type="text"
                                         value={editingPost.title}
                                         onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                                        className="w-full text-2xl font-serif font-bold bg-transparent border-b border-white/20 focus:border-accent outline-none py-2 transition-all text-white placeholder-white/20"
-                                        placeholder="Enter Title..."
+                                        className={cn(
+                                            "w-full text-4xl lg:text-5xl font-serif font-bold bg-transparent outline-none placeholder-opacity-50",
+                                            isDarkMode ? "text-white placeholder-white/20" : "text-gray-900 placeholder-gray-300"
+                                        )}
+                                        placeholder="Title..."
                                     />
+                                    <div className="flex gap-4">
+                                        <input
+                                            type="text"
+                                            value={editingPost.slug}
+                                            onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
+                                            className={cn("font-mono text-sm bg-transparent outline-none", isDarkMode ? "text-gray-500" : "text-gray-400")}
+                                            placeholder="url-slug"
+                                        />
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Slug</label>
-                                    <input
-                                        type="text"
-                                        value={editingPost.slug}
-                                        onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
-                                        className="w-full font-mono text-sm bg-transparent border-b border-white/20 focus:border-accent outline-none py-2 transition-all text-gray-400"
-                                        placeholder="url-slug-here"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="bg-white/5 rounded-2xl p-1 border border-white/10 overflow-hidden">
-                                <Editor content={editorContent} onChange={setEditorContent} />
+                                <Editor content={editorContent} onChange={setEditorContent} isDarkMode={isDarkMode} />
                             </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <button
                                 onClick={handleCreate}
-                                className="group relative bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-accent hover:bg-white/10 transition-all duration-300 flex flex-col items-center justify-center min-h-[300px] text-gray-400 hover:text-white gap-4 backdrop-blur-sm"
+                                className={cn(
+                                    "group relative p-6 rounded-3xl border transition-all duration-300 flex flex-col items-center justify-center min-h-[300px] gap-4 backdrop-blur-sm",
+                                    isDarkMode ? "bg-white/5 border-white/10 hover:border-accent hover:bg-white/10 text-gray-400 hover:text-white" : "bg-gray-50 border-gray-200 hover:border-accent hover:bg-white text-gray-500 hover:text-black"
+                                )}
                             >
-                                <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 group-hover:border-accent group-hover:scale-110 flex items-center justify-center transition-all shadow-lg">
-                                    <Plus className="w-8 h-8 text-gray-400 group-hover:text-accent" />
+                                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center transition-all shadow-lg", isDarkMode ? "bg-white/5 border-white/10 group-hover:border-accent" : "bg-white border-gray-200 group-hover:border-accent")}>
+                                    <Plus className="w-8 h-8 group-hover:text-accent" />
                                 </div>
-                                <span className="font-bold uppercase tracking-widest text-xs">Initialize New Entry</span>
+                                <span className="font-bold uppercase tracking-widest text-xs">New Content</span>
                             </button>
 
                             {fetching ? (
-                                <div className="col-span-full py-20 text-center text-gray-400 font-mono text-xs animate-pulse">Scanning database...</div>
+                                <div className="col-span-full py-20 text-center font-mono text-xs animate-pulse opacity-50">Searching...</div>
                             ) : (
                                 posts.map((post) => (
-                                    <div key={post.id} className="group bg-black/40 backdrop-blur-md p-6 rounded-3xl border border-white/10 hover:border-white/30 transition-all duration-300 flex flex-col h-full hover:bg-white/5">
+                                    <div key={post.id} className={cn(
+                                        "group p-6 rounded-3xl border transition-all duration-300 flex flex-col h-full",
+                                        isDarkMode ? "bg-black/40 backdrop-blur-md border-white/10 hover:border-white/30 hover:bg-white/5" : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-xl"
+                                    )}>
                                         <div className="aspect-video rounded-xl overflow-hidden mb-4 bg-gray-900 relative">
                                             {post.image && <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100" />}
                                             <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur rounded text-[9px] font-bold uppercase tracking-widest text-white border border-white/10">
                                                 {post.category}
                                             </div>
                                         </div>
-                                        <h3 className="font-serif font-bold text-xl mb-2 leading-tight text-gray-200 group-hover:text-white transition-colors line-clamp-2">{post.title}</h3>
-                                        <div className="mt-auto pt-4 flex items-center justify-between text-[10px] font-bold text-gray-500 uppercase tracking-widest border-t border-white/5">
+                                        <h3 className={cn("font-serif font-bold text-xl mb-2 leading-tight transition-colors line-clamp-2", isDarkMode ? "text-gray-200 group-hover:text-white" : "text-gray-900")}>
+                                            {post.title}
+                                        </h3>
+                                        <div className={cn("mt-auto pt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest border-t", isDarkMode ? "text-gray-500 border-white/5" : "text-gray-400 border-gray-100")}>
                                             <span>{post.date}</span>
                                             <button
                                                 onClick={() => handleEdit(post)}
-                                                className="flex items-center gap-1 text-gray-400 hover:text-accent transition-colors"
+                                                className="flex items-center gap-1 hover:text-accent transition-colors"
                                             >
                                                 <Edit2 className="w-3 h-3" /> Edit
                                             </button>

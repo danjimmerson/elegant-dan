@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
-const MenuBar = ({ editor }: { editor: any }) => {
+const MenuBar = ({ editor, isDarkMode }: { editor: any, isDarkMode: boolean }) => {
     if (!editor) {
         return null;
     }
@@ -38,8 +38,14 @@ const MenuBar = ({ editor }: { editor: any }) => {
             disabled={disabled}
             title={title}
             className={cn(
-                "p-2 rounded-lg transition-all duration-200 hover:bg-white/10 text-gray-400 hover:text-white",
-                isActive && "bg-white/10 text-accent shadow-[0_0_10px_rgba(255,255,255,0.1)]",
+                "p-2 rounded-lg transition-all duration-200",
+                isDarkMode
+                    ? "hover:bg-white/10 text-gray-400 hover:text-white"
+                    : "hover:bg-gray-100 text-gray-500 hover:text-black",
+                isActive && (isDarkMode
+                    ? "bg-white/10 text-accent shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                    : "bg-gray-100 text-black shadow-inner"
+                ),
                 disabled && "opacity-50 cursor-not-allowed"
             )}
         >
@@ -47,10 +53,13 @@ const MenuBar = ({ editor }: { editor: any }) => {
         </button>
     );
 
-    const Divider = () => <div className="w-px h-6 bg-white/10 mx-1 self-center" />;
+    const Divider = () => <div className={cn("w-px h-6 mx-1 self-center", isDarkMode ? "bg-white/10" : "bg-gray-200")} />;
 
     return (
-        <div className="flex flex-wrap items-center gap-1 p-2 bg-black/40 backdrop-blur-md border-b border-white/10 sticky top-0 z-20">
+        <div className={cn(
+            "flex flex-wrap items-center gap-1 p-2 border-b sticky top-0 z-20 backdrop-blur-md transition-colors",
+            isDarkMode ? "bg-black/40 border-white/10" : "bg-white/80 border-gray-100"
+        )}>
             <div className="flex items-center gap-1">
                 <Button onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo">
                     <Undo className="w-4 h-4" />
@@ -158,13 +167,13 @@ const MenuBar = ({ editor }: { editor: any }) => {
     );
 };
 
-const Editor = ({ content, onChange }: { content: string, onChange: (html: string) => void }) => {
+const Editor = ({ content, onChange, isDarkMode }: { content: string, onChange: (html: string) => void, isDarkMode: boolean }) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
             Image.configure({
                 HTMLAttributes: {
-                    class: 'rounded-xl shadow-lg border border-white/10 my-8 w-full',
+                    class: 'rounded-xl shadow-lg border my-8 w-full transition-colors ' + (isDarkMode ? 'border-white/10' : 'border-gray-200'),
                 },
             }),
             Link.configure({
@@ -180,14 +189,22 @@ const Editor = ({ content, onChange }: { content: string, onChange: (html: strin
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-invert prose-lg max-w-none focus:outline-none min-h-[500px] px-8 py-8 font-serif leading-relaxed',
+                class: cn(
+                    'prose prose-lg max-w-3xl focus:outline-none min-h-[500px] px-8 py-8 font-serif leading-relaxed transition-colors duration-500',
+                    isDarkMode ? 'prose-invert' : 'prose-gray text-black'
+                ),
             },
         },
     });
 
     return (
-        <div className="rounded-2xl overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl ring-1 ring-white/5">
-            <MenuBar editor={editor} />
+        <div className={cn(
+            "rounded-2xl overflow-hidden shadow-2xl ring-1 transition-all duration-500",
+            isDarkMode
+                ? "bg-black/40 backdrop-blur-xl ring-white/5"
+                : "bg-white ring-gray-200 shadow-[0_20px_40px_rgba(0,0,0,0.05)]"
+        )}>
+            <MenuBar editor={editor} isDarkMode={isDarkMode} />
             <EditorContent editor={editor} />
         </div>
     );
