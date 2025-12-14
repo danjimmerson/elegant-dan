@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
-import { ArrowRight, Globe, ExternalLink, RotateCcw } from "lucide-react";
+import { ArrowRight, Globe, ExternalLink, RotateCcw, Hand, X, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Post {
     id: number | string;
@@ -12,6 +13,8 @@ interface Post {
     readTime: string;
     type?: string;
     link?: string;
+    slug?: string;
+    author?: string;
 }
 
 interface SwipeFeedProps {
@@ -20,85 +23,125 @@ interface SwipeFeedProps {
 
 const SwipeFeed = ({ posts }: SwipeFeedProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [direction, setDirection] = useState<'left' | 'right' | null>(null);
+    const [hasInteracted, setHasInteracted] = useState(false);
+    const navigate = useNavigate();
 
-    // If we've gone through all posts
-    if (currentIndex >= posts.length) {
+    // Reset if posts change substantially
+    if (currentIndex > posts.length) {
+        setCurrentIndex(0);
+    }
+
+    const activePost = posts[currentIndex];
+    const nextPost = posts[currentIndex + 1];
+
+    const handleSwipe = (dir: 'left' | 'right') => {
+        setHasInteracted(true);
+
+        if (dir === 'right' && activePost) {
+            if (activePost.type === 'curated' && activePost.link) {
+                setTimeout(() => window.open(activePost.link, '_blank'), 200);
+            } else if (activePost.slug) {
+                setTimeout(() => navigate(`/feed/${activePost.slug}`), 200);
+            }
+        }
+
+        setTimeout(() => {
+            setCurrentIndex(prev => prev + 1);
+        }, 200);
+    };
+
+    if (!activePost) {
         return (
-            <div className="flex flex-col items-center justify-center h-[500px] text-center">
-                <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">All caught up!</h3>
-                <p className="text-gray-600 mb-8">You've swiped through all the articles.</p>
+            <div className="flex flex-col items-center justify-center p-12 text-center h-[500px] animate-in fade-in duration-500 bg-white rounded-[2rem] shadow-sm border border-gray-100">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <Check className="w-10 h-10 text-green-500" />
+                </div>
+                <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4">You're all caught up!</h3>
+                <p className="text-gray-500 mb-8 max-w-sm">You've swiped through all the latest curated thoughts and strategies.</p>
                 <button
                     onClick={() => setCurrentIndex(0)}
-                    className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+                    className="flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
                 >
                     <RotateCcw className="w-4 h-4" />
-                    Start Over
+                    Review Again
                 </button>
             </div>
         );
     }
 
-    // We only render the top 2 cards for performance and stacking effect
-    const visiblePosts = posts.slice(currentIndex, currentIndex + 2).reverse();
-
-    const handleSwipe = (dir: 'left' | 'right') => {
-        setDirection(dir);
-
-        // If right swipe, open the link
-        if (dir === 'right') {
-            const post = posts[currentIndex];
-            const url = post.type === 'created' ? `/feed/${post.id}` : post.link;
-            if (url) {
-                if (post.type === 'curated') {
-                    window.open(url, '_blank');
-                } else {
-                    window.open(url, '_blank');
-                }
-            }
-        }
-
-        // Delay setting index to allow animation to play
-        setTimeout(() => {
-            setCurrentIndex(prev => prev + 1);
-            setDirection(null);
-        }, 200);
-    };
-
     return (
-        <div className="relative w-full max-w-md mx-auto h-[600px] flex items-center justify-center">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-50">
-                <div className="w-[90%] h-[90%] border-2 border-dashed border-gray-300 rounded-[2.5rem]" />
-            </div>
+        <div className="w-full max-w-sm md:max-w-md mx-auto aspect-[3/4] md:aspect-[4/5] relative select-none">
 
+            {/* Tutorial Overlay */}
             <AnimatePresence>
-                {visiblePosts.map((post, index) => {
-                    const isTop = index === visiblePosts.length - 1;
-                    return (
-                        <Card
-                            key={post.id}
-                            post={post}
-                            isTop={isTop}
-                            onSwipe={handleSwipe}
-                        />
-                    );
-                })}
+                {!hasInteracted && currentIndex === 0 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute -top-16 left-0 right-0 z-50 flex justify-center pointer-events-none"
+                    >
+                        <motion.div
+                            animate={{ x: [-20, 20, -20] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="flex flex-col items-center gap-2 text-gray-400"
+                        >
+                            <Hand className="w-6 h-6 rotate-12" />
+                            <span className="text-xs font-bold uppercase tracking-widest">Swipe Left / Right</span>
+                        </motion.div>
+                    </motion.div>
+                )}
             </AnimatePresence>
 
+            {/* Stack Container */}
+            <div className="relative w-full h-full perspective-1000">
+
+                {/* Background Card (Next Post) */}
+                {nextPost && (
+                    <div className="absolute inset-0 z-0">
+                        <Card post={nextPost} isBackground />
+                    </div>
+                )}
+
+                {/* Foreground Card (Active Post) */}
+                <AnimatePresence mode="popLayout">
+                    <motion.div
+                        key={activePost.id} // Key is crucial for AnimatePresence
+                        className="absolute inset-0 z-10 touch-action-none"
+                        exit={{
+                            x: -300,
+                            opacity: 0,
+                            rotate: -10,
+                            transition: { duration: 0.2 }
+                        }}
+                    >
+                        <DraggableCard
+                            post={activePost}
+                            onSwipe={handleSwipe}
+                            setHasInteracted={setHasInteracted}
+                        />
+                    </motion.div>
+                </AnimatePresence>
+
+            </div>
+
             {/* Controls */}
-            <div className="absolute -bottom-20 flex gap-6">
+            <div className="mt-8 flex items-center justify-center gap-6">
                 <button
                     onClick={() => handleSwipe('left')}
-                    className="w-14 h-14 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm"
+                    className="w-16 h-16 bg-white border border-gray-100 rounded-full text-gray-400 flex items-center justify-center shadow-lg hover:bg-gray-50 hover:text-red-500 hover:scale-110 active:scale-95 transition-all"
+                    aria-label="Skip"
                 >
-                    <span className="sr-only">Skip</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <X className="w-6 h-6" />
                 </button>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-gray-300 font-mono">
+                    {currentIndex + 1} / {posts.length}
+                </div>
                 <button
                     onClick={() => handleSwipe('right')}
-                    className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                    className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-xl shadow-black/20 hover:bg-zinc-800 hover:scale-110 active:scale-95 transition-all"
+                    aria-label="Read"
                 >
-                    <span className="sr-only">Read</span>
                     <ArrowRight className="w-6 h-6" />
                 </button>
             </div>
@@ -106,113 +149,120 @@ const SwipeFeed = ({ posts }: SwipeFeedProps) => {
     );
 };
 
-interface CardProps {
+interface DraggableCardProps {
     post: Post;
-    isTop: boolean;
     onSwipe: (dir: 'left' | 'right') => void;
+    setHasInteracted: (v: boolean) => void;
 }
 
-const Card = ({ post, isTop, onSwipe }: CardProps) => {
+const DraggableCard = ({ post, onSwipe, setHasInteracted }: DraggableCardProps) => {
     const x = useMotionValue(0);
-    const rotate = useTransform(x, [-200, 200], [-25, 25]);
-    const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
-
-    // Background color change on swipe
-    const bg = useTransform(
-        x,
-        [-200, -100, 0, 100, 200],
-        ["rgb(255, 200, 200)", "rgb(255, 255, 255)", "rgb(255, 255, 255)", "rgb(255, 255, 255)", "rgb(200, 255, 200)"]
-    );
+    const rotate = useTransform(x, [-200, 200], [-15, 15]);
+    const overlayOpacityRight = useTransform(x, [0, 150], [0, 0.4]);
+    const overlayOpacityLeft = useTransform(x, [-150, 0], [0.4, 0]);
 
     const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-        if (Math.abs(info.offset.x) > 100) {
-            const dir = info.offset.x > 0 ? 'right' : 'left';
-            onSwipe(dir);
+        if (info.offset.x > 100) {
+            onSwipe('right');
+        } else if (info.offset.x < -100) {
+            onSwipe('left');
         }
     };
 
     return (
         <motion.div
-            style={{
-                x: isTop ? x : 0,
-                rotate: isTop ? rotate : 0,
-                opacity: isTop ? opacity : 1, // Keep opacity 1 here, control via animate
-                background: bg,
-                zIndex: isTop ? 10 : 0
-            }}
-            drag={isTop ? "x" : false}
+            style={{ x, rotate, cursor: 'grab' }}
+            whileTap={{ cursor: 'grabbing' }}
+            drag="x"
             dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.7}
+            onDragStart={() => setHasInteracted(true)}
             onDragEnd={handleDragEnd}
-            className={`absolute top-0 w-full h-full p-4 ${isTop ? 'cursor-grab active:cursor-grabbing' : 'pointer-events-none'}`}
-            initial={{ scale: 0.95, opacity: 0.5 }}
-            animate={{
-                scale: isTop ? 1 : 0.95,
-                opacity: isTop ? 1 : 0.5
-            }}
-            exit={{ x: x.get() < 0 ? -200 : 200, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="w-full h-full absolute inset-0"
         >
-            <div className="w-full h-full bg-white rounded-[2rem] border-2 border-black shadow-xl overflow-hidden relative flex flex-col">
-                <div className="relative h-1/2 overflow-hidden border-b-2 border-black">
-                    <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover pointer-events-none"
-                    />
-                    <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-xs font-bold uppercase tracking-widest rounded-full text-black shadow-sm border border-black/10">
-                            {post.category}
-                        </span>
-                    </div>
-                    {post.type === 'curated' && (
-                        <div className="absolute top-4 right-4 bg-black text-white p-2 rounded-full">
-                            <Globe className="w-4 h-4" />
-                        </div>
-                    )}
-                </div>
-                <div className="p-8 flex flex-col flex-1">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 font-mono">
-                        <span>{post.date}</span>
-                        <span>•</span>
-                        <span>{post.readTime}</span>
-                    </div>
-                    <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4 leading-tight">
-                        {post.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed mb-6 font-sans text-base line-clamp-3">
-                        {post.excerpt}
-                    </p>
+            <div className="w-full h-full bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative flex flex-col select-none">
 
-                    <div className="mt-auto flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                            <span className="flex items-center gap-1"><ArrowRight className="w-3 h-3 rotate-180" /> Skip</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs font-bold text-black uppercase tracking-widest">
-                            {post.type === 'curated' ? (
-                                <span className="flex items-center gap-1">Visit <ExternalLink className="w-3 h-3" /></span>
-                            ) : (
-                                <span className="flex items-center gap-1">Read <ArrowRight className="w-3 h-3" /></span>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                {/* Overlays */}
+                <motion.div style={{ opacity: overlayOpacityRight }} className="absolute inset-0 bg-green-500 z-20 pointer-events-none mix-blend-multiply" />
+                <motion.div style={{ opacity: overlayOpacityLeft }} className="absolute inset-0 bg-red-500 z-20 pointer-events-none mix-blend-multiply" />
 
-                {/* Swipe Indicators */}
+                {/* Stamps */}
                 <motion.div
                     style={{ opacity: useTransform(x, [50, 100], [0, 1]) }}
-                    className="absolute top-8 left-8 -rotate-12 border-4 border-green-500 text-green-500 rounded-lg px-4 py-2 font-black text-4xl uppercase tracking-widest pointer-events-none bg-white/80"
+                    className="absolute top-8 left-8 z-30 border-4 border-green-500 text-green-500 rounded-lg px-4 py-2 font-black text-4xl uppercase tracking-widest -rotate-12 bg-white/90 backdrop-blur-sm shadow-sm"
                 >
-                    READ
+                    OPEN
                 </motion.div>
                 <motion.div
                     style={{ opacity: useTransform(x, [-100, -50], [1, 0]) }}
-                    className="absolute top-8 right-8 rotate-12 border-4 border-red-500 text-red-500 rounded-lg px-4 py-2 font-black text-4xl uppercase tracking-widest pointer-events-none bg-white/80"
+                    className="absolute top-8 right-8 z-30 border-4 border-red-500 text-red-500 rounded-lg px-4 py-2 font-black text-4xl uppercase tracking-widest rotate-12 bg-white/90 backdrop-blur-sm shadow-sm"
                 >
                     SKIP
                 </motion.div>
+
+                <CardContent post={post} />
             </div>
         </motion.div>
     );
 };
+
+const Card = ({ post, isBackground = false }: { post: Post, isBackground?: boolean }) => (
+    <div className={`w-full h-full bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative flex flex-col select-none ${isBackground ? 'scale-95 translate-y-4 opacity-50 contrast-50' : ''}`}>
+        <CardContent post={post} />
+    </div>
+);
+
+const CardContent = ({ post }: { post: Post }) => (
+    <>
+        <div className="relative h-[45%] shrink-0 overflow-hidden bg-gray-100">
+            <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-full object-cover pointer-events-none"
+            />
+            <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start bg-gradient-to-b from-black/50 to-transparent">
+                <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest rounded-full text-black shadow-sm">
+                    {post.category}
+                </span>
+                {post.type === 'curated' && (
+                    <div className="bg-black/80 backdrop-blur-sm text-white p-2 rounded-full">
+                        <Globe className="w-3 h-3" />
+                    </div>
+                )}
+            </div>
+        </div>
+
+        <div className="p-6 md:p-8 flex flex-col flex-1 relative bg-white">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 font-mono">
+                {post.author && (
+                    <>
+                        <span className="text-black">{post.author}</span>
+                        <span className="text-gray-300">•</span>
+                    </>
+                )}
+                <span>{post.date}</span>
+                <span className="text-gray-300">•</span>
+                <span>{post.readTime}</span>
+            </div>
+
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-3 leading-[1.15] line-clamp-3">
+                {post.title}
+            </h3>
+
+            <p className="text-gray-500 leading-relaxed font-sans text-sm md:text-base line-clamp-4 mb-4">
+                {post.excerpt}
+            </p>
+
+            <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <X className="w-3 h-3" /> Skip
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-black uppercase tracking-widest">
+                    Visit <ExternalLink className="w-3 h-3" />
+                </div>
+            </div>
+        </div>
+    </>
+);
 
 export default SwipeFeed;

@@ -315,11 +315,11 @@ const AdminCuratedFeed = ({ isDarkMode }: AdminCuratedFeedProps) => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="space-y-1 flex-1">
+                        <div className="space-y-1 flex-1 min-w-0">
                             <label className="text-[10px] uppercase font-bold tracking-widest opacity-50">Original URL</label>
-                            <div className="flex items-center gap-2 text-xs opacity-70 truncate bg-black/5 p-2 rounded">
-                                <Globe className="w-3 h-3" />
-                                {activePost.url}
+                            <div className="flex items-center gap-2 text-xs opacity-70 bg-black/5 p-2 rounded w-full overflow-hidden">
+                                <Globe className="w-3 h-3 flex-shrink-0" />
+                                <span className="truncate flex-1">{activePost.url}</span>
                             </div>
                         </div>
                         <div className="space-y-1">
