@@ -99,6 +99,15 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         ballAttached: true,
     });
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             containerRef.current?.requestFullscreen();
@@ -462,7 +471,8 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                                     }
 
                                     const pColor = b.type === BRICK_TYPES.SPECIAL ? theme.secondary : theme.primary;
-                                    for (let i = 0; i < 8; i++) {
+                                    const particleCount = isMobile ? 2 : 8; // PERFORMANCE: Reduce particles on mobile
+                                    for (let i = 0; i < particleCount; i++) {
                                         state.particles.push({
                                             x: bX + BRICK_WIDTH / 2, y: bY + BRICK_HEIGHT / 2,
                                             vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8,
@@ -585,7 +595,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             canvas.removeEventListener('touchstart', handleTouchStart);
             cancelAnimationFrame(animationId);
         };
-    }, [gameState, currentLevel]);
+    }, [gameState, currentLevel, isMobile]); // Added isMobile to dependency
 
     useEffect(() => {
         if (gameState === 'GAMEOVER' || gameState === 'LEADERBOARD') {
@@ -611,25 +621,29 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     const currentTheme = COLORS[LEVELS[currentLevel % LEVELS.length].theme as keyof typeof COLORS];
 
     return (
-        <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : 'h-full'}`}>
-            {/* VINTAGE CRT OVERLAY */}
-            <div className={`absolute inset-0 z-50 pointer-events-none crt-overlay mix-blend-overlay ${isFullscreen ? 'opacity-20' : 'opacity-30'}`}></div>
-            <div className={`absolute inset-0 z-50 pointer-events-none crt-scanline ${isFullscreen ? 'opacity-5' : 'opacity-10'}`}></div>
+        <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : 'w-full h-full md:w-auto md:h-full'}`}>
+            {/* VINTAGE CRT OVERLAY - Disabled on mobile for performance */}
+            {!isMobile && (
+                <>
+                    <div className={`absolute inset-0 z-50 pointer-events-none crt-overlay mix-blend-overlay ${isFullscreen ? 'opacity-20' : 'opacity-30'}`}></div>
+                    <div className={`absolute inset-0 z-50 pointer-events-none crt-scanline ${isFullscreen ? 'opacity-5' : 'opacity-10'}`}></div>
+                </>
+            )}
 
-            <div className="flex justify-between w-full max-w-[800px] mb-4 text-[#E9B44C] items-center uppercase tracking-widest z-10 font-bold">
+            <div className="flex justify-between w-full max-w-[800px] mb-4 text-[#E9B44C] items-center uppercase tracking-widest z-10 font-bold px-2 md:px-0">
                 {/* BRAND & LEVEL INFO */}
-                <div className="flex items-center gap-6">
-                    <img src={brandLogo} alt="Dan Jimmerson" className="h-10 w-auto text-glow" />
+                <div className="flex items-center gap-4 md:gap-6">
+                    <img src={brandLogo} alt="Dan Jimmerson" className="h-6 md:h-10 w-auto text-glow" />
                     <div className="flex flex-col">
-                        <span className="text-xs text-blue-300 opacity-80">CURRENT LEVEL</span>
-                        <span className="text-lg text-glow text-white tracking-tighter shadow-blue-500/50">{LEVELS[currentLevel % LEVELS.length].name}</span>
+                        <span className="text-[10px] md:text-xs text-blue-300 opacity-80">CURRENT LEVEL</span>
+                        <span className="text-sm md:text-lg text-glow text-white tracking-tighter shadow-blue-500/50">{LEVELS[currentLevel % LEVELS.length].name}</span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-8">
+                <div className="flex items-center gap-4 md:gap-8">
                     <div className="text-right">
-                        <div className="text-xs text-blue-300 opacity-80">SCORE</div>
-                        <div className="text-3xl text-glow leading-none">{score.toString().padStart(6, '0')}</div>
+                        <div className="text-[10px] md:text-xs text-blue-300 opacity-80">SCORE</div>
+                        <div className="text-xl md:text-3xl text-glow leading-none">{score.toString().padStart(6, '0')}</div>
                     </div>
                     {/* FULLSCREEN TOGGLE */}
                     <button onClick={toggleFullscreen} className="p-2 hover:bg-white/10 rounded transition-colors text-blue-400">
@@ -644,39 +658,41 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                 </div>
             </div>
 
-            <div className={`relative bg-black border-[4px] border-[#333] shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : 'w-[800px] h-[600px]'}`}>
+            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : 'w-full max-w-[800px] aspect-[4/3] h-auto'}`}>
+                {/* Canvas keeps internal resolution but scales via CSS */}
                 <canvas ref={canvasRef} width={800} height={600} className="w-full h-full block rendering-pixelated" />
 
                 {/* MENU OVERLAY */}
                 {gameState === 'MENU' && (
-                    <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center space-y-8 z-40 backdrop-blur-md">
-                        <div className="relative flex flex-col items-center gap-6">
+                    <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center space-y-4 md:space-y-8 z-40 backdrop-blur-md">
+                        <div className="relative flex flex-col items-center gap-4 md:gap-6 w-full px-4">
                             {/* Scaled down logo so buttons aren't cut off */}
-                            <img src={danpongLogo} alt="DanPong" className="w-[420px] h-auto rendering-pixelated drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]" />
+                            <img src={danpongLogo} alt="DanPong" className="w-[70%] max-w-[420px] h-auto rendering-pixelated drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]" />
 
-                            <div className="flex flex-col gap-3 items-center">
+                            <div className="flex flex-col gap-3 items-center w-full">
                                 <div className="flex gap-4">
                                     {/* Brand Blue Button */}
-                                    <button onClick={startGame} className="group relative px-10 py-4 bg-[hsl(var(--accent))] hover:brightness-110 text-white font-black text-xl uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,85,255,0.6)] border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded">
+                                    <button onClick={startGame} className="group relative px-6 md:px-10 py-3 md:py-4 bg-[hsl(var(--accent))] hover:brightness-110 text-white font-black text-sm md:text-xl uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,85,255,0.6)] border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded">
                                         <div className="flex items-center gap-2">
-                                            <Zap className="w-5 h-5" />
-                                            Start Game
+                                            <Zap className="w-4 h-4 md:w-5 md:h-5" />
+                                            Start
                                         </div>
                                     </button>
-                                    <button onClick={() => setGameState('LEADERBOARD')} className="px-6 py-4 bg-[#222] hover:bg-[#333] text-white font-bold uppercase tracking-widest border border-white/10 rounded transition-all hover:border-yellow-500/50">
-                                        <Trophy className="w-5 h-5 inline-block mr-2 text-yellow-500" />
+                                    <button onClick={() => setGameState('LEADERBOARD')} className="px-4 md:px-6 py-3 md:py-4 bg-[#222] hover:bg-[#333] text-white font-bold text-sm md:text-base uppercase tracking-widest border border-white/10 rounded transition-all hover:border-yellow-500/50">
+                                        <Trophy className="w-4 h-4 md:w-5 md:h-5 inline-block mr-2 text-yellow-500" />
                                         Scores
                                     </button>
                                 </div>
 
-                                <button onClick={() => setGameState('INSTRUCTIONS')} className="text-xs text-blue-300 hover:text-white uppercase tracking-widest font-bold border-b border-transparent hover:border-white transition-colors pb-1">
+                                <button onClick={() => setGameState('INSTRUCTIONS')} className="text-xs text-blue-300 hover:text-white uppercase tracking-widest font-bold border-b border-transparent hover:border-white transition-colors pb-1 mt-2">
                                     How to Play
                                 </button>
                             </div>
 
-                            <p className="text-blue-200/50 text-xs font-mono mt-4 crt-flicker">PRESS SPACE TO START</p>
+                            <p className="text-blue-200/50 text-[10px] md:text-xs font-mono mt-2 md:mt-4 crt-flicker hidden md:block">PRESS SPACE TO START</p>
+                            <p className="text-blue-200/50 text-[10px] md:text-xs font-mono mt-2 md:mt-4 crt-flicker md:hidden">TAP TO START</p>
 
-                            <div className="text-[#333] text-[10px] font-mono opacity-50 flex gap-4 mt-8">
+                            <div className="text-[#333] text-[8px] md:text-[10px] font-mono opacity-50 flex gap-4 mt-4 md:mt-8">
                                 <span>DAN_OS V2.0</span>
                                 <span>•</span>
                                 <span>BUILT WITH <span className="text-red-900">♥</span> IN COLORADO</span>
