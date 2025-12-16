@@ -31,7 +31,6 @@ const Index = () => {
   }, [location]);
 
   const handleLaunchGame = () => {
-    setInitialWindow("Game");
     setOsOpen(true);
   };
 

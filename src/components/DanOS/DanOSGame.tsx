@@ -737,7 +737,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                 </div>
             </div>
 
-            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : (isMobilePlaying ? 'max-h-[100dvh] max-w-[100vw] aspect-[4/3] w-auto h-auto' : 'w-full max-w-[800px] aspect-[4/3] h-auto')}`}>
+            <div className={`relative bg-black ${isMobilePlaying ? '' : 'border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg ring-1 ring-white/10'} overflow-hidden ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : (isMobilePlaying ? 'max-h-[100dvh] max-w-[100vw] aspect-[4/3] w-auto h-auto' : 'w-full max-w-[800px] aspect-[4/3] h-auto')}`}>
                 {/* Canvas keeps internal resolution but scales via CSS */}
                 <canvas ref={canvasRef} width={800} height={600} className="w-full h-full block rendering-pixelated" />
 
