@@ -73,7 +73,15 @@ export const DanOSOverlay = ({ onClose, initialWindow }: DanOSOverlayProps) => {
         }
     };
 
-
+    // Mobile Direct Launch: If Game is opened (via icon), show it fullscreen immediately
+    if (isMobile && openWindows.includes("Game")) {
+        return createPortal(
+            <div className="fixed inset-0 z-[9999] bg-black">
+                <DanOSGame onClose={() => closeWindow("Game")} />
+            </div>,
+            document.body
+        );
+    }
 
     return createPortal(
         <motion.div
