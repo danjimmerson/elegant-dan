@@ -165,7 +165,7 @@ const Navigation = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black z-[45] flex flex-col items-center justify-center overflow-hidden"
+              className="fixed inset-0 bg-black z-[45] flex flex-col items-center justify-start pt-28 md:justify-center md:pt-0 overflow-hidden"
             >
               {/* Animated Background Blobs */}
               <div className="absolute inset-0 z-0 pointer-events-none">
