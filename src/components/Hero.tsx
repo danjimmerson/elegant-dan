@@ -12,7 +12,7 @@ const Hero = () => {
   ]);
 
   return (
-    <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+    <section className="relative min-h-screen bg-black flex items-center overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] opacity-50 animate-pulse-glow" />
@@ -57,7 +57,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute right-0 top-[-2px] bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
+            className="absolute right-0 top-[-5px] bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
           >
             <div className="relative w-full h-full">
               <img
