@@ -108,6 +108,25 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    // Layout Cache Ref to prevent thrashing
+    const rectRef = useRef<DOMRect | null>(null);
+
+    const updateRect = () => {
+        if (canvasRef.current) {
+            rectRef.current = canvasRef.current.getBoundingClientRect();
+        }
+    };
+
+    useEffect(() => {
+        updateRect();
+        window.addEventListener('resize', updateRect);
+        window.addEventListener('scroll', updateRect);
+        return () => {
+            window.removeEventListener('resize', updateRect);
+            window.removeEventListener('scroll', updateRect);
+        };
+    }, []);
+
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             containerRef.current?.requestFullscreen();
