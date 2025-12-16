@@ -642,7 +642,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     const isMobilePlaying = isMobile && gameState === 'PLAYING';
 
     return (
-        <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : ''} ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black' : 'w-full h-full md:w-auto md:h-full'}`}>
+        <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : ''} ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black justify-center' : 'w-full h-full md:w-auto md:h-full'}`}>
             {/* Mobile Exit Button */}
             {isMobilePlaying && (
                 <button
@@ -689,7 +689,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                 </div>
             </div>
 
-            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : 'w-full max-w-[800px] aspect-[4/3] h-auto'}`}>
+            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : (isMobilePlaying ? 'w-full h-auto aspect-[4/3]' : 'w-full max-w-[800px] aspect-[4/3] h-auto')}`}>
                 {/* Canvas keeps internal resolution but scales via CSS */}
                 <canvas ref={canvasRef} width={800} height={600} className="w-full h-full block rendering-pixelated" />
 
