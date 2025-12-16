@@ -26,70 +26,73 @@ import {
 const TestimonialCard = ({ t }: { t: Testimonial }) => {
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <div className="w-[85vw] md:w-[450px] relative group flex-shrink-0 select-none h-full cursor-pointer">
-                    {/* Background Container */}
-                    <div className="absolute inset-0 bg-black border border-white/10 rounded-[2rem] overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
-                        {/* Animated Background Glow */}
-                        <motion.div
-                            className="absolute w-[400px] h-[400px] rounded-full opacity-30 blur-[80px]"
-                            style={{ backgroundColor: t.color }}
-                            animate={{
-                                x: [0, 150, -150, 0],
-                                y: [0, -150, 150, 0],
-                                scale: [1, 1.5, 0.8, 1],
-                                rotate: [0, 90, 180, 0]
-                            }}
-                            transition={{
-                                duration: 8 + Math.random() * 5,
-                                repeat: Infinity,
-                                repeatType: "mirror",
-                                ease: "easeInOut"
-                            }}
-                        />
-                        {/* Cropped Quote Icon */}
-                        <Quote
-                            className="absolute -top-10 -left-6 w-32 h-32 z-0 opacity-100"
-                            fill={t.color}
-                            stroke="none"
-                        />
-                    </div>
+            {/* Card Container - No longer a trigger itself */}
+            <div className="w-[85vw] md:w-[450px] relative group flex-shrink-0 select-none h-full">
+                {/* Background Container */}
+                <div className="absolute inset-0 bg-black border border-white/10 rounded-[2rem] overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
+                    {/* Animated Background Glow */}
+                    <motion.div
+                        className="absolute w-[400px] h-[400px] rounded-full opacity-30 blur-[80px]"
+                        style={{ backgroundColor: t.color }}
+                        animate={{
+                            x: [0, 150, -150, 0],
+                            y: [0, -150, 150, 0],
+                            scale: [1, 1.5, 0.8, 1],
+                            rotate: [0, 90, 180, 0]
+                        }}
+                        transition={{
+                            duration: 8 + Math.random() * 5,
+                            repeat: Infinity,
+                            repeatType: "mirror",
+                            ease: "easeInOut"
+                        }}
+                    />
+                    {/* Cropped Quote Icon */}
+                    <Quote
+                        className="absolute -top-10 -left-6 w-32 h-32 z-0 opacity-100"
+                        fill={t.color}
+                        stroke="none"
+                    />
+                </div>
 
-                    {/* Content */}
-                    <div className="relative z-10 p-8 md:p-10 flex flex-col justify-between h-full min-h-[400px]">
-                        <div className="mt-16 mb-6">
-                            <p className="text-lg md:text-xl font-sans leading-relaxed text-white drop-shadow-md line-clamp-4">
-                                "{t.quote}"
-                            </p>
-                            <span className="inline-block mt-4 text-sm font-medium text-white/70 group-hover:text-white transition-colors border-b border-transparent group-hover:border-white/50">
+                {/* Content */}
+                <div className="relative z-10 p-8 md:p-10 flex flex-col justify-between h-full min-h-[400px]">
+                    <div className="mt-16 mb-6">
+                        <p className="text-lg md:text-xl font-sans leading-relaxed text-white drop-shadow-md line-clamp-4">
+                            "{t.quote}"
+                        </p>
+                        {/* Specific Trigger for Modal */}
+                        <DialogTrigger asChild>
+                            <span className="inline-block mt-4 text-sm font-medium text-white/70 group-hover:text-white transition-colors border-b border-transparent group-hover:border-white/50 cursor-pointer">
                                 Read full endorsement →
                             </span>
-                        </div>
+                        </DialogTrigger>
+                    </div>
 
-                        <div className="flex items-center gap-4 mt-auto pt-6">
-                            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
-                                <img
-                                    src={t.image}
-                                    alt={t.author}
-                                    className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500"
-                                    draggable={false}
-                                />
-                            </div>
-                            <div>
-                                <div className="font-bold text-base font-mono uppercase tracking-tight text-white">{t.author}</div>
-                                <div className="text-xs text-gray-400 font-mono text-left">{t.role}{t.company ? `, ${t.company}` : ''}</div>
-                            </div>
+                    <div className="flex items-center gap-4 mt-auto pt-6">
+                        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
+                            <img
+                                src={t.image}
+                                alt={t.author}
+                                className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500"
+                                draggable={false}
+                            />
+                        </div>
+                        <div>
+                            <div className="font-bold text-base font-mono uppercase tracking-tight text-white">{t.author}</div>
+                            <div className="text-xs text-gray-400 font-mono text-left">{t.role}{t.company ? `, ${t.company}` : ''}</div>
                         </div>
                     </div>
                 </div>
-            </DialogTrigger>
+            </div>
 
-            <DialogContent className="max-w-2xl bg-black/95 border-white/10 text-white p-0 overflow-hidden [&>button]:hidden">
-                <div className="relative p-8 md:p-12 overflow-hidden">
+            {/* Modal Content - Revised for Mobile */}
+            <DialogContent className="w-[90vw] max-w-2xl max-h-[85vh] bg-black/95 border-white/10 text-white p-0 overflow-hidden [&>button]:hidden rounded-2xl flex flex-col">
+                <div className="relative p-6 md:p-12 overflow-hidden flex flex-col h-full">
                     {/* Custom Close Button */}
                     <DialogTrigger asChild>
-                        <button className="absolute top-4 right-4 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md">
-                            <X className="w-6 h-6" />
+                        <button className="absolute top-3 right-3 md:top-4 md:right-4 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-md">
+                            <X className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
                     </DialogTrigger>
 
@@ -99,14 +102,18 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
                         style={{ backgroundColor: t.color }}
                     />
 
-                    <div className="relative z-10 p-2">
-                        <Quote className="w-12 h-12 mb-6 opacity-80" fill={t.color} stroke="none" />
+                    <div className="relative z-10 flex flex-col h-full">
+                        <Quote className="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 opacity-80 shrink-0" fill={t.color} stroke="none" />
 
-                        <p className="text-xl md:text-2xl font-sans leading-relaxed text-white/90 mb-8 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            "{t.quote}"
-                        </p>
+                        {/* Scrollable Content Area */}
+                        <div className="overflow-y-auto custom-scrollbar pr-2 -mr-2 flex-grow">
+                            <p className="text-lg md:text-2xl font-sans leading-relaxed text-white/90 mb-8 whitespace-pre-wrap">
+                                "{t.quote}"
+                            </p>
+                        </div>
 
-                        <div className="flex items-center gap-5 border-t border-white/10 pt-8">
+                        {/* Footer - Fixed at bottom of container */}
+                        <div className="flex items-center gap-5 border-t border-white/10 pt-6 md:pt-8 mt-4 shrink-0">
                             <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
                                 <img
                                     src={t.image}
