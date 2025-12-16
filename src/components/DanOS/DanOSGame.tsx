@@ -321,6 +321,17 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
     };
 
     const startGame = () => {
+        // Force native fullscreen on mobile for immersion
+        if (isMobile && containerRef.current) {
+            try {
+                containerRef.current.requestFullscreen().catch(err => {
+                    console.error("Fullscreen denied:", err);
+                });
+            } catch (e) {
+                console.error("Fullscreen error:", e);
+            }
+        }
+
         setScore(0);
         setLives(3);
         setCurrentLevel(0);
@@ -732,39 +743,61 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
 
                 {/* MENU OVERLAY */}
                 {gameState === 'MENU' && (
-                    <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center space-y-4 md:space-y-8 z-40 backdrop-blur-md">
-                        <div className="relative flex flex-col items-center gap-4 md:gap-6 w-full px-4">
-                            {/* Scaled down logo so buttons aren't cut off */}
-                            <img src={danpongLogo} alt="DanPong" className="w-[70%] max-w-[420px] h-auto rendering-pixelated drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]" />
+                    <div className="absolute inset-0 bg-black/85 flex flex-col items-center justify-center z-40 backdrop-blur-md">
+                        {/* Mobile Landscape Layout: Side-by-Side */}
+                        <div className={`relative flex ${isMobile ? 'flex-row gap-12' : 'flex-col gap-4 md:gap-6'} items-center justify-center w-full px-4`}>
 
-                            <div className="flex flex-col gap-3 items-center w-full">
-                                <div className="flex gap-4">
+                            {/* Logo Section */}
+                            <div className={`flex flex-col items-center justify-center ${isMobile ? 'w-1/2 items-end' : 'w-full'}`}>
+                                <img
+                                    src={danpongLogo}
+                                    alt="DanPong"
+                                    className={`${isMobile ? 'w-full max-w-[280px]' : 'w-[70%] max-w-[420px]'} h-auto rendering-pixelated drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]`}
+                                />
+                                {!isMobile && (
+                                    <div className="text-[#333] text-[8px] md:text-[10px] font-mono opacity-50 flex gap-4 mt-4 md:mt-8">
+                                        <span>DAN_OS V2.0</span>
+                                        <span>•</span>
+                                        <span>BUILT WITH <span className="text-red-900">♥</span> IN COLORADO</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Controls Section */}
+                            <div className={`flex flex-col items-center ${isMobile ? 'w-1/2 items-start gap-4' : 'w-full gap-3'}`}>
+                                <div className={`flex ${isMobile ? 'flex-col gap-3 w-48' : 'gap-4'}`}>
                                     {/* Brand Blue Button */}
-                                    <button onClick={startGame} className="group relative px-6 md:px-10 py-3 md:py-4 bg-[hsl(var(--accent))] hover:brightness-110 text-white font-black text-sm md:text-xl uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,85,255,0.6)] border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded">
+                                    <button onClick={startGame} className="group relative px-6 md:px-10 py-3 md:py-4 bg-[hsl(var(--accent))] hover:brightness-110 text-white font-black text-sm md:text-xl uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,85,255,0.6)] border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded w-full flex justify-center">
                                         <div className="flex items-center gap-2">
                                             <Zap className="w-4 h-4 md:w-5 md:h-5" />
                                             Start
                                         </div>
                                     </button>
-                                    <button onClick={() => setGameState('LEADERBOARD')} className="px-4 md:px-6 py-3 md:py-4 bg-[#222] hover:bg-[#333] text-white font-bold text-sm md:text-base uppercase tracking-widest border border-white/10 rounded transition-all hover:border-yellow-500/50">
+                                    <button onClick={() => setGameState('LEADERBOARD')} className="px-4 md:px-6 py-3 md:py-4 bg-[#222] hover:bg-[#333] text-white font-bold text-sm md:text-base uppercase tracking-widest border border-white/10 rounded transition-all hover:border-yellow-500/50 w-full flex justify-center">
                                         <Trophy className="w-4 h-4 md:w-5 md:h-5 inline-block mr-2 text-yellow-500" />
                                         Scores
                                     </button>
                                 </div>
 
-                                <button onClick={() => setGameState('INSTRUCTIONS')} className="text-xs text-blue-300 hover:text-white uppercase tracking-widest font-bold border-b border-transparent hover:border-white transition-colors pb-1 mt-2">
-                                    How to Play
-                                </button>
+                                {!isMobile && (
+                                    <button onClick={() => setGameState('INSTRUCTIONS')} className="text-xs text-blue-300 hover:text-white uppercase tracking-widest font-bold border-b border-transparent hover:border-white transition-colors pb-1 mt-2">
+                                        How to Play
+                                    </button>
+                                )}
+
+                                {isMobile && (
+                                    <div className="flex flex-col gap-2 mt-2">
+                                        <button onClick={() => setGameState('INSTRUCTIONS')} className="text-[10px] text-blue-300 hover:text-white uppercase tracking-widest font-bold border-b border-transparent hover:border-white transition-colors pb-1">
+                                            How to Play
+                                        </button>
+                                        <p className="text-blue-200/50 text-[10px] font-mono crt-flicker">TAP TO START</p>
+                                    </div>
+                                )}
                             </div>
 
-                            <p className="text-blue-200/50 text-[10px] md:text-xs font-mono mt-2 md:mt-4 crt-flicker hidden md:block">PRESS SPACE TO START</p>
-                            <p className="text-blue-200/50 text-[10px] md:text-xs font-mono mt-2 md:mt-4 crt-flicker md:hidden">TAP TO START</p>
-
-                            <div className="text-[#333] text-[8px] md:text-[10px] font-mono opacity-50 flex gap-4 mt-4 md:mt-8">
-                                <span>DAN_OS V2.0</span>
-                                <span>•</span>
-                                <span>BUILT WITH <span className="text-red-900">♥</span> IN COLORADO</span>
-                            </div>
+                            {!isMobile && (
+                                <p className="text-blue-200/50 text-[10px] md:text-xs font-mono mt-2 md:mt-4 crt-flicker">PRESS SPACE TO START</p>
+                            )}
                         </div>
                     </div>
                 )}
