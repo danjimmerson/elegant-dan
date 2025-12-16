@@ -108,25 +108,6 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // Layout Cache Ref to prevent thrashing
-    const rectRef = useRef<DOMRect | null>(null);
-
-    const updateRect = () => {
-        if (canvasRef.current) {
-            rectRef.current = canvasRef.current.getBoundingClientRect();
-        }
-    };
-
-    useEffect(() => {
-        updateRect();
-        window.addEventListener('resize', updateRect);
-        window.addEventListener('scroll', updateRect);
-        return () => {
-            window.removeEventListener('resize', updateRect);
-            window.removeEventListener('scroll', updateRect);
-        };
-    }, []);
-
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             containerRef.current?.requestFullscreen();
@@ -137,13 +118,187 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         }
     };
 
-    // ... (keep audio resume effect)
+    // Auto-resume audio on interaction
+    useEffect(() => {
+        const resumeAudio = () => {
+            if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+                audioCtxRef.current.resume();
+            }
+        };
+        document.addEventListener('click', resumeAudio);
+        return () => document.removeEventListener('click', resumeAudio);
+    }, []);
 
-    // ... (keep generateAssets and getAudioCtx)
+    const generateAssets = (themeKey: string) => {
+        const theme = COLORS[themeKey as keyof typeof COLORS];
+        const ctx = document.createElement('canvas').getContext('2d');
+        if (!ctx) return;
 
-    // ... (keep playSound)
+        const bake = (w: number, h: number, drawFn: (c: CanvasRenderingContext2D) => void) => {
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            const cx = c.getContext('2d');
+            if (cx) drawFn(cx);
+            return c;
+        };
 
-    // ... (keep loadLevel)
+        spritesRef.current.set('paddle', bake(200, PADDLE_HEIGHT, (c) => {
+            c.fillStyle = theme.paddle;
+            c.fillRect(0, 0, 200, PADDLE_HEIGHT);
+            c.fillStyle = "rgba(255,255,255,0.3)";
+            c.fillRect(0, 0, 200, 4);
+        }));
+
+        spritesRef.current.set('brick_normal', bake(BRICK_WIDTH, BRICK_HEIGHT, (c) => {
+            c.fillStyle = theme.primary;
+            c.fillRect(0, 0, BRICK_WIDTH, BRICK_HEIGHT);
+
+            if (themeKey === 'colorado') {
+                c.fillStyle = "#1a330a";
+                c.beginPath(); c.moveTo(10, 24); c.lineTo(16, 10); c.lineTo(22, 24); c.fill();
+                c.beginPath(); c.moveTo(40, 24); c.lineTo(46, 10); c.lineTo(52, 24); c.fill();
+            } else if (themeKey === 'coffee') {
+                c.strokeStyle = "#4ea";
+                c.globalCompositeOperation = 'multiply';
+                c.fillStyle = "#000"; c.globalAlpha = 0.2;
+                c.beginPath(); c.arc(32, 12, 8, 0, Math.PI * 2); c.fill();
+            }
+            c.globalAlpha = 1;
+            c.globalCompositeOperation = 'source-over';
+            c.fillStyle = "rgba(255,255,255,0.2)";
+            c.fillRect(0, 0, BRICK_WIDTH, 2); c.fillRect(0, 0, 2, BRICK_HEIGHT);
+            c.fillStyle = "rgba(0,0,0,0.3)";
+            c.fillRect(0, BRICK_HEIGHT - 2, BRICK_WIDTH, 2); c.fillRect(BRICK_WIDTH - 2, 0, 2, BRICK_HEIGHT);
+        }));
+
+        spritesRef.current.set('brick_special', bake(BRICK_WIDTH, BRICK_HEIGHT, (c) => {
+            c.fillStyle = theme.secondary;
+            c.fillRect(0, 0, BRICK_WIDTH, BRICK_HEIGHT);
+
+            if (themeKey === 'colorado') {
+                c.fillStyle = "#FFF";
+                c.beginPath(); c.moveTo(0, 0); c.lineTo(BRICK_WIDTH, 0); c.lineTo(BRICK_WIDTH, 12);
+                c.lineTo(48, 6); c.lineTo(32, 14); c.lineTo(16, 6); c.lineTo(0, 12); c.fill();
+            } else if (themeKey === 'curling') {
+                c.strokeStyle = "#FFF"; c.lineWidth = 2;
+                c.beginPath(); c.arc(32, 12, 8, 0, Math.PI * 2); c.stroke();
+            }
+            c.fillStyle = "rgba(255,255,255,0.3)";
+            c.fillRect(0, 0, BRICK_WIDTH, 2); c.fillRect(0, 0, 2, BRICK_HEIGHT);
+            c.fillStyle = "rgba(0,0,0,0.4)";
+            c.fillRect(0, BRICK_HEIGHT - 2, BRICK_WIDTH, 2); c.fillRect(BRICK_WIDTH - 2, 0, 2, BRICK_HEIGHT);
+        }));
+
+        spritesRef.current.set('brick_powerup', bake(BRICK_WIDTH, BRICK_HEIGHT, (c) => {
+            c.fillStyle = "#FFD700";
+            c.fillRect(0, 0, BRICK_WIDTH, BRICK_HEIGHT);
+            c.fillStyle = "#000";
+            c.font = "bold 20px monospace";
+            c.textAlign = "center";
+            c.fillText("?", BRICK_WIDTH / 2, BRICK_HEIGHT / 2 + 7);
+            c.strokeStyle = "#FFF"; c.lineWidth = 2;
+            c.strokeRect(2, 2, BRICK_WIDTH - 4, BRICK_HEIGHT - 4);
+        }));
+    };
+
+    const getAudioCtx = () => {
+        if (!audioCtxRef.current) {
+            // @ts-expect-error: Webkit compatibility
+            audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioCtxRef.current;
+    };
+
+    const playSound = (type: string) => {
+        try {
+            const ctx = getAudioCtx();
+            if (ctx.state === "suspended") ctx.resume();
+
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'hit') {
+                osc.frequency.setValueAtTime(400 + Math.random() * 200, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'paddle') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(200, now);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'powerup') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(1200, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'die') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(50, now + 0.5);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(554, now + 0.1);
+                osc.frequency.setValueAtTime(659, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.6);
+                osc.start(now); osc.stop(now + 0.6);
+            }
+        } catch (e) {
+            console.error("Audio error", e);
+        }
+    };
+
+    const loadLevel = (levelIdx: number) => {
+        const themeKey = LEVELS[levelIdx % LEVELS.length].theme;
+        generateAssets(themeKey);
+
+        const newBricks = [];
+        for (let c = 0; c < BRICK_COLUMN_COUNT; c++) {
+            newBricks[c] = [];
+            for (let r = 0; r < BRICK_ROW_COUNT; r++) {
+                let type = BRICK_TYPES.NORMAL;
+                let active = 1;
+
+                if (themeKey === 'colorado') {
+                    if (r < 2 && (c < 2 || c > 7)) active = 0;
+                    if (r === 0 && active) type = BRICK_TYPES.SPECIAL;
+                } else if (themeKey === 'marketing') {
+                    if (r > c && r > (BRICK_COLUMN_COUNT - 1 - c)) active = 0;
+                    if (r === 5) type = BRICK_TYPES.SPECIAL;
+                } else if (themeKey === 'curling') {
+                    if ((c >= 3 && c <= 6) && (r >= 1 && r <= 4)) type = BRICK_TYPES.SPECIAL;
+                    else if ((c >= 2 && c <= 7) && (r >= 0 && r <= 5)) type = BRICK_TYPES.NORMAL;
+                    else active = 0;
+                }
+
+                if (active && Math.random() < 0.05) type = BRICK_TYPES.POWERUP;
+                newBricks[c][r] = { x: 0, y: 0, status: active, type };
+            }
+        }
+
+        gameRef.current.bricks = newBricks;
+        gameRef.current.ballAttached = true;
+        gameRef.current.x = CANVAS_WIDTH / 2;
+        gameRef.current.y = CANVAS_HEIGHT - PADDLE_HEIGHT - BALL_SIZE - 2;
+        gameRef.current.dx = 0;
+        gameRef.current.dy = 0;
+        gameRef.current.paddleX = (CANVAS_WIDTH - 100) / 2;
+        gameRef.current.paddleWidth = 100;
+        gameRef.current.particles = [];
+        gameRef.current.powerUps = [];
+    };
 
     const startGame = () => {
         setScore(0);
@@ -152,40 +307,323 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         loadLevel(0);
         setGameState('PLAYING');
         try { if (audioCtxRef.current) audioCtxRef.current.resume(); } catch { }
-        // Force update rect on start to ensure accurate initial input
-        setTimeout(updateRect, 100);
     };
 
-    // ... (inside the useEffect for game loop)
+    // Global Key Listener for Start
+    useEffect(() => {
+        if (gameState === 'MENU') {
+            const handleStartKey = (e: KeyboardEvent) => {
+                if (e.code === 'Space' || e.key === 'Enter') startGame();
+            };
+            window.addEventListener('keydown', handleStartKey);
+            return () => window.removeEventListener('keydown', handleStartKey);
+        }
+    }, [gameState]);
 
-    const handleInput = (clientX: number) => {
+    useEffect(() => {
+        if (gameState !== 'PLAYING') return;
+        const canvas = canvasRef.current;
         if (!canvas) return;
-        // PERFORMANCE: Use cached rect
-        const rect = rectRef.current || canvas.getBoundingClientRect();
+        const ctx = canvas.getContext('2d', { alpha: false });
+        if (!ctx) return;
 
-        const scaleX = CANVAS_WIDTH / rect.width;
-        const relativeX = (clientX - rect.left) * scaleX;
+        ctx.imageSmoothingEnabled = false;
+        let animationId: number;
 
-        const PWIDTH = gameRef.current.paddleWidth;
-        let newPaddleX = relativeX - PWIDTH / 2;
+        const levelData = LEVELS[currentLevel % LEVELS.length];
+        const theme = COLORS[levelData.theme as keyof typeof COLORS] || COLORS.colorado;
 
-        if (newPaddleX < 0) newPaddleX = 0;
-        if (newPaddleX > CANVAS_WIDTH - PWIDTH) newPaddleX = CANVAS_WIDTH - PWIDTH;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight') gameRef.current.rightPressed = true;
+            if (e.key === 'ArrowLeft') gameRef.current.leftPressed = true;
+            if (e.code === 'Space' && gameRef.current.ballAttached) {
+                gameRef.current.ballAttached = false;
+                gameRef.current.dy = -6;
+                gameRef.current.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                playSound('hit');
+            }
+        };
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight') gameRef.current.rightPressed = false;
+            if (e.key === 'ArrowLeft') gameRef.current.leftPressed = false;
+        };
 
-        gameRef.current.paddleX = newPaddleX;
+        const handleInput = (clientX: number) => {
+            if (!canvas) return;
+            // PERFORMANCE: Use cached rect if available to prevent layout thrashing
+            const rect = rectRef.current || canvas.getBoundingClientRect();
+            const scaleX = CANVAS_WIDTH / rect.width;
+            const relativeX = (clientX - rect.left) * scaleX;
+
+            const PWIDTH = gameRef.current.paddleWidth;
+            let newPaddleX = relativeX - PWIDTH / 2;
+
+            if (newPaddleX < 0) newPaddleX = 0;
+            if (newPaddleX > CANVAS_WIDTH - PWIDTH) newPaddleX = CANVAS_WIDTH - PWIDTH;
+
+            gameRef.current.paddleX = newPaddleX;
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            handleInput(e.clientX);
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (e.cancelable) e.preventDefault();
+            if (e.touches.length > 0) {
+                handleInput(e.touches[0].clientX);
+            }
+        };
+
+        const handleLaunch = () => {
+            if (gameRef.current.ballAttached) {
+                gameRef.current.ballAttached = false;
+                gameRef.current.dy = -6;
+                gameRef.current.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                playSound('hit');
+            }
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            // Optional: Handle immediate move on start
+            if (e.touches.length > 0) {
+                handleInput(e.touches[0].clientX);
+            }
+            handleLaunch();
+        };
+
+        const update = () => {
+            const state = gameRef.current;
+            const PWIDTH = state.paddleWidth;
+
+            ctx.fillStyle = theme.bg;
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            ctx.save();
+            if (state.shake > 0) {
+                ctx.translate((Math.random() - 0.5) * state.shake, (Math.random() - 0.5) * state.shake);
+                state.shake *= 0.9;
+                if (state.shake < 0.5) state.shake = 0;
+            }
+
+            if (state.rightPressed && state.paddleX < CANVAS_WIDTH - PWIDTH) state.paddleX += 7;
+            if (state.leftPressed && state.paddleX > 0) state.paddleX -= 7;
+
+            if (!state.ballAttached) {
+                state.x += state.dx;
+                state.y += state.dy;
+
+                if (state.x + state.dx > CANVAS_WIDTH - BALL_SIZE || state.x + state.dx < 0) {
+                    state.dx = -state.dx; playSound('hit');
+                }
+                if (state.y + state.dy < 0) {
+                    state.dy = -state.dy; playSound('hit');
+                } else if (state.y + state.dy > CANVAS_HEIGHT - BALL_SIZE) {
+                    setLives(prev => {
+                        const newLives = prev - 1;
+                        if (newLives <= 0) {
+                            setGameState('GAMEOVER');
+                            playSound('die');
+                        } else {
+                            state.ballAttached = true;
+                            state.paddleWidth = 100;
+                            playSound('die');
+                        }
+                        return newLives;
+                    });
+                }
+
+                if (state.y + BALL_SIZE >= CANVAS_HEIGHT - PADDLE_HEIGHT &&
+                    state.x + BALL_SIZE >= state.paddleX &&
+                    state.x <= state.paddleX + PWIDTH) {
+                    state.dy = -Math.abs(state.dy);
+                    const hitPoint = (state.x + BALL_SIZE / 2) - (state.paddleX + PWIDTH / 2);
+                    state.dx = hitPoint * 0.15;
+                    state.shake = 5;
+                    playSound('paddle');
+                }
+
+                let activeBricks = 0;
+                if (state.bricks && state.bricks.length > 0) {
+                    for (let c = 0; c < BRICK_COLUMN_COUNT; c++) {
+                        for (let r = 0; r < BRICK_ROW_COUNT; r++) {
+                            const b = state.bricks[c]?.[r];
+                            if (b && b.status === 1) {
+                                activeBricks++;
+                                const bX = c * (BRICK_WIDTH + BRICK_PADDING) + BRICK_OFFSET_LEFT;
+                                const bY = r * (BRICK_HEIGHT + BRICK_PADDING) + BRICK_OFFSET_TOP;
+
+                                if (state.x + BALL_SIZE > bX && state.x < bX + BRICK_WIDTH &&
+                                    state.y + BALL_SIZE > bY && state.y < bY + BRICK_HEIGHT) {
+                                    state.dy = -state.dy;
+                                    b.status = 0;
+                                    setScore(s => s + (b.type === BRICK_TYPES.SPECIAL ? 50 : 10));
+                                    playSound('hit');
+                                    state.shake = 3;
+
+                                    if (b.type === BRICK_TYPES.POWERUP) {
+                                        state.powerUps.push({
+                                            x: bX + BRICK_WIDTH / 2,
+                                            y: bY,
+                                            type: 'WIDE',
+                                            active: true
+                                        });
+                                        playSound('powerup');
+                                    }
+
+                                    const pColor = b.type === BRICK_TYPES.SPECIAL ? theme.secondary : theme.primary;
+                                    const particleCount = isMobile ? 2 : 8; // PERFORMANCE: Reduce particles on mobile
+                                    for (let i = 0; i < particleCount; i++) {
+                                        state.particles.push({
+                                            x: bX + BRICK_WIDTH / 2, y: bY + BRICK_HEIGHT / 2,
+                                            vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8,
+                                            life: 1, color: pColor, size: Math.random() * 6 + 2
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (activeBricks === 0 && state.bricks.length > 0) {
+                    playSound('win');
+                    if (currentLevel < LEVELS.length - 1) {
+                        setCurrentLevel(prev => prev + 1);
+                        loadLevel(currentLevel + 1);
+                    } else {
+                        setCurrentLevel(0);
+                        loadLevel(0);
+                    }
+                }
+
+            } else {
+                state.x = state.paddleX + PWIDTH / 2 - BALL_SIZE / 2;
+                state.y = CANVAS_HEIGHT - PADDLE_HEIGHT - BALL_SIZE - 2;
+            }
+
+            for (let i = state.powerUps.length - 1; i >= 0; i--) {
+                const pup = state.powerUps[i];
+                if (pup.active) {
+                    pup.y += 3;
+                    if (pup.y > CANVAS_HEIGHT - PADDLE_HEIGHT - 20 &&
+                        pup.y < CANVAS_HEIGHT &&
+                        pup.x > state.paddleX &&
+                        pup.x < state.paddleX + PWIDTH) {
+                        state.paddleWidth = Math.min(200, state.paddleWidth + 50);
+                        setScore(s => s + 100);
+                        playSound('powerup');
+                        pup.active = false;
+                        state.powerUps.splice(i, 1);
+                    }
+                    if (pup.y > CANVAS_HEIGHT) state.powerUps.splice(i, 1);
+                }
+            }
+
+            const getSprite = (k: string) => spritesRef.current.get(k);
+
+            state.bricks.forEach((col: any[], c: number) => {
+                col.forEach((b: any, r: number) => {
+                    if (b.status === 1) {
+                        const bX = c * (BRICK_WIDTH + BRICK_PADDING) + BRICK_OFFSET_LEFT;
+                        const bY = r * (BRICK_HEIGHT + BRICK_PADDING) + BRICK_OFFSET_TOP;
+                        let sKey = 'brick_normal';
+                        if (b.type === BRICK_TYPES.SPECIAL) sKey = 'brick_special';
+                        if (b.type === BRICK_TYPES.POWERUP) sKey = 'brick_powerup';
+                        const img = getSprite(sKey);
+                        if (img) ctx.drawImage(img, bX, bY);
+                        else {
+                            ctx.fillStyle = theme.primary;
+                            ctx.fillRect(bX, bY, BRICK_WIDTH, BRICK_HEIGHT);
+                        }
+                    }
+                });
+            });
+
+            const pImg = getSprite('paddle');
+            if (pImg) {
+                ctx.drawImage(pImg, 0, 0, 200, PADDLE_HEIGHT, state.paddleX, CANVAS_HEIGHT - PADDLE_HEIGHT, PWIDTH, PADDLE_HEIGHT);
+            } else {
+                ctx.fillStyle = theme.paddle;
+                ctx.fillRect(state.paddleX, CANVAS_HEIGHT - PADDLE_HEIGHT, PWIDTH, PADDLE_HEIGHT);
+            }
+
+            ctx.fillStyle = theme.ball;
+            ctx.fillRect(state.x, state.y, BALL_SIZE, BALL_SIZE);
+
+            state.powerUps.forEach(pup => {
+                ctx.fillStyle = "#FFd700";
+                ctx.beginPath();
+                ctx.arc(pup.x, pup.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#000";
+                ctx.font = "10px monospace";
+                ctx.fillText("W", pup.x - 4, pup.y + 4);
+            });
+
+            for (let i = state.particles.length - 1; i >= 0; i--) {
+                const p = state.particles[i];
+                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                if (p.life <= 0) state.particles.splice(i, 1);
+                else {
+                    ctx.globalAlpha = p.life;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            ctx.restore();
+            animationId = requestAnimationFrame(update);
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mousedown', handleLaunch);
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+        update();
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keyup', handleKeyUp);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+            canvas.removeEventListener('mousedown', handleLaunch);
+            canvas.removeEventListener('touchmove', handleTouchMove);
+            canvas.removeEventListener('touchstart', handleTouchStart);
+            cancelAnimationFrame(animationId);
+        };
+    }, [gameState, currentLevel, isMobile]); // Added isMobile to dependency
+
+    useEffect(() => {
+        if (gameState === 'GAMEOVER' || gameState === 'LEADERBOARD') {
+            const fetchScores = async () => {
+                const { data } = await supabase.from('high_scores').select('*').order('score', { ascending: false }).limit(10);
+                if (data) setHighScores(data);
+            };
+            fetchScores();
+        }
+    }, [gameState]);
+
+    const submitScore = async () => {
+        if (!initials) return;
+        await supabase.from('high_scores').insert({
+            name: initials.toUpperCase(),
+            score: score,
+            level: currentLevel + 1
+        });
+        toast.success("Score Submitted!");
+        setGameState('LEADERBOARD'); // Go to leaderboard after submit
     };
 
-    // ... (render return)
-
+    const currentTheme = COLORS[LEVELS[currentLevel % LEVELS.length].theme as keyof typeof COLORS];
     const isMobilePlaying = isMobile && gameState === 'PLAYING';
 
     return (
-        <div
-            ref={containerRef}
-            className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 
-            ${isFullscreen ? 'w-full h-full' : ''}
-            ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black' : 'w-full h-full md:w-auto md:h-full'}`}
-        >
+        <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : ''} ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black' : 'w-full h-full md:w-auto md:h-full'}`}>
             {/* Mobile Exit Button */}
             {isMobilePlaying && (
                 <button
@@ -219,14 +657,12 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                         <div className="text-[10px] md:text-xs text-blue-300 opacity-80">SCORE</div>
                         <div className="text-xl md:text-3xl text-glow leading-none">{score.toString().padStart(6, '0')}</div>
                     </div>
-                    {/* FULLSCREEN TOGGLE - Hide on mobile playing as it's auto-fullscreen */}
-                    {!isMobilePlaying && (
-                        <button onClick={toggleFullscreen} className="p-2 hover:bg-white/10 rounded transition-colors text-blue-400">
-                            {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
-                        </button>
-                    )}
-                    {/* CLOSE BUTTON */}
-                    {!isFullscreen && !isMobilePlaying && (
+                    {/* FULLSCREEN TOGGLE */}
+                    <button onClick={toggleFullscreen} className="p-2 hover:bg-white/10 rounded transition-colors text-blue-400">
+                        {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                    </button>
+                    {/* CLOSE BUTTON (Only visible if not fullscreen usually, but good to keep) */}
+                    {!isFullscreen && (
                         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded transition-colors text-red-500">
                             <X className="w-5 h-5" />
                         </button>
@@ -234,9 +670,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                 </div>
             </div>
 
-            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 
-                ${isFullscreen || isMobilePlaying ? 'h-auto max-h-[85vh] aspect-[4/3] w-full' : 'w-full max-w-[800px] aspect-[4/3] h-auto'}
-            `}>
+            <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : 'w-full max-w-[800px] aspect-[4/3] h-auto'}`}>
                 {/* Canvas keeps internal resolution but scales via CSS */}
                 <canvas ref={canvasRef} width={800} height={600} className="w-full h-full block rendering-pixelated" />
 
