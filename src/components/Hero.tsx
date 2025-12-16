@@ -57,7 +57,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute right-0 top-0 bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
+            className="absolute right-0 top-[-2px] bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
           >
             <div className="relative w-full h-full">
               <img

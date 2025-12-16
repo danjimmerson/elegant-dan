@@ -184,7 +184,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             ref={containerRef}
             className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 
             ${isFullscreen ? 'w-full h-full' : ''}
-            ${isMobilePlaying ? 'fixed inset-0 z-[100] w-full h-full bg-black' : 'w-full h-full md:w-auto md:h-full'}`}
+            ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black' : 'w-full h-full md:w-auto md:h-full'}`}
         >
             {/* Mobile Exit Button */}
             {isMobilePlaying && (

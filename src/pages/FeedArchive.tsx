@@ -40,9 +40,9 @@ const FeedArchive = () => {
 
     return (
         <div className="min-h-screen bg-cream text-gray-900 selection:bg-black selection:text-white">
-            <Navigation alwaysShowBackground />
+            <Navigation />
 
-            <main className="pt-32 pb-24 px-6 lg:px-12">
+            <main className="pt-32 pb-24 px-4 lg:px-12">
                 <div className="container mx-auto max-w-6xl">
 
                     {/* Header */}
@@ -232,7 +232,7 @@ interface ArticlePost {
 }
 
 const ArticleCard = ({ post, isExternal = false }: { post: ArticlePost, isExternal?: boolean }) => (
-    <article className="flex flex-col md:flex-row gap-8 items-center bg-white p-6 rounded-[2rem] border-2 border-black shadow-sm group-hover:shadow-xl transition-all duration-300">
+    <article className="flex flex-col md:flex-row gap-8 items-center bg-white p-4 md:p-6 rounded-[2rem] border-2 border-black shadow-sm group-hover:shadow-xl transition-all duration-300">
         <div className="w-full md:w-1/3 aspect-[4/3] md:aspect-square overflow-hidden rounded-2xl relative shadow-inner border border-black/5">
             <img
                 src={post.image}
