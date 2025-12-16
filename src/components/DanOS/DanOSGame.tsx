@@ -369,8 +369,8 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             if (e.key === 'ArrowLeft') gameRef.current.leftPressed = true;
             if (e.code === 'Space' && gameRef.current.ballAttached) {
                 gameRef.current.ballAttached = false;
-                gameRef.current.dy = -6;
-                gameRef.current.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                gameRef.current.dy = -8;
+                gameRef.current.dx = 5 * (Math.random() > 0.5 ? 1 : -1);
                 playSound('hit');
             }
         };
@@ -409,8 +409,8 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         const handleLaunch = () => {
             if (gameRef.current.ballAttached) {
                 gameRef.current.ballAttached = false;
-                gameRef.current.dy = -6;
-                gameRef.current.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                gameRef.current.dy = -8;
+                gameRef.current.dx = 5 * (Math.random() > 0.5 ? 1 : -1);
                 playSound('hit');
             }
         };
