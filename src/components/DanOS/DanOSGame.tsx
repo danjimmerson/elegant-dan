@@ -339,6 +339,49 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             if (e.key === 'ArrowLeft') gameRef.current.leftPressed = false;
         };
 
+        const handleInput = (clientX: number) => {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = CANVAS_WIDTH / rect.width;
+            const relativeX = (clientX - rect.left) * scaleX;
+
+            const PWIDTH = gameRef.current.paddleWidth;
+            let newPaddleX = relativeX - PWIDTH / 2;
+
+            if (newPaddleX < 0) newPaddleX = 0;
+            if (newPaddleX > CANVAS_WIDTH - PWIDTH) newPaddleX = CANVAS_WIDTH - PWIDTH;
+
+            gameRef.current.paddleX = newPaddleX;
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            handleInput(e.clientX);
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (e.cancelable) e.preventDefault();
+            if (e.touches.length > 0) {
+                handleInput(e.touches[0].clientX);
+            }
+        };
+
+        const handleLaunch = () => {
+            if (gameRef.current.ballAttached) {
+                gameRef.current.ballAttached = false;
+                gameRef.current.dy = -6;
+                gameRef.current.dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+                playSound('hit');
+            }
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            // Optional: Handle immediate move on start
+            if (e.touches.length > 0) {
+                handleInput(e.touches[0].clientX);
+            }
+            handleLaunch();
+        };
+
         const update = () => {
             const state = gameRef.current;
             const PWIDTH = state.paddleWidth;
@@ -525,11 +568,21 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
 
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);
+
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mousedown', handleLaunch);
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+
         update();
 
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
             document.removeEventListener('keyup', handleKeyUp);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+            canvas.removeEventListener('mousedown', handleLaunch);
+            canvas.removeEventListener('touchmove', handleTouchMove);
+            canvas.removeEventListener('touchstart', handleTouchStart);
             cancelAnimationFrame(animationId);
         };
     }, [gameState, currentLevel]);
