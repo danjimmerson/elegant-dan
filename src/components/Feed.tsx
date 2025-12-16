@@ -151,8 +151,8 @@ const Feed = () => {
                         {recentPosts.map((post) => (
                             post.type === 'curated' ? (
                                 <a key={post.id} href={post.link} target="_blank" rel="noopener noreferrer" className="group block flex-1">
-                                    <div className="flex gap-4 lg:gap-6 p-5 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-center">
-                                        <div className="w-24 h-24 lg:w-40 lg:h-40 shrink-0 rounded-2xl overflow-hidden relative shadow-inner">
+                                    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-start lg:items-center">
+                                        <div className="w-full h-48 lg:w-40 lg:h-40 shrink-0 rounded-2xl overflow-hidden relative shadow-inner">
                                             <img
                                                 src={post.image}
                                                 alt={post.title}
@@ -179,8 +179,8 @@ const Feed = () => {
                                 </a>
                             ) : (
                                 <Link key={post.id} to={`/feed/${post.slug}`} className="group block flex-1">
-                                    <div className="flex gap-4 lg:gap-6 p-5 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-center">
-                                        <div className="w-24 h-24 lg:w-40 lg:h-40 shrink-0 rounded-2xl overflow-hidden relative shadow-inner">
+                                    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 lg:p-6 rounded-3xl bg-white border-2 border-black hover:shadow-xl transition-all duration-300 h-full items-start lg:items-center">
+                                        <div className="w-full h-48 lg:w-40 lg:h-40 shrink-0 rounded-2xl overflow-hidden relative shadow-inner">
                                             <img
                                                 src={post.image}
                                                 alt={post.title}
