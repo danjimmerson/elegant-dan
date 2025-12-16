@@ -199,6 +199,19 @@ const Navigation = () => {
                 />
               </div>
 
+              {/* Mobile Menu Header */}
+              <div className="absolute top-0 left-0 right-0 p-6 flex items-center justify-between z-50">
+                <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                  <img src={logoMark} alt="Dan Jimmerson" className="h-8 w-auto" />
+                </Link>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-white p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-8 h-8" />
+                </button>
+              </div>
+
               <div className="relative z-10 flex flex-col items-center gap-6 text-center">
                 <NavItem to="/" label="Home" mobile />
                 <NavItem to="#about" label="About" isHash mobile />
