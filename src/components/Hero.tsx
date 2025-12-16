@@ -57,13 +57,13 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute right-0 top-20 lg:top-0 bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
+            className="absolute right-0 top-0 bottom-0 w-full lg:w-[60%] h-full z-0 lg:z-10"
           >
             <div className="relative w-full h-full">
               <img
                 src={heroImage}
                 alt="Dan Jimmerson"
-                className="w-full h-[110%] absolute top-0 md:top-0 md:h-full object-cover object-[center_15%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
+                className="w-full h-[110%] absolute top-0 md:top-0 md:h-full object-cover object-[center_30%] brightness-[0.8] lg:w-auto lg:h-[115%] lg:absolute lg:right-0 lg:object-cover lg:object-[center_top] lg:[mask-image:linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
               />
 
               {/* Mobile: Bottom Gradient for Text Readability */}
