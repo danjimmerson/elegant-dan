@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Gamepad2, Trophy, Zap, ListOrdered, X, Maximize2, Minimize2 } from "lucide-react";
+import { Gamepad2, Trophy, Zap, ListOrdered, X, Maximize2, Minimize2, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import danpongLogo from "@/assets/danpong_logo.png";
@@ -444,7 +444,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             }
 
             // USE DELTA TIME FOR MOVEMENT
-            const paddleSpeed = 7 * deltaTime;
+            const paddleSpeed = 10 * deltaTime; // FASTER PADDLE
             if (state.rightPressed && state.paddleX < CANVAS_WIDTH - PWIDTH) state.paddleX += paddleSpeed;
             if (state.leftPressed && state.paddleX > 0) state.paddleX -= paddleSpeed;
 
@@ -740,6 +740,37 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             <div className={`relative bg-black border-[2px] md:border-[4px] border-[#333] shadow-[0_0_15px_rgba(0,0,0,0.9)] md:shadow-[0_0_30px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden ring-1 ring-white/10 ${isFullscreen ? 'h-[80vh] aspect-[4/3]' : (isMobilePlaying ? 'max-h-[100dvh] max-w-[100vw] aspect-[4/3] w-auto h-auto' : 'w-full max-w-[800px] aspect-[4/3] h-auto')}`}>
                 {/* Canvas keeps internal resolution but scales via CSS */}
                 <canvas ref={canvasRef} width={800} height={600} className="w-full h-full block rendering-pixelated" />
+
+                {/* LAUNCH INDICATOR */}
+                {gameState === 'PLAYING' && gameRef.current.ballAttached && (
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                        <div className="text-yellow-400 font-bold text-sm md:text-xl uppercase tracking-widest animate-pulse drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]">
+                            {isMobile ? "TAP TO LAUNCH" : "PRESS SPACE"}
+                        </div>
+                    </div>
+                )}
+
+                {/* MOBILE TOUCH CONTROLS OVERLAY */}
+                {isMobilePlaying && (
+                    <div className="absolute inset-x-0 bottom-0 h-full w-full pointer-events-none z-30">
+                        {/* Left Control */}
+                        <div
+                            className="absolute left-0 bottom-0 top-0 w-[20%] bg-white/5 active:bg-white/10 transition-colors flex items-center justify-start pl-4 pointer-events-auto"
+                            onTouchStart={(e) => { e.preventDefault(); gameRef.current.leftPressed = true; }}
+                            onTouchEnd={(e) => { e.preventDefault(); gameRef.current.leftPressed = false; }}
+                        >
+                            <ChevronLeft className="text-white/20 w-12 h-12" />
+                        </div>
+                        {/* Right Control */}
+                        <div
+                            className="absolute right-0 bottom-0 top-0 w-[20%] bg-white/5 active:bg-white/10 transition-colors flex items-center justify-end pr-4 pointer-events-auto"
+                            onTouchStart={(e) => { e.preventDefault(); gameRef.current.rightPressed = true; }}
+                            onTouchEnd={(e) => { e.preventDefault(); gameRef.current.rightPressed = false; }}
+                        >
+                            <ChevronRight className="text-white/20 w-12 h-12" />
+                        </div>
+                    </div>
+                )}
 
                 {/* MENU OVERLAY */}
                 {gameState === 'MENU' && (
