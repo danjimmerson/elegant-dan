@@ -87,7 +87,7 @@ const TestimonialCard = ({ t }: { t: Testimonial }) => {
             </div>
 
             {/* Modal Content - Revised for Mobile */}
-            <DialogContent className="w-screen h-[100dvh] md:w-[90vw] md:max-w-2xl md:h-auto md:max-h-[85vh] bg-black/95 md:border md:border-white/10 text-white p-0 overflow-hidden [&>button]:hidden rounded-none md:rounded-2xl flex flex-col border-0">
+            <DialogContent className="fixed left-0 top-0 translate-x-0 translate-y-0 w-screen h-[100dvh] md:left-[50%] md:top-[50%] md:translate-x-[-50%] md:translate-y-[-50%] md:w-[90vw] md:max-w-2xl md:h-auto md:max-h-[85vh] bg-black/95 md:border md:border-white/10 text-white p-0 overflow-hidden [&>button]:hidden rounded-none md:rounded-2xl flex flex-col border-0 data-[state=open]:slide-in-from-left-0 data-[state=open]:slide-in-from-top-0 md:data-[state=open]:slide-in-from-left-1/2 md:data-[state=open]:slide-in-from-top-[48%]">
                 <div className="relative p-6 md:p-12 overflow-hidden flex flex-col h-full">
                     {/* Custom Close Button */}
                     <DialogTrigger asChild>
