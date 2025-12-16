@@ -34,6 +34,14 @@ export const DanOSOverlay = ({ onClose, initialWindow }: DanOSOverlayProps) => {
     const [booted, setBooted] = useState(false);
     const [openWindows, setOpenWindows] = useState<string[]>(initialWindow ? [initialWindow] : []);
     const [activeWindow, setActiveWindow] = useState<string | null>(initialWindow || null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Handle Escape key to close and lock body scroll
     useEffect(() => {
@@ -64,6 +72,16 @@ export const DanOSOverlay = ({ onClose, initialWindow }: DanOSOverlayProps) => {
             setActiveWindow(null);
         }
     };
+
+    // Mobile Direct Launch
+    if (isMobile && openWindows.includes("Game")) {
+        return createPortal(
+            <div className="fixed inset-0 z-[9999] bg-black">
+                <DanOSGame onClose={() => closeWindow("Game")} />
+            </div>,
+            document.body
+        );
+    }
 
     return createPortal(
         <motion.div

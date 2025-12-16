@@ -97,6 +97,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         powerUps: [] as PowerUp[],
         shake: 0,
         ballAttached: true,
+        lastTime: 0 // DELTA TIME
     });
 
     const [isMobile, setIsMobile] = useState(false);
@@ -411,8 +412,14 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             handleLaunch();
         };
 
-        const update = () => {
+        const update = (timestamp: number) => {
             const state = gameRef.current;
+
+            // DELTA TIME CALCULATION
+            if (!state.lastTime) state.lastTime = timestamp;
+            const deltaTime = Math.min((timestamp - state.lastTime) / 16.667, 3); // Cap at 3x speed to prevent teleporting
+            state.lastTime = timestamp;
+
             const PWIDTH = state.paddleWidth;
 
             ctx.fillStyle = theme.bg;
@@ -425,19 +432,22 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                 if (state.shake < 0.5) state.shake = 0;
             }
 
-            if (state.rightPressed && state.paddleX < CANVAS_WIDTH - PWIDTH) state.paddleX += 7;
-            if (state.leftPressed && state.paddleX > 0) state.paddleX -= 7;
+            // USE DELTA TIME FOR MOVEMENT
+            const paddleSpeed = 7 * deltaTime;
+            if (state.rightPressed && state.paddleX < CANVAS_WIDTH - PWIDTH) state.paddleX += paddleSpeed;
+            if (state.leftPressed && state.paddleX > 0) state.paddleX -= paddleSpeed;
 
             if (!state.ballAttached) {
-                state.x += state.dx;
-                state.y += state.dy;
+                // MOVE BY DELTA
+                state.x += state.dx * deltaTime;
+                state.y += state.dy * deltaTime;
 
-                if (state.x + state.dx > CANVAS_WIDTH - BALL_SIZE || state.x + state.dx < 0) {
+                if (state.x + state.dx * deltaTime > CANVAS_WIDTH - BALL_SIZE || state.x + state.dx * deltaTime < 0) {
                     state.dx = -state.dx; playSound('hit');
                 }
-                if (state.y + state.dy < 0) {
+                if (state.y + state.dy * deltaTime < 0) {
                     state.dy = -state.dy; playSound('hit');
-                } else if (state.y + state.dy > CANVAS_HEIGHT - BALL_SIZE) {
+                } else if (state.y + state.dy * deltaTime > CANVAS_HEIGHT - BALL_SIZE) {
                     setLives(prev => {
                         const newLives = prev - 1;
                         if (newLives <= 0) {
@@ -491,7 +501,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
                                     }
 
                                     const pColor = b.type === BRICK_TYPES.SPECIAL ? theme.secondary : theme.primary;
-                                    const particleCount = isMobile ? 2 : 8; // PERFORMANCE: Reduce particles on mobile
+                                    const particleCount = isMobile ? 0 : 8; // DISABLED PARTICLES ON MOBILE COMPLETELY
                                     for (let i = 0; i < particleCount; i++) {
                                         state.particles.push({
                                             x: bX + BRICK_WIDTH / 2, y: bY + BRICK_HEIGHT / 2,
@@ -524,7 +534,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
             for (let i = state.powerUps.length - 1; i >= 0; i--) {
                 const pup = state.powerUps[i];
                 if (pup.active) {
-                    pup.y += 3;
+                    pup.y += 3 * deltaTime;
                     if (pup.y > CANVAS_HEIGHT - PADDLE_HEIGHT - 20 &&
                         pup.y < CANVAS_HEIGHT &&
                         pup.x > state.paddleX &&
@@ -582,7 +592,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
 
             for (let i = state.particles.length - 1; i >= 0; i--) {
                 const p = state.particles[i];
-                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                p.x += p.vx * deltaTime; p.y += p.vy * deltaTime; p.life -= 0.02 * deltaTime;
                 if (p.life <= 0) state.particles.splice(i, 1);
                 else {
                     ctx.globalAlpha = p.life;
@@ -604,7 +614,7 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
         canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
         canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
 
-        update();
+        animationId = requestAnimationFrame(update);
 
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
@@ -640,6 +650,33 @@ export const DanOSGame = ({ onClose }: DanOSGameProps) => {
 
     const currentTheme = COLORS[LEVELS[currentLevel % LEVELS.length].theme as keyof typeof COLORS];
     const isMobilePlaying = isMobile && gameState === 'PLAYING';
+
+    const [showRotatePrompt, setShowRotatePrompt] = useState(false);
+
+    useEffect(() => {
+        const checkOrientation = () => {
+            if (isMobile && window.innerHeight > window.innerWidth) {
+                setShowRotatePrompt(true);
+            } else {
+                setShowRotatePrompt(false);
+            }
+        };
+        checkOrientation();
+        window.addEventListener('resize', checkOrientation);
+        return () => window.removeEventListener('resize', checkOrientation);
+    }, [isMobile]);
+
+    if (showRotatePrompt) {
+        return (
+            <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-center p-8">
+                <div className="animate-spin mb-8">
+                    <Maximize2 className="w-16 h-16 text-yellow-500" />
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-4 uppercase tracking-widest">Please Rotate Device</h2>
+                <p className="text-gray-400">DanPong requires landscape mode for optimal performance.</p>
+            </div>
+        );
+    }
 
     return (
         <div ref={containerRef} className={`flex flex-col items-center justify-center p-4 bg-[#0a0a0a] text-white font-mono relative select-none transition-all duration-300 ${isFullscreen ? 'w-full h-full' : ''} ${isMobilePlaying ? 'fixed top-0 left-0 z-[100] w-full h-[100dvh] bg-black justify-center' : 'w-full h-full md:w-auto md:h-full'}`}>
