@@ -116,7 +116,10 @@ const Navigation = () => {
             <Link
               to="/"
               className="hover:opacity-80 transition-opacity z-50 relative"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             >
               <img
                 src={logoMark}
@@ -127,7 +130,6 @@ const Navigation = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <NavItem to="/" label="Home" />
               <NavItem to="#about" label="About" isHash />
               <NavItem to="/feed" label="Feed" />
               <NavItem to="#labs" label="Labs" isHash />
@@ -203,7 +205,13 @@ const Navigation = () => {
               <div className="absolute top-0 left-0 right-0 z-50">
                 <div className="container mx-auto px-6 lg:px-12">
                   <div className="flex items-center justify-between h-20">
-                    <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                    <Link
+                      to="/"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
                       <img src={logoMark} alt="Dan Jimmerson" className="h-8 w-auto" />
                     </Link>
                     <button
@@ -217,7 +225,6 @@ const Navigation = () => {
               </div>
 
               <div className="relative z-10 flex flex-col items-center gap-6 text-center">
-                <NavItem to="/" label="Home" mobile />
                 <NavItem to="#about" label="About" isHash mobile />
                 <NavItem to="/feed" label="Feed" mobile />
                 <NavItem to="#labs" label="Labs" isHash mobile />
